@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TensorFlow笔记（1）——TensorFlow中的相关基本概念 | 斯是陋室</title><meta name="keywords" content="TensorFlow"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言Tensorflow 是一个编程系统，使用图（graph）来表示计算任务，图（graph）中的节点称之为 op  (operation），一个 op 获得 0 个或多个 Tensor，执行计算，产生 0 个或多个 Tensor。Tensor 看作是一个 n 维的数组或列表。图必须在会话（Session）里被启动。 基本概念 使用图（Graph）来表示计算任务 在被称为会话（Session）的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow笔记（1）——TensorFlow中的相关基本概念">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/a695.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="前言Tensorflow 是一个编程系统，使用图（graph）来表示计算任务，图（graph）中的节点称之为 op  (operation），一个 op 获得 0 个或多个 Tensor，执行计算，产生 0 个或多个 Tensor。Tensor 看作是一个 n 维的数组或列表。图必须在会话（Session）里被启动。 基本概念 使用图（Graph）来表示计算任务 在被称为会话（Session）的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.302Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.302Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="TensorFlow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/a695"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">TensorFlow笔记（1）——TensorFlow中的相关基本概念</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.302Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.302Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/a695.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/a695.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fzpyo15gfdj30m80cogo7.jpg"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Tensorflow 是一个编程系统，使用图（graph）来表示计算任务，图（graph）中的节点称之为 op  (operation），一个 op 获得 0 个或多个 Tensor，执行计算，产生 0 个或多个 Tensor。Tensor 看作是一个 n 维的数组或列表。图必须在会话（Session）里被启动。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>使用图（Graph）来表示计算任务</li>
+<li>在被称为会话（Session）的上下文（context）中执行图</li>
+<li>使用tensor表示数据</li>
+<li>通过变量（Variable）维护状态</li>
+<li>使用feed和fetch可以为任意的操作赋值或者从中获取数据</li>
+</ul>
+<p>下图显示了Session、Graph、Tensor、Variable之间的关系</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fxo6y63a09j30m80cogo7.jpg" alt="关系图"></p>
+<a id="more"></a>
+
+<h2 id="图（Graph）"><a href="#图（Graph）" class="headerlink" title="图（Graph）"></a>图（Graph）</h2><p>在TensorFlow的官方文档中，Graph 被定义为“一些 Operation 和 Tensor 的集合”。例如我们表达如下的一个计算的 python代码:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">b &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">c &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">d &#x3D; a*b+c</span><br><span class="line">e &#x3D; d*2</span><br></pre></td></tr></table></figure>
+
+<p>就会生成相应的一张图，在Tensorboard中看到的图大概如下这样。其中每一个圆圈表示一个Operation（输入处为Placeholder），椭圆到椭圆的边为Tensor，箭头的指向表示了这张图Operation 输入输出 Tensor 的传递关系。<br><img src="https://upload-images.jianshu.io/upload_images/5666077-4aea69b69b184954.png%EF%BC%9FimageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图（Graph）"></p>
+<h2 id="会话（Session）"><a href="#会话（Session）" class="headerlink" title="会话（Session）"></a>会话（Session）</h2><p><strong><code>会话（Session）</code>**是TensorFlow中的一个非常重要的概念。上面提到了，在TensorFlow中的所有计算都构建在一张计算图（Graph）中，这是一种对数学运算过程的可视化方法。而会话（Session）就是负责让这个图运算起来，</strong><code>会话（Session）</code>持有并管理TensorFlow程序运行时的所有资源**，例如CPU或者GPU的分配。</p>
+<h3 id="使用会话（Session）的两种方式"><a href="#使用会话（Session）的两种方式" class="headerlink" title="使用会话（Session）的两种方式"></a>使用会话（Session）的两种方式</h3><p><strong>方式一：明确的调用会话的生成函数和关闭会话函数</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建一个会话</span><br><span class="line">sess &#x3D; tf.Session()</span><br><span class="line"></span><br><span class="line"># 使用该会话执行一个结果</span><br><span class="line">sess.run(...)</span><br><span class="line"></span><br><span class="line"># 关闭会话，释放内存</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<p>调用这种方式时，要明确调用<code>Session.close()</code>，以释放资源。当程序异常退出时，关闭函数就不能被执行，从而导致资源泄露。</p>
+<p><strong>方式二：上下文管理机制自动释放所有资源</strong><br>利用with结构将需要执行的代码包裹住，创建会话，并通过上下文机制管理器管理该会话</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    sess.run(...)</span><br><span class="line"># 不需要再调用&quot;Session.close()&quot;</span><br><span class="line"># 在退出with statement时，会话关闭和资源释放已自动完成</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Tips:一般情况下推荐使用方式二使用会话</p>
+</blockquote>
+<h2 id="张量（Tensor）"><a href="#张量（Tensor）" class="headerlink" title="张量（Tensor）"></a>张量（Tensor）</h2><p>TensorFlow用张量这种数据结构来表示所有的数据.你可以把一个张量想象成一个n维的数组或列表.一个张量有一个静态类型和动态类型的维数.张量可以在图中的节点之间流通</p>
+<h3 id="阶"><a href="#阶" class="headerlink" title="阶"></a>阶</h3><p>在TensorFlow系统中，张量的维数来被描述为阶.但是张量的阶和矩阵的阶并不是同一个概念.张量的阶（有时是关于如顺序或度数或者是n维）是张量维数的一个数量描述.比如，下面的张量（使用Python中list定义的）就是2阶.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">t &#x3D; [[1, 2, 3], [4, 5, 6], [7, 8, 9]]</span><br></pre></td></tr></table></figure>
+<p>你可以认为一个二阶张量就是我们平常所说的矩阵，一阶张量可以认为是一个向量.对于一个二阶张量你可以用语句t[i, j]来访问其中的任何元素.而对于三阶张量你可以用’t[i, j, k]’来访问其中的任何元素.</p>
+<table>
+<thead>
+<tr>
+<th>阶</th>
+<th>数学实例</th>
+<th>Python 例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>纯量 (只有大小)</td>
+<td>s = 483</td>
+</tr>
+<tr>
+<td>1</td>
+<td>向量(大小和方向)</td>
+<td>v = [1.1, 2.2, 3.3]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>矩阵(数据表)</td>
+<td>m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3阶张量 (数据立体)</td>
+<td>t = [[[2], [4], [6]], [[8], [10], [12]], [[14], [16], [18]]]</td>
+</tr>
+<tr>
+<td>n</td>
+<td>n阶 (自己想想看)</td>
+<td>….</td>
+</tr>
+<tr>
+<td>张量是所有深度学习框架中最核心的组件，因为后续的所有运算和优化算法都是基于张量进行的。几何代数中定义的张量是基于向量和矩阵的推广，通俗一点理解的话，我们可以将标量视为零阶张量，矢量视为一阶张量，那么矩阵就是二阶张量。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="变量（Variable）"><a href="#变量（Variable）" class="headerlink" title="变量（Variable）"></a>变量（Variable）</h2><p>本质也是一个tensor张量，但variable主要用于数据存储(可以理解为Java中的全局变量)<br>Variable 用于构建一个变量，在计算图的运算过程中，其值会一直保存到程序运行结束，而一般的tensor张量在tensorflow运行过程中只是在计算图中流过，并不会保存下来。<br>因此Varibale主要用来保存tensorflow构建的一些结构中的参数，这些参数才不会随着运算的消失而消失，才能最终得到一个模型。 </p>
+<blockquote>
+<p><strong>Tips:</strong> 所有和varible有关的操作在计算的时候都要使用session会话来控制，包括计算，打印等等。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 2.2变量</span><br><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># 定义一个变量 X</span><br><span class="line">X&#x3D;tf.Variable([1,2])</span><br><span class="line"># 定义一个常量 a</span><br><span class="line">a&#x3D;tf.constant([3,3])</span><br><span class="line"></span><br><span class="line"># 增加一个减法op</span><br><span class="line">sub&#x3D;tf.subtract(X,a)</span><br><span class="line"># 增加一个加法op</span><br><span class="line">add&#x3D;tf.add(X,sub)</span><br><span class="line"></span><br><span class="line"># 初始化所有变量</span><br><span class="line">init&#x3D;tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"># 定义一段会话</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 在会话中执行</span><br><span class="line">    sess.run(init)</span><br><span class="line">    print(sess.run(sub))</span><br><span class="line">    print(sess.run(add))</span><br><span class="line"></span><br><span class="line"># 创建一个变量，初始化为0</span><br><span class="line">state&#x3D;tf.Variable(0,name&#x3D;&#39;counter&#39;)</span><br><span class="line"># 创建一个op，作用是使state加1</span><br><span class="line">new_value&#x3D;tf.add(state,1)</span><br><span class="line"># 赋值op</span><br><span class="line">update&#x3D;tf.assign(state,new_value)</span><br><span class="line"># 变量初始化</span><br><span class="line">init&#x3D;tf.global_variables_initializer()</span><br><span class="line"># 创建一个会话</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 利用会话执行初始化操作</span><br><span class="line">    sess.run(init)</span><br><span class="line">    print(sess.run(state))</span><br><span class="line">    for _ in range(5):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print(sess.run(state))</span><br></pre></td></tr></table></figure>
+<h2 id="feed和fetch"><a href="#feed和fetch" class="headerlink" title="feed和fetch"></a>feed和fetch</h2><h3 id="1-fetch"><a href="#1-fetch" class="headerlink" title="1.fetch"></a>1.fetch</h3><p>会话运行完成之后，如果我们想查看会话运行的结果，可以使用fetch来实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Fetch</span><br><span class="line"># 创建三个常量</span><br><span class="line">input1 &#x3D; tf.constant(3.0)</span><br><span class="line">input2 &#x3D; tf.constant(2.0)</span><br><span class="line">input3 &#x3D; tf.constant(5.0)</span><br><span class="line"></span><br><span class="line"># 执行加法和乘法操作</span><br><span class="line">add&#x3D;tf.add(input2,input3)</span><br><span class="line">mul&#x3D;tf.multiply(input1,add)</span><br><span class="line"></span><br><span class="line"># 创建会话执行</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    result&#x3D;sess.run([mul,add])</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[21.0, 7.0]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-feed与占位符-placeholder"><a href="#2-feed与占位符-placeholder" class="headerlink" title="2.feed与占位符(placeholder)"></a>2.feed与占位符(placeholder)</h3><p>当我们构建一个模型的时候，有时候我们需要在运行时候输入一些初始数据，这个时候定义模型数据输入在tensorflow中就是用placeholder（占位符）来完成。它的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def placeholder(dtype, shape&#x3D;None, name&#x3D;None):</span><br></pre></td></tr></table></figure>
+<p>其中dtype表示数据类型，shape表示维度，name表示名称。它支持单个数值与任意维度的数组输入。<br><strong>1. 单个数值占位符定义</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">b &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">c &#x3D; tf.add(a, b)</span><br></pre></td></tr></table></figure>
+<p>当我们需要执行得到c的运行结果时候我们就需要在会话运行时候，通过feed来插入a与b对应的值，代码演示如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run(c, feed_dict&#x3D;&#123;a:3, b:4&#125;)</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>其中 feed_dict就是完成了feed数据功能，feed中文有喂饭的意思，这里还是很形象的，对定义的模型来说，数据就是最好的食物，所以就通过feed_dict来实现。</p>
+<p><strong>2. 多维数据</strong><br>同样对于模型需要多维数据的情况下通过feed一样可以完成，定义二维数据的占位符，然后相加，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">_x &#x3D; tf.placeholder(shape&#x3D;[None, 2], dtype&#x3D;tf.float32, name&#x3D;&quot;x&quot;)</span><br><span class="line">_y &#x3D; tf.placeholder(shape&#x3D;[None, 2], dtype&#x3D;tf.float32, name&#x3D;&quot;y&quot;)</span><br><span class="line">z &#x3D; tf.add(_x, _y);</span><br></pre></td></tr></table></figure>
+<p>运行时候需要feed二维数组，实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run(z, feed_dict&#x3D;&#123;_x:[[3, 4], [1, 2]], _y:[[8, 8],[9, 9]]&#125;)</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>下面给出示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Feed</span><br><span class="line"># 常见占位符</span><br><span class="line">input4&#x3D;tf.placeholder(tf.float32)</span><br><span class="line">input5&#x3D;tf.placeholder(tf.float32)</span><br><span class="line">output&#x3D;tf.multiply(input4,input5)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    # feed的数据以字典的形式传入</span><br><span class="line">    print(sess.run(output,feed_dict&#x3D;&#123;input4:2.0,input5:45.2&#125;))</span><br></pre></td></tr></table></figure>
+<p>执行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">90.4</span><br></pre></td></tr></table></figure>
+<h3 id="3-feed和fetch"><a href="#3-feed和fetch" class="headerlink" title="3. feed和fetch"></a>3. feed和fetch</h3><p>总结下，feed和fetch的作用就和他的意思是一样的，fetch用于从session中获取结果数据，feed是用于将数据喂给operation，然后用session执行。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/a695.html">https://blog.liangyueyong.cn/p/a695.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TensorFlow/">TensorFlow</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/4c3a.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TensorFlow笔记2——利用TensorFlow训练一个最简单的一元线性模型</div></div></a></div><div class="next-post pull-right"><a href="/p/4ab8.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TensorFlow笔记0——在Ubuntu 18.04安装tensorflow 1.12 GPU版本</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/ec16.html" title="【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型</div></div></a></div><div><a href="/p/e376.html" title="【译】Effective TensorFlow Chapter3——理解变量域Scope以及何时应该使用它们"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter3——理解变量域Scope以及何时应该使用它们</div></div></a></div><div><a href="/p/96d2.html" title="AI画家第六弹——终章"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第六弹——终章</div></div></a></div><div><a href="/p/a56b.html" title="AI画家第四弹——利用Flask发布风格迁移API"><img class="cover" src="http://upload-images.jianshu.io/upload_images/5666077-172f3e6d74027f33?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第四弹——利用Flask发布风格迁移API</div></div></a></div><div><a href="/p/ffc6.html" title="为了预测股票，我用TensorFlow深度学习了股市数据"><img class="cover" src="https://upload-images.jianshu.io/upload_images/5666077-a670bc7cf4e3b904.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">为了预测股票，我用TensorFlow深度学习了股市数据</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%EF%BC%88Graph%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">图（Graph）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%EF%BC%88Session%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">会话（Session）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BC%9A%E8%AF%9D%EF%BC%88Session%EF%BC%89%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">4.1.</span> <span class="toc-text">使用会话（Session）的两种方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F%EF%BC%88Tensor%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">张量（Tensor）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6"><span class="toc-number">5.1.</span> <span class="toc-text">阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%EF%BC%88Variable%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">变量（Variable）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#feed%E5%92%8Cfetch"><span class="toc-number">7.</span> <span class="toc-text">feed和fetch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fetch"><span class="toc-number">7.1.</span> <span class="toc-text">1.fetch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-feed%E4%B8%8E%E5%8D%A0%E4%BD%8D%E7%AC%A6-placeholder"><span class="toc-number">7.2.</span> <span class="toc-text">2.feed与占位符(placeholder)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-feed%E5%92%8Cfetch"><span class="toc-number">7.3.</span> <span class="toc-text">3. feed和fetch</span></a></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TensorFlow笔记3——利用TensorFlow和MNIST数据集训练一个最简单的手写数字识别模型 | 斯是陋室</title><meta name="keywords" content="TensorFlow"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言当我们开始学习编程的时候，第一件事往往是学习打印”Hello World”。就好比编程入门有Hello World，机器学习入门有MNIST。 MNIST是一个入门级的计算机视觉数据集，它包含各种手写数字图片：  它也包含每一张图片对应的标签，告诉我们这个是数字几。比如，上面这四张图片的标签分别是5，0，4，1。 其实训练一个简单的手写数字识别模型的代码很短，我的示例代码总共也就50行，除去">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow笔记3——利用TensorFlow和MNIST数据集训练一个最简单的手写数字识别模型">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/efd4.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="前言当我们开始学习编程的时候，第一件事往往是学习打印”Hello World”。就好比编程入门有Hello World，机器学习入门有MNIST。 MNIST是一个入门级的计算机视觉数据集，它包含各种手写数字图片：  它也包含每一张图片对应的标签，告诉我们这个是数字几。比如，上面这四张图片的标签分别是5，0，4，1。 其实训练一个简单的手写数字识别模型的代码很短，我的示例代码总共也就50行，除去">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.304Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.304Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="TensorFlow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/efd4"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">TensorFlow笔记3——利用TensorFlow和MNIST数据集训练一个最简单的手写数字识别模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.304Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.304Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/efd4.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/efd4.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fzpyolzjavj30yg0flwfm.jpg"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当我们开始学习编程的时候，第一件事往往是学习打印”Hello World”。就好比编程入门有Hello World，机器学习入门有MNIST。</p>
+<p>MNIST是一个入门级的计算机视觉数据集，它包含各种手写数字图片：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-4a6654c25e807636.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="手写数字"></p>
+<p>它也包含每一张图片对应的标签，告诉我们这个是数字几。比如，上面这四张图片的标签分别是<code>5，0，4，1</code>。</p>
+<p>其实训练一个简单的手写数字识别模型的代码很短，我的示例代码总共也就50行，除去注释、空格之类的估计连30行也没有，但是去理解包含在代码中的设计思想是很重要的，因此这篇笔记我会将我对每段代码的理解都记录下来。</p>
+<p>参考：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://www.tensorfly.cn/tfdoc/tutorials/mnist_beginners.html">MNIST机器学习入门</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.csuldw.com/2016/03/26/2016-03-26-loss-function/">机器学习-损失函数</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="MNIST数据集"><a href="#MNIST数据集" class="headerlink" title="MNIST数据集"></a>MNIST数据集</h2><p>MNIST数据集的官网是<a target="_blank" rel="noopener" href="http://yann.lecun.com/exdb/mnist/">Yann LeCun’s website</a>。<br>虽然python提供了直接下载这个数据集的代码，但是考虑到国内网络的原因，建议<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/11i2ddnxPwR7CFEvN8qmuYg">点这下载数据集</a>，然后导入到项目根目录下就可以了。<br><img src="https://upload-images.jianshu.io/upload_images/5666077-aa298c973df86d93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据集"><br>下载下来的数据集被分成两部分：60000行的训练数据集（mnist.train）和10000行的测试数据集（mnist.test）。这样的划分很重要，在机器学习模型设计时必须有一个单独的测试数据集不用于训练而是用来评估这个模型的性能，从而更加容易把设计的模型推广到其他数据集上（泛化）。</p>
+<p>正如前面提到的一样，每一个MNIST数据单元有两部分组成：一张包含手写数字的图片和一个对应的标签。我们把这些图片设为<code>xs</code>，把这些标签设为<code>ys</code>。训练数据集和测试数据集都包含<code>xs</code>和<code>ys</code>，比如训练数据集的图片是 <code>mnist.train.images </code>，训练数据集的标签是 <code>mnist.train.labels</code>。</p>
+<p>每一张图片包含28像素X28像素。我们可以用一个数字数组来表示这张图片：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-9b355b3ff43c303a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例"></p>
+<p>我们把这个数组展开成一个向量，长度是 28x28 = 784。如何展开这个数组（数字间的顺序）不重要，只要保持各个图片采用相同的方式展开就可以了。</p>
+<p>因此，在MNIST训练数据集中，<code>mnist.train.images</code> 是一个形状为 <code>[60000, 784]</code> 的张量，第一个维度数字用来索引图片，第二个维度数字用来索引每张图片中的像素点。在此张量里的每一个元素，都表示某张图片里的某个像素的强度值，值介于0和1之间。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-0a83e428622c1389.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="mnist.train.images"></p>
+<p>相对应的MNIST数据集的标签是介于0到9的数字，用来描述给定图片里表示的数字。为了用于这个教程，我们使标签数据是”one-hot vectors”。 一个<code>one-hot</code>向量除了某一位的数字是1以外其余各维度数字都是0。所以在此教程中，数字n将表示成一个只有在第n维度（从0开始）数字为1的10维向量。比如，标签0将表示成([1,0,0,0,0,0,0,0,0,0,0])。因此， <code>mnist.train.labels</code> 是一个 <code>[60000, 10]</code> 的数字矩阵。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-33d890b038990c3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="mnist.train.labels"></p>
+<p>现在，我们准备好可以开始构建我们的模型啦！</p>
+<h2 id="Softmax回归介绍"><a href="#Softmax回归介绍" class="headerlink" title="Softmax回归介绍"></a>Softmax回归介绍</h2><blockquote>
+<p>（因为这段很枯燥，而且我也解释不太好，所以干脆直接从Tensorflow的网站上复制粘贴来了，如果不想看的可以直接跳过到模型实现，最后写代码的时候只要知道用softmax函数就可以了）</p>
+</blockquote>
+<p>我们知道MNIST的每一张图片都表示一个数字，从0到9。我们希望得到给定图片代表每个数字的概率。比如说，我们的模型可能推测一张包含9的图片代表数字9的概率是80%但是判断它是8的概率是5%（因为8和9都有上半部分的小圆），然后给予它代表其他数字的概率更小的值。</p>
+<p>这是一个使用softmax回归（softmax regression）模型的经典案例。softmax模型可以用来给不同的对象分配概率。即使在之后，我们训练更加精细的模型时，最后一步也需要用softmax来分配概率。</p>
+<p>softmax回归（softmax regression）分两步：第一步</p>
+<p>为了得到一张给定图片属于某个特定数字类的证据（evidence），我们对图片像素值进行加权求和。如果这个像素具有很强的证据说明这张图片不属于该类，那么相应的权值为负数，相反如果这个像素拥有有利的证据支持这张图片属于这个类，那么权值是正数。</p>
+<p>下面的图片显示了一个模型学习到的图片上每个像素对于特定数字类的权值。红色代表负数权值，蓝色代表正数权值。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-7083c239f3187d37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>我们也需要加入一个额外的偏置量（bias），因为输入往往会带有一些无关的干扰量。因此对于给定的输入图片 <strong>x</strong> 它代表的是数字 <strong>i</strong> 的证据可以表示为</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-7cf005141e7aefd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>其中 <code>$W_i$</code> 代表权重，<code>$b_i$</code> 代表数字 <strong>i</strong> 类的偏置量，<strong>j</strong> 代表给定图片 <strong>x</strong> 的像素索引用于像素求和。然后用softmax函数可以把这些证据转换成概率 <strong>y</strong>：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-30ff0e52c4f8fca2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>这里的softmax可以看成是一个激励（activation）函数或者链接（link）函数，把我们定义的线性函数的输出转换成我们想要的格式，也就是关于10个数字类的概率分布。因此，给定一张图片，它对于每一个数字的吻合度可以被softmax函数转换成为一个概率值。softmax函数可以定义为：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-a12f5cc5a5e3a531.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>展开等式右边的子式，可以得到：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-e6ab587fa09a9a89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>但是更多的时候把softmax模型函数定义为前一种形式：把输入值当成幂指数求值，再正则化这些结果值。这个幂运算表示，更大的证据对应更大的假设模型（hypothesis）里面的乘数权重值。反之，拥有更少的证据意味着在假设模型里面拥有更小的乘数系数。假设模型里的权值不可以是0值或者负值。Softmax然后会正则化这些权重值，使它们的总和等于1，以此构造一个有效的概率分布。（更多的关于Softmax函数的信息，可以参考Michael Nieslen的书里面的这个<a target="_blank" rel="noopener" href="http://neuralnetworksanddeeplearning.com/chap3.html#softmax">部分</a>，其中有关于softmax的可交互式的可视化解释。）</p>
+<p>对于softmax回归模型可以用下面的图解释，对于输入的<code>xs</code>加权求和，再分别加上一个偏置量，最后再输入到softmax函数中：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-557513ac4d2082ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>如果把它写成一个等式，我们可以得到：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-0520bdcf138d9bc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>我们也可以用向量表示这个计算过程：用矩阵乘法和向量相加。这有助于提高计算效率。（也是一种更有效的思考方式）</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-9caa41f27aaff842.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>更进一步，可以写成更加紧凑的方式：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-73d3acf5e95009f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<h2 id="实现模型"><a href="#实现模型" class="headerlink" title="实现模型"></a>实现模型</h2><p>在使用TensorFlow之前，首先导入它：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br></pre></td></tr></table></figure>
+<p>然后导入数据集并载入数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 载入数据</span></span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">&quot;MNIST_data&quot;</span>, one_hot=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们通过操作符号变量来描述这些可交互的操作单元，可以用下面的方式创建一个：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">784</span>])</span><br></pre></td></tr></table></figure>
+
+<p><code>x</code>不是一个特定的值，而是一个占位符<code>placeholder</code>，我们在TensorFlow运行计算时输入这个值。我们希望能够输入任意数量的MNIST图像，每一张图展平成784维的向量。我们用2维的浮点数张量来表示这些图，这个张量的形状是<code>[None，784 ]</code>。（这里的<code>None</code>表示此张量的第一个维度可以是任何长度的。）</p>
+<p>我们的模型也需要权重和偏量，当然我们可以把它们当做是另外的输入（使用占位符），但TensorFlow有一个更好的方法来表示它们：<code>Variable</code> 。 一个<code>Variable</code>代表一个可修改的张量，存在在TensorFlow的用于描述交互性操作的图中。它们可以用于计算输入值，也可以在计算中被修改。对于各种机器学习应用，一般都会有模型参数，可以用<code>Variable</code>表示。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>,<span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br></pre></td></tr></table></figure>
+
+<p>我们赋予<code>tf.Variable</code>不同的初值来创建不同的<code>Variable</code>：在这里，我们都用全为零的张量来初始化<code>W</code>和<code>b</code>。因为我们要学习<code>W</code>和<code>b</code>的值，它们的初值可以随意设置。</p>
+<p>注意，<code>W</code>的维度是[784，10]，因为我们想要用784维的图片向量乘以它以得到一个10维的证据值向量，每一位对应不同数字类。<code>b</code>的形状是[10]，所以我们可以直接把它加到输出上面。</p>
+<p>现在，我们可以实现我们的模型啦。只需要一行代码！</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prediction = tf.nn.softmax(tf.matmul(x, W)+b)</span><br></pre></td></tr></table></figure>
+
+<p>首先，我们用<code>tf.matmul(X，W)</code>表示<code>x</code>乘以<code>W</code>，对应之前等式里面的Wx，这里<code>x</code>是一个2维张量拥有多个输入。然后再加上<code>b</code>，把和输入到<code>tf.nn.softmax</code>函数里面。</p>
+<h2 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h2><p>为了训练我们的模型，我们首先需要定义一个指标来评估这个模型是好的。其实，在机器学习，我们通常定义指标来表示一个模型是坏的，这个指标称为成本（cost）或损失（loss），然后尽量最小化这个指标。但是，这两种方式是相同的。损失函数有很多种，在这里我们采用<strong>平方损失函数</strong>，通常我们会用均方差（MSE）作为衡量指标，公式如下：$MSE=\frac{1}{n}\sum_{i=1}^{n}\ (y-prediction)^2$</p>
+<p>为了计算损失函数，我们首先需要添加一个新的占位符用于输入正确值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+
+<p>然后定义损失函数（loss）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 二次代价函数</span></span><br><span class="line">loss = tf.reduce_mean(tf.square(y-prediction))</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的含义我在上一篇笔记中已经介绍过了，不清楚的推荐阅读<a target="_blank" rel="noopener" href="https://juejin.im/post/5c014ff6f265da6149335fe9">TensorFlow笔记（2）——利用TensorFlow训练一个最简单的一元线性模型</a></p>
+<p>然后使用优化算法来不断的修改变量来降低损失值：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用梯度下降法</span><br><span class="line">train_step &#x3D; tf.train.GradientDescentOptimizer(0.1).minimize(loss)</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们要求TensorFlow用梯度下降算法（gradient descent algorithm）以0.01的学习速率最小化交叉熵。梯度下降算法（gradient descent algorithm）是一个简单的学习过程，TensorFlow只需将每个变量一点点地往使成本不断降低的方向移动。当然TensorFlow也提供了<a target="_blank" rel="noopener" href="http://www.tensorfly.cn/tfdoc/api_docs/python/train.html#optimizers">其他许多优化算法</a>：只要简单地调整一行代码就可以使用其他的算法。</p>
+<p>TensorFlow在这里实际上所做的是，它会在后台给描述你的计算的那张图里面增加一系列新的计算操作单元用于实现反向传播算法和梯度下降算法。然后，它返回给你的只是一个单一的操作，当运行这个操作时，它用梯度下降算法训练你的模型，微调你的变量，不断减少成本。</p>
+<p>现在，我们已经设置好了我们的模型。在运行计算之前，我们需要添加一个操作来初始化我们创建的变量：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 初始化变量</span></span><br><span class="line">init = tf.global_variables_initializer()</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们就可以定义一个会话了，并在该会话中执行初始化变量的操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br></pre></td></tr></table></figure>
+
+<p>然后开始训练模型，我们需要先定义一个批次<code>batch_size</code>，因为我们在训练的时候不可能每次都只放一张图片进入神经网络（因为这样太慢了），批次为100在这表示的就是我们一次放入100张图片进入神经网络，然后我们需要计算一共会有多少个批次：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 每个批次的大小</span></span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line"><span class="comment"># 计算一共有多少个批次</span></span><br><span class="line">n_batch = mnist.train.num_examples // batch_size</span><br></pre></td></tr></table></figure>
+
+<p>然后我们让模型循环训练30次:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">        <span class="keyword">for</span> batch <span class="keyword">in</span> range(n_batch):</span><br><span class="line">            batch_xs, batch_ys = mnist.train.next_batch(batch_size)</span><br><span class="line">            sess.run(train_step, feed_dict=&#123;x: batch_xs, y: batch_ys&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>该循环的每个步骤中，我们都会随机抓取训练数据中的<code>n_batch</code>个批处理数据点，然后我们用这些数据点作为参数替换之前的占位符来运行<code>train_step</code>。</p>
+<p>使用一小部分的随机数据来进行训练被称为随机训练（stochastic training）- 在这里更确切的说是随机梯度下降训练。在理想情况下，我们希望用我们所有的数据来进行每一步的训练，因为这能给我们更好的训练结果，但显然这需要很大的计算开销。所以，每一次训练我们可以使用不同的数据子集，这样做既可以减少计算开销，又可以最大化地学习到数据集的总体特性。</p>
+<h2 id="评估我们的模型"><a href="#评估我们的模型" class="headerlink" title="评估我们的模型"></a>评估我们的模型</h2><p>那么我们的模型性能如何呢？</p>
+<p>首先让我们找出那些预测正确的标签。<code>tf.argmax</code> 是一个非常有用的函数，它能给出某个tensor对象在某一维上的其数据最大值所在的索引值。由于标签向量是由0,1组成，因此最大值1所在的索引位置就是类别标签，比如<code>tf.argmax(y,1)</code>返回的是模型对于任一输入x预测到的标签值，而 <code>tf.argmax(prediction,1)</code> 代表正确的标签，我们可以用 <code>tf.equal</code> 来检测我们的预测是否真实标签匹配(索引位置一样表示匹配)。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 结果存放在一个布尔型列表中</span></span><br><span class="line"><span class="comment"># argmax返回一维张量中最大的值所在的位置</span></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y, <span class="number">1</span>), tf.argmax(prediction, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这行代码会给我们一组布尔值。为了确定正确预测项的比例，我们可以把布尔值转换成浮点数，然后取平均值。例如，<code>[True, False, True, True]</code> 会变成 <code>[1,0,1,1]</code> ，取平均值后得到 <code>0.75</code>.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 求准确率</span></span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br></pre></td></tr></table></figure>
+
+<p>最后，我们计算所学习到的模型在测试数据集上面的正确率。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">        <span class="keyword">for</span> batch <span class="keyword">in</span> range(n_batch):</span><br><span class="line">            batch_xs, batch_ys = mnist.train.next_batch(batch_size)</span><br><span class="line">            sess.run(train_step, feed_dict=&#123;x: batch_xs, y: batch_ys&#125;)</span><br><span class="line">        acc = sess.run(accuracy, feed_dict=&#123;</span><br><span class="line">                       x: mnist.test.images, y: mnist.test.labels&#125;)</span><br><span class="line">        print(<span class="string">&quot;Iter &quot;</span>+str(epoch)+<span class="string">&quot;,Testing Accuracy &quot;</span>+str(acc))</span><br></pre></td></tr></table></figure>
+
+<p>最终结果如下图所示，精确度大约在90%</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fxusgjtmjfj30cy0nedjr.jpg" alt="image-20181204162301761"></p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>我加了datetime这个包，目的是为了计算代码的执行时间，不影响阅读。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.2 MNIST数据集分类简单版本</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"></span><br><span class="line">start = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 载入数据</span></span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">&quot;MNIST_data&quot;</span>, one_hot=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 每个批次的大小</span></span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line"><span class="comment"># 计算一共有多少个批次</span></span><br><span class="line">n_batch = mnist.train.num_examples // batch_size</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义两个placeholder</span></span><br><span class="line">x = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">784</span>])</span><br><span class="line">y = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个简单的神经网络</span></span><br><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>, <span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line">prediction = tf.nn.softmax(tf.matmul(x, W)+b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 二次代价函数</span></span><br><span class="line">loss = tf.reduce_mean(tf.square(y-prediction))</span><br><span class="line"><span class="comment"># 使用梯度下降法</span></span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化变量</span></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果存放在一个布尔型列表中</span></span><br><span class="line"><span class="comment"># argmax返回一维张量中最大的值所在的位置</span></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y, <span class="number">1</span>), tf.argmax(prediction, <span class="number">1</span>))</span><br><span class="line"><span class="comment"># 求准确率</span></span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">        <span class="keyword">for</span> batch <span class="keyword">in</span> range(n_batch):</span><br><span class="line">            batch_xs, batch_ys = mnist.train.next_batch(batch_size)</span><br><span class="line">            sess.run(train_step, feed_dict=&#123;x: batch_xs, y: batch_ys&#125;)</span><br><span class="line">        acc = sess.run(accuracy, feed_dict=&#123;</span><br><span class="line">                       x: mnist.test.images, y: mnist.test.labels&#125;)</span><br><span class="line">        print(<span class="string">&quot;Iter &quot;</span>+str(epoch)+<span class="string">&quot;,Testing Accuracy &quot;</span>+str(acc))</span><br><span class="line"></span><br><span class="line">end = datetime.datetime.now()</span><br><span class="line">print((end-start).seconds)</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/efd4.html">https://blog.liangyueyong.cn/p/efd4.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TensorFlow/">TensorFlow</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/f2b.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TensorFlow笔记4——优化手写数字识别模型之代价函数和拟合</div></div></a></div><div class="next-post pull-right"><a href="/p/4c3a.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TensorFlow笔记2——利用TensorFlow训练一个最简单的一元线性模型</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/ec16.html" title="【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型</div></div></a></div><div><a href="/p/9793.html" title="【译】Effective TensorFlow Chapter2——理解静态和动态形状"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter2——理解静态和动态形状</div></div></a></div><div><a href="/p/96d2.html" title="AI画家第六弹——终章"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第六弹——终章</div></div></a></div><div><a href="/p/a56b.html" title="AI画家第四弹——利用Flask发布风格迁移API"><img class="cover" src="http://upload-images.jianshu.io/upload_images/5666077-172f3e6d74027f33?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第四弹——利用Flask发布风格迁移API</div></div></a></div><div><a href="/p/ffc6.html" title="为了预测股票，我用TensorFlow深度学习了股市数据"><img class="cover" src="https://upload-images.jianshu.io/upload_images/5666077-a670bc7cf4e3b904.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">为了预测股票，我用TensorFlow深度学习了股市数据</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MNIST%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">2.</span> <span class="toc-text">MNIST数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax%E5%9B%9E%E5%BD%92%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">Softmax回归介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">实现模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.</span> <span class="toc-text">训练模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E6%88%91%E4%BB%AC%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">评估我们的模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">7.</span> <span class="toc-text">完整代码</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>你的系统可用性 5 个 9 了吗？ | 斯是陋室</title><meta name="keywords" content="其他"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="又是一年放榜日，众多考生满怀期待的点开招生网，结果输了信息才发现根本没办法查询——查询人数太多了，直接把系统打挂了！ 这个时候，还没翻身的码农闰土被问到一个直击心灵的问题：这个系统可用性达到了多少个 9？ 想要回答这个问题，我们得先有些前置知识。 可用性&amp;可靠性这两个词很相似，我也一直找不到一个很好的定义区分这两个词，直到后来在看分布式系统的时候，看到了一个解释：  可用性被定义为系统的一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你的系统可用性 5 个 9 了吗？">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/431c.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="又是一年放榜日，众多考生满怀期待的点开招生网，结果输了信息才发现根本没办法查询——查询人数太多了，直接把系统打挂了！ 这个时候，还没翻身的码农闰土被问到一个直击心灵的问题：这个系统可用性达到了多少个 9？ 想要回答这个问题，我们得先有些前置知识。 可用性&amp;可靠性这两个词很相似，我也一直找不到一个很好的定义区分这两个词，直到后来在看分布式系统的时候，看到了一个解释：  可用性被定义为系统的一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1giln3b89k1j30p00anq4t.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.384Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.384Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="其他">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1giln3b89k1j30p00anq4t.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/431c"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://tva1.sinaimg.cn/large/007S8ZIlgy1giln3b89k1j30p00anq4t.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">你的系统可用性 5 个 9 了吗？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.384Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.384Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%91%E6%99%AE/">技术科普</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/431c.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/431c.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>又是一年放榜日，众多考生满怀期待的点开招生网，结果输了信息才发现根本没办法查询——查询人数太多了，直接把系统打挂了！</p>
+<p>这个时候，还没翻身的码农闰土被问到一个直击心灵的问题：这个系统可用性达到了多少个 9？</p>
+<p>想要回答这个问题，我们得先有些前置知识。</p>
+<h2 id="可用性-amp-可靠性"><a href="#可用性-amp-可靠性" class="headerlink" title="可用性&amp;可靠性"></a>可用性&amp;可靠性</h2><p>这两个词很相似，我也一直找不到一个很好的定义区分这两个词，直到后来在看分布式系统的时候，看到了一个解释：</p>
+<blockquote>
+<p>可用性被定义为系统的一个<strong>属性</strong>，它说明系统已准备好，马上就可以使用。换句话说，高度可用的系统在任何给定的时刻都能及时地工作。<br>可靠性是指系统可以无故障地持续运行，是一个<strong>持续的状态</strong>。与可用性相反，可靠性是根据时间段而不是任何时刻来进行定义的。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-8c5c18ff0153414b.png&originHeight=226&originWidth=226&size=34806&status=done&style=none&width=226?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>举个例子，想要评估一个舔 🐶，可用性就是你找他的时候能不能找到，而可靠性就是你需要花钱的时候他出手大不大方。一个舔 🐶 如果随叫随到，但是花钱太抠，就是高可用、低可靠；而如果他经常找不到人，但出手很大方，就是低可用、高可靠。</p>
+<p>类比到系统时，如果系统在每小时崩溃 1ms，那么它的可用性就超过 99.9999%，但是它还是高度不可靠。与之类似，如果一个系统从来不崩溃，但是每年要停机两星期，那么它是高度可靠的，但是可用性只有 96%。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-0e6fc48e557d9a64.png&originHeight=461&originWidth=640&size=60750&status=done&style=none&width=411?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>百度百科对于系统可靠性的解释是：系统可靠性一般是指在规定的时间内和规定的工况下，系统完成规定功能的能力/概率。也就是系统的无故障运行概率。而在我们在评估一个系统的可用性和可靠性时，一般都会说三个 9，四个 9 之类的。这些一般都是说系统的**SLA(Service Level Agreement)**具体是几个「9」，以此，来表示该系统一年中具体宕机的时间。对于这几个 9 的解释，我会放到第三节来详细解释。</p>
+<p>不过，在实际交流过程中，大多数人对这两个词的理解还是差不多的。况且咬文嚼字也并非本文的主题，接下来我们来看看可用性的计算方式。</p>
+<h2 id="可用性计算"><a href="#可用性计算" class="headerlink" title="可用性计算"></a>可用性计算</h2><p>通常我们用 A 表示一个系统的可用性，用以下几个指标来辅助计算：</p>
+<h3 id="相关指标"><a href="#相关指标" class="headerlink" title="相关指标"></a>相关指标</h3><h4 id="MTBF"><a href="#MTBF" class="headerlink" title="MTBF"></a>MTBF</h4><p>MTBF,即平均故障间隔时间，英文全称是“Mean Time Between Failure”。是衡量一个产品（尤其是电器产品）的可靠性指标。单位为“小时”。具体来说，是指相邻两次故障之间的平均工作时间，也称为平均故障间隔。</p>
+<h4 id="MTTR"><a href="#MTTR" class="headerlink" title="MTTR"></a>MTTR</h4><p>MTTR，全称是 Mean Time To Repair，即平均修复时间。是指可修复产品的平均修复时间，就是从出现故障到修复中间的这段时间。MTTR 越短表示易恢复性越好。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-fd931ef75d19cb18.png&originHeight=457&originWidth=1097&size=214887&status=done&style=none&width=1097?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>通过上述公式计算出单个组件的可用性后，我们便可以以此计算出整个系统的可用性，而系统可用性是通过将系统建模为串联和并联的组件来计算的。以下规则用于确定系统是串联的还是并联的：</p>
+<ul>
+<li>如果组件的失效导致组合变得不可操作，则认为这两个部件是串联操作的</li>
+<li>如果组件的故障导致另一部件接管故障部件的操作，则认为这两部件并行操作</li>
+</ul>
+<h3 id="串行可用性"><a href="#串行可用性" class="headerlink" title="串行可用性"></a>串行可用性</h3><p><img src="https://upload-images.jianshu.io/upload_images/5666077-582e2fa107864bec.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>如上图所示，两个组件 X 和 Y，如果有一个出问题导致整个组合都不可用，就认为 X 和 Y 这两个组件是串联的。只有组件 X 和组件 Y 同时可用时，整个组合才可用。由此可见，组合的可用性是这两部分的乘积，公式如下：</p>
+<p>A = Ax Ay</p>
+<p>从上面的等式我们看出，串联系统中，整体组合的可用性，总是低于单个组件的可用性。</p>
+<p>对于上面 X 和 Y 两个串联组件，可用性如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-ca7542edaaad8340.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>从上面的表中，我们看到，即使使用了非常高可用性的组件 Y，但组合系统仍然受组件 X 的影响，会降低好多，和「木桶原理」一致，都受最短板的影响。</p>
+<h3 id="并行可用性"><a href="#并行可用性" class="headerlink" title="并行可用性"></a>并行可用性</h3><p><img src="https://upload-images.jianshu.io/upload_images/5666077-6ab5009c312ae817.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>如上图所示，如果两个组件都失败时，整个系统会失败的话，这两个组件会被认为是并行的。任一组件可用时，整个系统都是可用的。整体可用性是 1- (两个组件都不可用)，公式如下：</p>
+<p>A = 1-(1-Ax )2</p>
+<p>从上面我们能看出，两个组件并行的系统，整体可用性要任一单独的组件可用性高。如上图假设是组件 X 的两个部分，可用性如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-df4db79df86f5702.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>我们看到，即使一个可用性低的组件 X，组合后的系统可用性也很高。</p>
+<h2 id="X-个-9"><a href="#X-个-9" class="headerlink" title="X 个 9"></a>X 个 9</h2><p>说完了可用性的计算后，总算是回到本文的重点了，有个衡量其可靠性的标准——X 个 9，X 个 9 表示在系统 1 年时间的使用过程中，系统可以正常使用时间与总时间（1 年）之比，我们通过下面的计算来感受下 X 个 9 在不同级别的可靠性差异。</p>
+<ul>
+<li>3 个 9：(1-99.9%) × 365 × 24=8.76 小时，表示该系统在连续运行 1 年时间里最多可能的业务中断时间是 8.76 小时。</li>
+<li>4 个 9：(1-99.99%) × 365 × 24=0.876 小时=52.6 分钟，表示该系统在连续运行 1 年时间里最多可能的业务中断时间是 52.6 分钟。</li>
+<li>5 个 9：(1-99.999%) × 365 × 24 × 60=5.26 分钟，表示该系统在连续运行 1 年时间里最多可能的业务中断时间是 5.26 分钟。</li>
+</ul>
+<p>那么 X 个 9 里的 X 只代表数字 3<del>5，为什么没有 1</del>2，也没有大于 6 的呢？我们接着往下计算：</p>
+<ul>
+<li>1 个 9：(1-90%) × 365=36.5 天</li>
+<li>2 个 9：(1-99%) × 365=3.65 天</li>
+<li>6 个 9：(1-99.9999%) × 365 × 24 × 60 × 60=31 秒</li>
+</ul>
+<p>可以看到 1 个 9 和、2 个 9 分别表示一年时间内业务可能中断的时间是 36.5 天、3.65 天，这种级别的可靠性或许还不配使用“可靠性”这个词；而 6 个 9 则表示一年内业务中断时间最多是 31 秒，那么这个级别的可靠性并非实现不了，而是要做到从“5 个 9” 到“6 个 9”的可靠性提升的话，后者需要付出比前者几倍的成本。</p>
+<table>
+<thead>
+<tr>
+<th>可用性 A</th>
+<th>X 个 9</th>
+<th>停机时间（分钟）</th>
+<th>适用产品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.999</td>
+<td>3 个 9</td>
+<td>500</td>
+<td>电脑或服务器</td>
+</tr>
+<tr>
+<td>0.9999</td>
+<td>4 个 9</td>
+<td>50</td>
+<td>企业级设备</td>
+</tr>
+<tr>
+<td>0.99999</td>
+<td>5 个 9</td>
+<td>5</td>
+<td>一般电信级设备</td>
+</tr>
+<tr>
+<td>0.999999</td>
+<td>6 个 9</td>
+<td>0.5</td>
+<td>更高要求电信级设备</td>
+</tr>
+</tbody></table>
+<h2 id="怎么做到更多的-9？"><a href="#怎么做到更多的-9？" class="headerlink" title="怎么做到更多的 9？"></a>怎么做到更多的 9？</h2><p>每个公司对几个 9 的定义都不一样，好多的互联网公司要求都是 99.99。像一些事业单位网站，办事网站等，经常故障服务不可用，估计最高也就到 99.9。</p>
+<p>而我们经常用到所谓 4 个 9 或者 5 个 9，也就是 99.99%与 99.999%。虽然这两者的差距是 0.009%，还不到 0.01%。但对于系统而言，恰恰是这不到 0.01%的差距，决定了系统完全不在一个档次上。</p>
+<p>我们知道一个系统的可靠性并不完全取决于硬件，而由软件和硬件共同来决定，如果是软件问题，就需要监控自己的服务，在服务出现异常或者宕机的时候，能及时恢复。增加冗余，防止出现问题。</p>
+<p>但是要提高系统的可靠性，除软件外，还有硬件的部分，包括网络、服务器以及存储设备等。其中，网络可以借助多运营商接入来解决，存储有 RAID、快照等应对技术，通过备份来提高数据安全性。对于服务器来说，我们可以选择集群的方式保证高可用。</p>
+<hr>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghzqtz801ij30go0go40v.jpg"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/431c.html">https://blog.liangyueyong.cn/p/431c.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%85%B6%E4%BB%96/">其他</a></div><div class="post_share"><div class="social-share" data-image="https://tva1.sinaimg.cn/large/007S8ZIlgy1giln3b89k1j30p00anq4t.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/9bcc.html"><img class="prev-cover" src="https://tva1.sinaimg.cn/large/006y8mN6ly1g8f1vnkztbj31hc0u0n3s.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">你看那个区块链，像不像我借你的二百元？</div></div></a></div><div class="next-post pull-right"><a href="/p/f93c.html"><img class="next-cover" src="https://upload-images.jianshu.io/upload_images/5666077-15f649ee5e40092c.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">从网易云日推浅谈个性化推荐系统--基于用户的协同过滤算法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/3e02.html" title="为什么我建议你去写博客？"><img class="cover" src="https://tva1.sinaimg.cn/large/0081Kckwly1gkburs4eqbj31900u0ql3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">为什么我建议你去写博客？</div></div></a></div><div><a href="/p/dff4.html" title="DO,VO,DTO 你知道吗？"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggwloquallj30p00anac3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">DO,VO,DTO 你知道吗？</div></div></a></div><div><a href="/p/7819.html" title="想追女神？先学 Synchronized 吧"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gitqh5kzgyj30v00cwdza.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">想追女神？先学 Synchronized 吧</div></div></a></div><div><a href="/p/ee77.html" title="聊一聊 2038 年问题"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdtf806d6oj30p00ank6y.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">聊一聊 2038 年问题</div></div></a></div><div><a href="/p/373c.html" title="费米推理——理科生的脑筋急转弯"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">费米推理——理科生的脑筋急转弯</div></div></a></div><div><a href="/p/d340.html" title="API 与 SDK：有什么区别？"><img class="cover" src="https://tva1.sinaimg.cn/large/0081Kckwgy1glvvc8x4t9j30p00anq38.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">API 与 SDK：有什么区别？</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7-amp-%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">可用性&amp;可靠性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7%E8%AE%A1%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">可用性计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%8C%87%E6%A0%87"><span class="toc-number">2.1.</span> <span class="toc-text">相关指标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MTBF"><span class="toc-number">2.1.1.</span> <span class="toc-text">MTBF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MTTR"><span class="toc-number">2.1.2.</span> <span class="toc-text">MTTR</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E8%A1%8C%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">串行可用性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="toc-number">2.3.</span> <span class="toc-text">并行可用性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#X-%E4%B8%AA-9"><span class="toc-number">3.</span> <span class="toc-text">X 个 9</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E6%9B%B4%E5%A4%9A%E7%9A%84-9%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">怎么做到更多的 9？</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

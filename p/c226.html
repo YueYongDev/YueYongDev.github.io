@@ -1,0 +1,324 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】HTTP/2 常见问题解答 | 斯是陋室</title><meta name="keywords" content="掘金翻译计划,Http"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="**本文翻译自：  《HTTP&#x2F;2 Frequently Asked Questions》， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **  HTTP&#x2F;2 常见问题解答以下是有关 HTTP&#x2F;2 的常见问题解答。   一般问题  为什么要修订 HTTP ? 谁制定了 HTTP&#x2F;2?? HTTP&#x2F;2 与 SPDY 的关系是什么？  究竟是 HTTP&#x2F;2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】HTTP&#x2F;2 常见问题解答">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/c226.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="**本文翻译自：  《HTTP&#x2F;2 Frequently Asked Questions》， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **  HTTP&#x2F;2 常见问题解答以下是有关 HTTP&#x2F;2 的常见问题解答。   一般问题  为什么要修订 HTTP ? 谁制定了 HTTP&#x2F;2?? HTTP&#x2F;2 与 SPDY 的关系是什么？  究竟是 HTTP&#x2F;2.0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.282Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.282Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="掘金翻译计划">
+<meta property="article:tag" content="Http">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/c226"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】HTTP/2 常见问题解答</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.282Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.282Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/c226.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/c226.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fzudb80ogng30h808cmzi.gif"></p>
+<blockquote>
+<p>**本文翻译自：  <a target="_blank" rel="noopener" href="https://http2.github.io/faq/">《HTTP/2 Frequently Asked Questions》</a>， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **</p>
+</blockquote>
+<h1 id="HTTP-2-常见问题解答"><a href="#HTTP-2-常见问题解答" class="headerlink" title="HTTP/2 常见问题解答"></a>HTTP/2 常见问题解答</h1><p>以下是有关 HTTP/2 的常见问题解答。 </p>
+<ul>
+<li><p><a href="#%E4%B8%80%E8%88%AC%E9%97%AE%E9%A2%98">一般问题</a></p>
+<ul>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BF%AE%E8%AE%A2-http">为什么要修订 HTTP ?</a></li>
+<li><a href="#%E8%B0%81%E5%88%B6%E5%AE%9A%E4%BA%86-http2">谁制定了 HTTP/2??</a></li>
+<li><a href="#http2-%E4%B8%8E-spdy-%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88">HTTP/2 与 SPDY 的关系是什么？ </a></li>
+<li><a href="#%E7%A9%B6%E7%AB%9F%E6%98%AF-http20-%E8%BF%98%E6%98%AF-http2">究竟是 HTTP/2.0 还是 HTTP/2？ </a></li>
+<li><a href="#%E5%92%8C-http1x-%E7%9B%B8%E6%AF%94-http2-%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88">和 HTTP/1.x 相比 HTTP/2 的关键区别是什么?</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88-http2-%E6%98%AF%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84">为什么 HTTP/2 是二进制的?</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88-http2-%E9%9C%80%E8%A6%81%E5%A4%9A%E8%B7%AF%E4%BC%A0%E8%BE%93">为什么 HTTP/2 需要多路传输?</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AA%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA-TCP-%E8%BF%9E%E6%8E%A5">为什么只需要一个 TCP 连接?</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E9%80%81%E7%9A%84%E5%A5%BD%E5%A4%84%E6%98%AF%E4%BB%80%E4%B9%88">服务器推送的好处是什么？ </a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E5%A4%B4%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81%E5%8E%8B%E7%BC%A9">消息头为何需要压缩？ </a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9-HPACK">为什么选择 HPACK？ </a></li>
+<li><a href="#http2-%E5%8F%AF%E4%BB%A5%E8%AE%A9-cookies-%E6%88%96%E8%80%85%E5%85%B6%E4%BB%96%E6%B6%88%E6%81%AF%E5%A4%B4%E5%8F%98%E5%BE%97%E6%9B%B4%E5%A5%BD%E5%90%97">HTTP/2 可以让 cookies （或者其他消息头）变得更好吗？ </a></li>
+<li><a href="#%E9%9D%9E%E6%B5%8F%E8%A7%88%E5%99%A8%E7%94%A8%E6%88%B7%E7%9A%84-HTTP-%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84">非浏览器用户的 HTTP 是什么样的？ </a></li>
+<li><a href="#http2-%E9%9C%80%E8%A6%81%E5%8A%A0%E5%AF%86%E5%90%97">HTTP/2 需要加密吗？ </a></li>
+<li><a href="#Hhttp2-%E6%98%AF%E6%80%8E%E4%B9%88%E6%8F%90%E9%AB%98%E5%AE%89%E5%85%A8%E6%80%A7%E7%9A%84%E5%91%A2">HTTP/2 是怎么提高安全性的呢？ </a></li>
+<li><a href="#%E6%88%91%E7%8E%B0%E5%9C%A8%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8-http2-%E5%90%97">我现在可以使用 HTTP/2 吗？ </a></li>
+<li><a href="#http2-%E5%B0%86%E4%BC%9A%E5%8F%96%E4%BB%A3-http1x-%E5%90%97">HTTP/2 将会取代 HTTP/1.x 吗？ </a></li>
+<li><a href="#http3-%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%90%97">HTTP/3 会出现吗？ </a></li>
+</ul>
+</li>
+<li><p><a href="#%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98">实现过程中的问题</a></p>
+<ul>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99%E4%BC%9A%E5%9B%B4%E7%BB%95%E6%B6%88%E6%81%AF%E5%A4%B4%E5%B8%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8E%A5%E7%BB%AD">为什么规则会围绕消息头帧的数据接续？ </a></li>
+<li><a href="#hpack-%E7%8A%B6%E6%80%81%E7%9A%84%E6%9C%80%E5%B0%8F%E5%92%8C%E6%9C%80%E5%A4%A7%E5%B0%BA%E5%AF%B8%E6%98%AF%E5%A4%9A%E5%B0%91">HPACK 状态的最小和最大尺寸是多少？ </a></li>
+<li><a href="#%E6%88%91%E6%80%8E%E6%A0%B7%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E4%BF%9D%E6%8C%81-hpack-%E7%8A%B6%E6%80%81">我怎样才能避免保持 HPACK 状态？ </a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E5%8D%95%E7%8B%AC%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8A%E4%B8%8B%E6%96%87">为什么会有一个单独的压缩/流程控制上下文？ </a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8-hpack-%E4%B8%AD%E6%9C%89-eos-%E7%9A%84%E7%AC%A6%E5%8F%B7">为什么在 HPACK 中有 EOS 的符号？ </a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-http2-%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E5%8F%AF%E4%BB%A5%E4%B8%8D%E7%94%A8%E5%8E%BB%E5%AE%9E%E7%8E%B0-http11-%E5%90%97">实现 HTTP/2 的时候我可以不用去实现 HTTP/1.1 吗？ </a></li>
+<li><a href="#532%E8%8A%82%E4%B8%AD%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%E7%A4%BA%E4%BE%8B%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE">5.3.2节中的优先级示例是否正确？ </a></li>
+<li><a href="#http2-%E8%BF%9E%E6%8E%A5%E4%B8%AD%E9%9C%80%E8%A6%81-tcp_nodelay-%E5%90%97">HTTP/2 连接中需要 TCP_NODELAY 吗？ </a></li>
+</ul>
+</li>
+<li><p><a href="#%E9%83%A8%E7%BD%B2%E9%97%AE%E9%A2%98">部署问题</a></p>
+<ul>
+<li><a href="#%E6%88%91%E8%AF%A5%E6%80%8E%E4%B9%88%E8%B0%83%E8%AF%95%E5%8A%A0%E5%AF%86%E8%BF%87%E7%9A%84-http2">我该怎么调试加密过的 HTTP/2 ？ </a></li>
+<li><a href="#%E6%88%91%E8%AF%A5%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8-http2-%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A8%E9%80%81">我该怎么使用 HTTP/2 的服务端推送？ </a></li>
+</ul>
+</li>
+</ul>
+<h2 id="一般问题"><a href="#一般问题" class="headerlink" title="一般问题"></a>一般问题</h2><h3 id="为什么要修订-HTTP"><a href="#为什么要修订-HTTP" class="headerlink" title="为什么要修订 HTTP?"></a>为什么要修订 HTTP?</h3><p>HTTP/1.1 已经在 Web 上服役了十五年以上， 但其劣势也开始显现。 </p>
+<p>加载一个网页比以往更加耗费资源（详见 <a target="_blank" rel="noopener" href="http://httparchive.org/trends.php#bytesTotal&reqTotal">HTTP Archive’s page size statistics</a>）。 与此同时， 有效地加载所有这些静态资源变得非常困难， 因为事实上， HTTP 只允许每个 TCP 连接有一个未完成的请求。 </p>
+<p>在过去， 浏览器使用多个 TCP 连接来发出并行请求。 然而这种做法是有限制的。 如果使用了太多的连接， 就会产生相反的效果（TCP 拥塞控制将被无效化， 导致的用塞事件将会损害性能和网络）。 而且从根本上讲这对其他程序来说也是不公平的(因为浏览器会占用许多本不该属于他的资源)。 </p>
+<p>同时， 大量的请求意味着“在线上”有大量重复的数据。 </p>
+<p>这两个因素都意味着 HTTP/1.1 请求有很多与之相关的开销; 如果请求太多， 则会影响性能。 </p>
+<p>这使得业界在有哪些是最好的实践上达成共识， 它们包括， 比如， Spriting（图片合并）、 data: inlining（数据内嵌）、 Domain Sharding（域名分片）和 Concatenation（文件合并）等。 这些不规范的解决方案说明了协议本身存在一些潜在问题， 并且在使用的时候会出现很多问题。 </p>
+<h3 id="谁制定了-HTTP-2"><a href="#谁制定了-HTTP-2" class="headerlink" title="谁制定了 HTTP/2?"></a>谁制定了 HTTP/2?</h3><p>HTTP/2 是由 <a target="_blank" rel="noopener" href="http://www.ietf.org/">IETF</a> 的 <a target="_blank" rel="noopener" href="https://httpwg.github.io/">HTTP 工作组</a>开发的， 该组织负责维护 HTTP 协议。 该组织由众多 HTTP 实现者、 用户、 网络运营商和 HTTP 专家组成。 </p>
+<p>值得注意的是， 虽然<a target="_blank" rel="noopener" href="http://lists.w3.org/Archives/Public/ietf-http-wg/">工作组的邮件列表</a>托管在 W3C 网站上， 不过这并不是 W3C 的功劳。 但是， Tim Berners-Lee 和 W3C TAG与 WG 的进度保持一致。 </p>
+<p>许多人为这项工作做出了自己的贡献， 尤其是一些来自“大”项目的工程师， 例如 Firefox、 Chrome、 Twitter、 Microsoft 的 HTTP stack、 Curl 和 Akamai。 以及若干 Python、 Ruby 和 NodeJS 的 HTTP 实现者。 </p>
+<p>为了更好的了解有关 IETF 的信息， 你可以访问 <a target="_blank" rel="noopener" href="http://www.ietf.org/tao.html">Tao of the IETF</a>； 你也可以在 <a target="_blank" rel="noopener" href="https://github.com/http2/http2-spec/graphs/contributors">Github 的贡献者图表</a>上查看有哪些人为该项目做出了贡献， 同样的， 你也可以在 <a target="_blank" rel="noopener" href="https://github.com/http2/http2-spec/wiki/Implementations">implementation list</a> 上查看谁正在参与该项目。 </p>
+<h3 id="HTTP-2-与-SPDY-的关系是什么？"><a href="#HTTP-2-与-SPDY-的关系是什么？" class="headerlink" title="HTTP/2 与 SPDY 的关系是什么？"></a>HTTP/2 与 SPDY 的关系是什么？</h3><p>HTTP/2 第一次出现并被讨论的时候， SPDY 正得到厂商 (像 Mozilla 和 nginx)的青睐和支持， 并被看成是 HTTP/1.x 基础上的重大改善。 </p>
+<p>在不断的征求建议以及投票选择之后， <a target="_blank" rel="noopener" href="http://tools.ietf.org/html/draft-mbelshe-httpbis-spdy-00">SPDY/2</a> 被选为 HTTP/2 的基础。 从那时起， 根据工作组的讨论和用户的反馈， 它已经有了很多变化。 </p>
+<p>在整个过程中， SPDY 的核心开发人员参与了 HTTP/2 的开发， 其中包括 Mike Belshe 和 Roberto Peon。 </p>
+<p>2015 年 2 月， 谷歌<a target="_blank" rel="noopener" href="https://blog.chromium.org/2015/02/hello-http2-goodbye-spdy.html">宣布计划</a>取消对 SPDY 的支持， 转而支持 HTTP/2。 </p>
+<h3 id="究竟是-HTTP-2-0-还是-HTTP-2？"><a href="#究竟是-HTTP-2-0-还是-HTTP-2？" class="headerlink" title="究竟是 HTTP/2.0 还是 HTTP/2？"></a>究竟是 HTTP/2.0 还是 HTTP/2？</h3><p>工作组决定删除次要版本（“.0”）， 因为它在 HTTP/1.x 中造成了很多混乱。 也就是说， HTTP 的版本仅代表它的兼容性， 不表示它的特性和“亮点”。 </p>
+<h3 id="和-HTTP-1-x-相比-HTTP-2-的关键区别是什么"><a href="#和-HTTP-1-x-相比-HTTP-2-的关键区别是什么" class="headerlink" title="和 HTTP/1.x 相比 HTTP/2 的关键区别是什么?"></a>和 HTTP/1.x 相比 HTTP/2 的关键区别是什么?</h3><p>在高版本 HTTP/2 中： </p>
+<ul>
+<li>是二进制的， 代替原有的文本</li>
+<li>是多路复用的， 代替原来的序列和阻塞机制</li>
+<li>所以可以在一个连接中并行处理</li>
+<li>压缩头部信息减小开销</li>
+<li>允许服务器主动推送应答到客户端的缓存中</li>
+</ul>
+<h3 id="为什么-HTTP-2-是二进制的"><a href="#为什么-HTTP-2-是二进制的" class="headerlink" title="为什么 HTTP/2 是二进制的?"></a>为什么 HTTP/2 是二进制的?</h3><p>和 HTTP/1.x 这样的文本协议相比， 二进制协议解析起来更高效、 “线上”更紧凑， 更重要的是错误更少。 因为它们对如空白字符的处理、 大小写、 行尾、 空链接等的处理很有帮助。 </p>
+<p>举个栗子 🌰， HTTP/1.1 定义了<a target="_blank" rel="noopener" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4">四种不同的方法来解析一条消息</a>； 而在HTTP/2中， 仅需一个代码路径即可。 </p>
+<p>HTTP/2 在 telnet 中不可用， 但是我们已经有一些工具可以提供支持， 例如 <a target="_blank" rel="noopener" href="https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9042">Wireshark plugin</a>。 </p>
+<h3 id="为什么-HTTP-2-需要多路传输？"><a href="#为什么-HTTP-2-需要多路传输？" class="headerlink" title="为什么 HTTP/2 需要多路传输？"></a>为什么 HTTP/2 需要多路传输？</h3><p>HTTP/1.x 有个问题叫“队头阻塞（head-of-line blocking）”， 它是指在一次连接（connection）中， 只提交一个请求的效率比较高， 多了就会变慢。 </p>
+<p>HTTP/1.1 尝试使用管线化（pipelining）来解决这个问题， 但是效果并不理想（对于数据量较大或者速度较慢的响应， 依旧会阻碍排在他后面的请求）。 此外， 由于许多网络媒介（intermediary）和服务器不能很好的支持管线化， 导致其部署起来也是困难重重。 </p>
+<p>这也就迫使客户端使用一些启发式的方法（基本靠猜）来决定通过哪些连接提交哪些请求； 由于一个页面加载的数据量， 往往比可用连接能处理的数据量的 10 倍还多， 对性能产生极大的负面影响， 结果经常引起瀑布式阻塞（waterfall of blocked requests）。 </p>
+<p>而多路传输（Multiplexing）能很好的解决这些问题， 因为它能同时处理多个消息的请求和响应； 甚至可以在传输过程中将一个消息跟另外一个掺杂在一起。 </p>
+<p>所以在这种情况下， 客户端只需要一个连接就能加载一个页面。 </p>
+<h3 id="为什么只需要一个-TCP-连接？"><a href="#为什么只需要一个-TCP-连接？" class="headerlink" title="为什么只需要一个 TCP 连接？"></a>为什么只需要一个 TCP 连接？</h3><p>如果使用 HTTP/1， 浏览器打开每个点（origin）就需要 4 到 8 个连接（Connection）。 而现在很多网站都使用多点传输（multiple origins）， 也就是说， 光加载一个网页， 打开的连接数量就超过 30 个。 </p>
+<p>一个应用同时打开这么多连接， 已经远远超出了当初设计 TCP 时的预想； 同时， 因为每个连接都会响应大量的数据， 使其可以造成网络缓存溢出的风险， 结果可能导致网络堵塞和数据重传。 </p>
+<p>此外， 使用这么多连接还会强占许多网络资源。 这些资源都是从那些“遵纪守法”的应用那“偷”的（VoIP 就是个很好的例子）。 </p>
+<h3 id="服务器推送的好处是什么？"><a href="#服务器推送的好处是什么？" class="headerlink" title="服务器推送的好处是什么？"></a>服务器推送的好处是什么？</h3><p>当浏览器请求页面时， 服务器发送 HTML 作为响应， 然后需要等待浏览器解析 HTML 并发出对所有嵌入资源的请求， 然后才能开始发送 JavaScript， 图像和 CSS。 </p>
+<p>服务器推送服务通过“推送”那些它认为客户端将会需要的内容到客户端的缓存中， 以此来避免往返的延迟。 </p>
+<p>但是， 推送的响应并不是“万金油”， 如果使用不当， 可能会损害性能。 正确使用服务器推送是一个长期的实验及研究领域。 </p>
+<h3 id="消息头为何需要压缩？"><a href="#消息头为何需要压缩？" class="headerlink" title="消息头为何需要压缩？"></a>消息头为何需要压缩？</h3><p>来自 Mozilla 的 Patrick McManus 通过计算消息头对平均页面负载的印象， 对此进行了形象且充分的说明。 </p>
+<p>假定一个页面有 80 个资源需要加载（这个数量对于今天的 Web 而言还是挺保守的）， 而每一次请求都有 1400 字节的消息头（这同样也并不少见， 因为 Cookie 和引用等东西的存在）， 至少要 7 到 8 个来回去“在线”获得这些消息头。 这还不包括响应时间——那只是从客户端那里获取到它们所花的时间而已。 </p>
+<p>这全都由于 TCP 的<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Slow-start">慢启动</a>机制， 它根据可以确认的数据包数量对新连接上发送数据的进行限制 — 这有效地限制了最初的几次来回可以发送的数据包数量。 </p>
+<p>相比之下， 即使是头部轻微的压缩也可以是让那些请求只需一个来回就能搞定——有时候甚至一个包就可以了。 </p>
+<p>这些额外的开销是相当多的， 特别是当你考虑对移动客户端的影响的时候。 这些往返的延迟， 即使在网络状况良好的情况下， 也高达数百毫秒。 </p>
+<h3 id="为什么选择-HPACK？"><a href="#为什么选择-HPACK？" class="headerlink" title="为什么选择 HPACK？"></a>为什么选择 HPACK？</h3><p>SPDY/2 提出在每一方都使用一个单独的 GZIP 上下文用于消息头压缩， 这实现起来很容易， 也很高效。 </p>
+<p>从那时起， 一个重要的攻击方式 <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/CRIME">CRIME</a> 诞生了， 这种方式可以攻击加密文件内部的所使用的压缩流（如GZIP）。 </p>
+<p>使用 CRIME， 那些具备向加密数据流中注入数据能力的攻击者获得了“探测”明文并还原的可能性。 因为是 Web， JavaScript 使其成为了可能， 而且已经有了通过对受到 TLS 保护的 HTTP 资源的使用CRIME来还原出 cookies 和认证令牌（Toekn）的案例。 </p>
+<p>因此， 我们不应该使用 GZIP 进行压缩。 由于找不到其它适合在这种用例下使用的安全有效的算法， 所以我们创造了一种新的， 针对消息头的， 进行粗粒度操作的压缩模式； 因为HTTP消息头并不常常需要改变， 我们仍然可以得到很好的压缩效率， 而且更加的安全。 </p>
+<h3 id="HTTP-2-可以让-cookies（或者其他消息头）变得更好吗？"><a href="#HTTP-2-可以让-cookies（或者其他消息头）变得更好吗？" class="headerlink" title="HTTP/2 可以让 cookies（或者其他消息头）变得更好吗？"></a>HTTP/2 可以让 cookies（或者其他消息头）变得更好吗？</h3><p>这一努力被许可在网络协议的一个修订版本上运行 – 例如， HTTP 消息头、 方法等等如何才能在不改变 HTTP 语义的前提下放到“网络上”。 </p>
+<p>这是因为 HTTP 的应用非常广泛。 如果我们使用了这个版本的 HTTP， 它就会引入一种新的状态机制（例如之前讨论过的例子）或者改变其核心方法（幸好， 这还没有发生过）， 这可能就意味着新的协议将不会兼容现有的 Web 内容。 </p>
+<p>具体地， 我们是想要能够从 HTTP/1 转移到 HTTP/2， 并且不会有信息的丢失。 如果我们开始”清理”消息头（大多数人都认为现在的 HTTP 消息头简直是一团糟)， 我们就不得不去面对现有 Web 的诸多问题。 </p>
+<p>这样做只会对新协议的普及造成麻烦。 </p>
+<p>总而言之， <a target="_blank" rel="noopener" href="https://httpwg.github.io/">工作组</a> 会对所有的 HTTP 负责， 而不仅仅只是 HTTP/2。 因此， 我们才可以在版本独立的新机制下运作， 只要它们也能同现有的网络向下兼容。 </p>
+<h3 id="非浏览器用户的-HTTP-是什么样的？"><a href="#非浏览器用户的-HTTP-是什么样的？" class="headerlink" title="非浏览器用户的 HTTP 是什么样的？"></a>非浏览器用户的 HTTP 是什么样的？</h3><p>如果非浏览器应用已经使用过 HTTP 的话， 那他们也应该可以使用 HTTP/2。 </p>
+<p>先前收到过 HTTP “APIs” 在 HTTP/2 中具有良好性能等特点这样的反馈， 那是因为 API 的设计不需要考虑类似请求开销这样一些事情。 </p>
+<p>话虽如此， 我们正在考虑的改进重点是典型的浏览用例， 因为这是协议主要的使用场景。 </p>
+<p>我们的章程里面是这样说的： </p>
+<p>正在组织的规范需要满足现在已经普遍部署了的 HTTP 的功能要求； 具体来说主要包括， Web 浏览（桌面端和移动端）， 非浏览器（“HTTP APIs” 形式的）， Web 服务（大范围的）， 还有各种网络中介（借助代理， 企业防火墙， 反向代理以及内容分发网络实现的）。 同样的， 对 HTTP/1.x 当前和未来的语义扩展 (例如， 消息头， 方法， 状态码， 缓存指令) 都应该在新的协议中支持。 </p>
+<p>值得注意的是， 这里没有包括将 HTTP 用于非特定行为所依赖的场景中（例如超时， 连接状态以及拦截代理）。 这些可能并不会被最终的产品启用。 </p>
+<h3 id="HTTP-2-需要加密吗？"><a href="#HTTP-2-需要加密吗？" class="headerlink" title="HTTP/2 需要加密吗？"></a>HTTP/2 需要加密吗？</h3><p>不需要。 在激烈的讨论后， 工作组没有就新协议是否使用加密（如 TLS）而达成共识。 </p>
+<p>不过， 有些观点认为只有在加密连接上使用时才会支持 HTTP/2， 而目前还没有浏览器支持未加密的 HTTP/2。 </p>
+<h3 id="HTTP-2-是怎么提高安全性的呢？"><a href="#HTTP-2-是怎么提高安全性的呢？" class="headerlink" title="HTTP/2 是怎么提高安全性的呢？"></a>HTTP/2 是怎么提高安全性的呢？</h3><p>HTTP/2 定义了所需的 TLS 文档， 包括版本， 密码套件黑名单和使用的扩展。 </p>
+<p>细节详见<a target="_blank" rel="noopener" href="http://http2.github.io/http2-spec/#TLSUsage">相关规范</a>。 </p>
+<p>还有对于一些额外机制的讨论， 例如对 HTTP:// URLs（所谓的“机会主义加密”）使用 TLS； 详见 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc8164">RFC 8164</a>。 </p>
+<h3 id="我现在可以使用-HTTP-2-吗？"><a href="#我现在可以使用-HTTP-2-吗？" class="headerlink" title="我现在可以使用 HTTP/2 吗？"></a>我现在可以使用 HTTP/2 吗？</h3><p>浏览器中， 最新版本的 Edge、 Safari、 Firefox 和 Chrome都支持 HTTP/2。 其他基于 Blink 的浏览器也将支持HTTP/2（例如 Opera 和 Yandex 浏览器）。 详见 <a target="_blank" rel="noopener" href="http://caniuse.com/#feat=http2">caniuse</a>。 </p>
+<p>还有几个可用的服务器（包括来自 <a target="_blank" rel="noopener" href="https://http2.akamai.com/">Akamai</a>， <a target="_blank" rel="noopener" href="https://www.google.com/">Google</a> 和 <a target="_blank" rel="noopener" href="https://twitter.com/">Twitter</a> 的主要站点的 beta 支持）， 以及许多可以部署和测试的开源实现。 </p>
+<p>有关详细信息， 请参阅<a target="_blank" rel="noopener" href="https://github.com/http2/http2-spec/wiki/Implementations">实现列表</a>。 </p>
+<h3 id="HTTP-2-将会取代-HTTP-1-x-吗？"><a href="#HTTP-2-将会取代-HTTP-1-x-吗？" class="headerlink" title="HTTP/2 将会取代 HTTP/1.x 吗？"></a>HTTP/2 将会取代 HTTP/1.x 吗？</h3><p>工作组的目的是让那些使用 HTTP/1.x 的人也可以使用 HTTP/2， 并能获得 HTTP/2 所带来的好处。 他们说过， 由于人们部署代理和服务器的方式不同， 我们不能强迫整个世界进行迁移， 所以 HTTP/1.x 仍有可能要使用了一段时间。 </p>
+<h3 id="HTTP-3-会出现吗？"><a href="#HTTP-3-会出现吗？" class="headerlink" title="HTTP/3 会出现吗？"></a>HTTP/3 会出现吗？</h3><p>如果通过 HTTP/2 引入的沟通协作机制运行良好， 支持新版本的 HTTP 就会比过去更加容易。 </p>
+<h2 id="实现过程中的问题"><a href="#实现过程中的问题" class="headerlink" title="实现过程中的问题"></a>实现过程中的问题</h2><h3 id="为什么规则会围绕消息头帧的数据接续？"><a href="#为什么规则会围绕消息头帧的数据接续？" class="headerlink" title="为什么规则会围绕消息头帧的数据接续？"></a>为什么规则会围绕消息头帧的数据接续？</h3><p>数据接续的存在是由于一个值（例如 cookie）可以超过 16kb， 这意味着它不可能全部装进一个帧里面。 </p>
+<p>所以就决定以最不容易出错的方式让所有的消息头数据以一个接一个帧的方式传递， 这样就使得对消息头的解码和缓冲区的管理变得更加容易。 </p>
+<h3 id="HPACK-状态的最小和最大尺寸是多少？"><a href="#HPACK-状态的最小和最大尺寸是多少？" class="headerlink" title="HPACK 状态的最小和最大尺寸是多少？"></a>HPACK 状态的最小和最大尺寸是多少？</h3><p>接收一方总是会控制 HPACK 中内存的使用量, 并且最小能设置到 0， 最大则要看 SETTING 帧中能表示的最大整型数是多少， 目前是 2^32 - 1。 </p>
+<h3 id="我怎样才能避免保持-HPACK-状态？"><a href="#我怎样才能避免保持-HPACK-状态？" class="headerlink" title="我怎样才能避免保持 HPACK 状态？"></a>我怎样才能避免保持 HPACK 状态？</h3><p>发送一个 SETTINGS 帧， 将状态尺寸（SETTINGS_HEADER_TABLE_SIZE）设置到 0， 然后 RST 所有的流， 直到一个带有 ACT 设置位的 SETTINGS 帧被接收。 </p>
+<h3 id="为什么会有一个单独的压缩-流程控制上下文？"><a href="#为什么会有一个单独的压缩-流程控制上下文？" class="headerlink" title="为什么会有一个单独的压缩/流程控制上下文？"></a>为什么会有一个单独的压缩/流程控制上下文？</h3><p>简单说一下。 </p>
+<p>原来的提案里面提到了流分组这个概念， 它可以共享上下文， 进行流控制等等。 尽管那样有利于代理（也有利于用户体验）， 但是这样做相应也会增加一点复杂度。 所以我们就决定先以一个简单的东西开始， 看看它会有多糟糕的问题， 并且在未来的协议版本中解决这些问题（如果有的话）。 </p>
+<h3 id="为什么在-HPACK-中有-EOS-的符号？"><a href="#为什么在-HPACK-中有-EOS-的符号？" class="headerlink" title="为什么在 HPACK 中有 EOS 的符号？"></a>为什么在 HPACK 中有 EOS 的符号？</h3><p>由于 CPU 效率和安全的原因， HPACK 的霍夫曼编码填充了霍夫曼编码字符串的下一个字节边界。 因此对于任何特定的字符串可能需要 0-7 个比特的填充。 </p>
+<p>如果单独考虑霍夫曼解码， 任何比所需要的填充长的符号都可以正常工作。 但是， HPACK 的设计允许按字节对比霍夫曼编码的字符串。 通过填充 EOS 符号需要的比特， 我们确保用户在做霍夫曼编码字符串字节级比较时是相等的。 反之， 许多 headers 可以在不需要霍夫曼解码的情况下被解析。 </p>
+<h3 id="实现-HTTP-2-的时候我可以不用去实现-HTTP-1-1-吗？"><a href="#实现-HTTP-2-的时候我可以不用去实现-HTTP-1-1-吗？" class="headerlink" title="实现 HTTP/2 的时候我可以不用去实现 HTTP/1.1 吗？"></a>实现 HTTP/2 的时候我可以不用去实现 HTTP/1.1 吗？</h3><p>通常/大部分时候可以。 </p>
+<p>对于运行在 TLS（ <code>h2</code> ）之上的 HTTP/2 而言， 如果你没有实现 <code>http1.1</code> 的 ALPN 标识， 那你就不需要支持任何 HTTP/1.1 的特性。 </p>
+<p>对于运行在 TCP（ <code>h2c</code> ）之上的 HTTP/2 而言， 你需要实现最初始的升级（Upgrade）请求。 </p>
+<p>只支持 <code>h2c</code> 的客户端需要生成一个针对 OPTIONS 的请求， 因为 <code>“*”</code> 或者一个针对 “/” 的 HEAD 请求， 他们相当安全， 并且也很容易构建。 仅仅只希望实现 HTTP/2 的客户端应当把没有带上 101 状态码的 HTTP/1.1 响应看做错误处理。 </p>
+<p>只支持 <code>h2c</code> 的服务器可以使用一个固定的 101 响应来接收一个包含升级（Upgrade）消息头字段的请求。 没有 <code>h2c</code> 的升级令牌的请求可以使用一个包含了 Upgrade 消息头字段的 505（HTTP 版本不支持）状态码来拒绝。 那些不希望处理 HTTP/1.1 响应的服务器应该在发送了带有鼓励用户在升级了的 HTTP/2 连接上重试的连接序言之后立即用带有 REFUSED_STREAM 错误码拒绝该请求的第一份数据流.</p>
+<h3 id="5-3-2节中的优先级示例是否正确？"><a href="#5-3-2节中的优先级示例是否正确？" class="headerlink" title="5.3.2节中的优先级示例是否正确？"></a>5.3.2节中的优先级示例是否正确？</h3><p>不， 那是正确的。 流 B 的权重为 4， 流 C 的权重为 12。 为了确定每个流接收的可用资源的比例， 将所有权重（16）相加并将每个流权重除以总权重。 因此， 流 B 接收四分之一的可用资源， 流 C 接收四分之三。 因此， 正如规范所述： <a target="_blank" rel="noopener" href="http://http2.github.io/http2-spec/#rfc.section.5.3.2">流 B 理想地接收分配给流 C 的资源的三分之一</a>。 </p>
+<h3 id="HTTP-2-连接中需要-TCP-NODELAY-吗？"><a href="#HTTP-2-连接中需要-TCP-NODELAY-吗？" class="headerlink" title="HTTP/2 连接中需要 TCP_NODELAY 吗？"></a>HTTP/2 连接中需要 TCP_NODELAY 吗？</h3><p>是的, 有可能。 即使对于仅使用单个流下载大量数据的客户端， 仍然需要一些数据包以相反的方向发回以实现最大传输速度。 在没有设置 TCP_NODELAY（仍然允许 Nagle 算法）的情况下， 可以传输的数据包将被延迟一段时间以允许它们与后续分组合并。 </p>
+<p>例如， 如果这样一个数据包告诉对等端有更多可用的窗口来发送数据， 那么将其发送延迟数毫秒（或更长时间）会对高速连接造成严重影响。 </p>
+<h2 id="部署问题"><a href="#部署问题" class="headerlink" title="部署问题"></a>部署问题</h2><h3 id="我该怎么调试加密过的-HTTP-2？"><a href="#我该怎么调试加密过的-HTTP-2？" class="headerlink" title="我该怎么调试加密过的 HTTP/2？"></a>我该怎么调试加密过的 HTTP/2？</h3><p>存取应用程序数据的方法很多， 最简单的方法是使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Key_Log_Format">NSS keylogging</a> 配上 Wireshark 插件（包含在最新开发版中）。 这种方法对 Firefox 和 Chrome 都适用。 </p>
+<h3 id="我该怎么使用-HTTP-2-的服务端推送？"><a href="#我该怎么使用-HTTP-2-的服务端推送？" class="headerlink" title="我该怎么使用 HTTP/2 的服务端推送？"></a>我该怎么使用 HTTP/2 的服务端推送？</h3><p>HTTP/2 服务器推送允许服务器向客户端提供内容而无需等待请求。 这可以提高检索资源的时间， 特别是对于具有大<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bandwidth-delay_product">带宽延迟产品</a>的连接， 其中网络往返时间占了在资源上花费的大部分时间。 </p>
+<p>推送基于请求内容而变化的资源可能是不明智的。 目前， 浏览器只会推送请求， 如果他们不这样做， 就会提出匹配的请求（详见 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7234#section-4">Section 4 of RFC 7234</a>）。 </p>
+<p>有些缓存不考虑所有请求头字段的变化， 即使它们列在 <code>Vary</code> header 字段中。 为了使推送资源被接收的可能性最大化， 内容协商是最好的选择。 基于 <code>accept-encoding</code> 报头字段的内容协商受到缓存的广泛尊重， 但是其他报头字段可能不受支持。 </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/c226.html">https://blog.liangyueyong.cn/p/c226.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a><a class="post-meta__tags" href="/tags/Http/">Http</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/3422.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div class="next-post pull-right"><a href="/p/16e3.html"><img class="next-cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&amp;h=338&amp;f=png&amp;s=167924" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】Flutter 系列入门教程五： 网格</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/8245.html" title="【译】为用户提供安全可靠的体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】为用户提供安全可靠的体验</div></div></a></div><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div><a href="/p/4e00.html" title="【译】JetPack Compose for Desktop 初体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】JetPack Compose for Desktop 初体验</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-2-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94"><span class="toc-number">1.</span> <span class="toc-text">HTTP&#x2F;2 常见问题解答</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">一般问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BF%AE%E8%AE%A2-HTTP"><span class="toc-number">1.1.1.</span> <span class="toc-text">为什么要修订 HTTP?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%81%E5%88%B6%E5%AE%9A%E4%BA%86-HTTP-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">谁制定了 HTTP&#x2F;2?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E4%B8%8E-SPDY-%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.3.</span> <span class="toc-text">HTTP&#x2F;2 与 SPDY 的关系是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%B6%E7%AB%9F%E6%98%AF-HTTP-2-0-%E8%BF%98%E6%98%AF-HTTP-2%EF%BC%9F"><span class="toc-number">1.1.4.</span> <span class="toc-text">究竟是 HTTP&#x2F;2.0 还是 HTTP&#x2F;2？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%92%8C-HTTP-1-x-%E7%9B%B8%E6%AF%94-HTTP-2-%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.5.</span> <span class="toc-text">和 HTTP&#x2F;1.x 相比 HTTP&#x2F;2 的关键区别是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-HTTP-2-%E6%98%AF%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84"><span class="toc-number">1.1.6.</span> <span class="toc-text">为什么 HTTP&#x2F;2 是二进制的?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-HTTP-2-%E9%9C%80%E8%A6%81%E5%A4%9A%E8%B7%AF%E4%BC%A0%E8%BE%93%EF%BC%9F"><span class="toc-number">1.1.7.</span> <span class="toc-text">为什么 HTTP&#x2F;2 需要多路传输？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AA%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA-TCP-%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.1.8.</span> <span class="toc-text">为什么只需要一个 TCP 连接？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E9%80%81%E7%9A%84%E5%A5%BD%E5%A4%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.9.</span> <span class="toc-text">服务器推送的好处是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%A4%B4%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81%E5%8E%8B%E7%BC%A9%EF%BC%9F"><span class="toc-number">1.1.10.</span> <span class="toc-text">消息头为何需要压缩？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9-HPACK%EF%BC%9F"><span class="toc-number">1.1.11.</span> <span class="toc-text">为什么选择 HPACK？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E5%8F%AF%E4%BB%A5%E8%AE%A9-cookies%EF%BC%88%E6%88%96%E8%80%85%E5%85%B6%E4%BB%96%E6%B6%88%E6%81%AF%E5%A4%B4%EF%BC%89%E5%8F%98%E5%BE%97%E6%9B%B4%E5%A5%BD%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.12.</span> <span class="toc-text">HTTP&#x2F;2 可以让 cookies（或者其他消息头）变得更好吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E6%B5%8F%E8%A7%88%E5%99%A8%E7%94%A8%E6%88%B7%E7%9A%84-HTTP-%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="toc-number">1.1.13.</span> <span class="toc-text">非浏览器用户的 HTTP 是什么样的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E9%9C%80%E8%A6%81%E5%8A%A0%E5%AF%86%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.14.</span> <span class="toc-text">HTTP&#x2F;2 需要加密吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E6%98%AF%E6%80%8E%E4%B9%88%E6%8F%90%E9%AB%98%E5%AE%89%E5%85%A8%E6%80%A7%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="toc-number">1.1.15.</span> <span class="toc-text">HTTP&#x2F;2 是怎么提高安全性的呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%8E%B0%E5%9C%A8%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8-HTTP-2-%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.16.</span> <span class="toc-text">我现在可以使用 HTTP&#x2F;2 吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E5%B0%86%E4%BC%9A%E5%8F%96%E4%BB%A3-HTTP-1-x-%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.17.</span> <span class="toc-text">HTTP&#x2F;2 将会取代 HTTP&#x2F;1.x 吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-3-%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.18.</span> <span class="toc-text">HTTP&#x2F;3 会出现吗？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">实现过程中的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99%E4%BC%9A%E5%9B%B4%E7%BB%95%E6%B6%88%E6%81%AF%E5%A4%B4%E5%B8%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8E%A5%E7%BB%AD%EF%BC%9F"><span class="toc-number">1.2.1.</span> <span class="toc-text">为什么规则会围绕消息头帧的数据接续？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HPACK-%E7%8A%B6%E6%80%81%E7%9A%84%E6%9C%80%E5%B0%8F%E5%92%8C%E6%9C%80%E5%A4%A7%E5%B0%BA%E5%AF%B8%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">HPACK 状态的最小和最大尺寸是多少？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E6%80%8E%E6%A0%B7%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E4%BF%9D%E6%8C%81-HPACK-%E7%8A%B6%E6%80%81%EF%BC%9F"><span class="toc-number">1.2.3.</span> <span class="toc-text">我怎样才能避免保持 HPACK 状态？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E5%8D%95%E7%8B%AC%E7%9A%84%E5%8E%8B%E7%BC%A9-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F"><span class="toc-number">1.2.4.</span> <span class="toc-text">为什么会有一个单独的压缩&#x2F;流程控制上下文？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8-HPACK-%E4%B8%AD%E6%9C%89-EOS-%E7%9A%84%E7%AC%A6%E5%8F%B7%EF%BC%9F"><span class="toc-number">1.2.5.</span> <span class="toc-text">为什么在 HPACK 中有 EOS 的符号？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0-HTTP-2-%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E5%8F%AF%E4%BB%A5%E4%B8%8D%E7%94%A8%E5%8E%BB%E5%AE%9E%E7%8E%B0-HTTP-1-1-%E5%90%97%EF%BC%9F"><span class="toc-number">1.2.6.</span> <span class="toc-text">实现 HTTP&#x2F;2 的时候我可以不用去实现 HTTP&#x2F;1.1 吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-2%E8%8A%82%E4%B8%AD%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%E7%A4%BA%E4%BE%8B%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE%EF%BC%9F"><span class="toc-number">1.2.7.</span> <span class="toc-text">5.3.2节中的优先级示例是否正确？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-%E8%BF%9E%E6%8E%A5%E4%B8%AD%E9%9C%80%E8%A6%81-TCP-NODELAY-%E5%90%97%EF%BC%9F"><span class="toc-number">1.2.8.</span> <span class="toc-text">HTTP&#x2F;2 连接中需要 TCP_NODELAY 吗？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.</span> <span class="toc-text">部署问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E8%AF%A5%E6%80%8E%E4%B9%88%E8%B0%83%E8%AF%95%E5%8A%A0%E5%AF%86%E8%BF%87%E7%9A%84-HTTP-2%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">我该怎么调试加密过的 HTTP&#x2F;2？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E8%AF%A5%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8-HTTP-2-%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A8%E9%80%81%EF%BC%9F"><span class="toc-number">1.3.2.</span> <span class="toc-text">我该怎么使用 HTTP&#x2F;2 的服务端推送？</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

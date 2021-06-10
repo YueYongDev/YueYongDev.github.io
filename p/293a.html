@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】5 分钟内从单体架构迁移到微服务架构 | 斯是陋室</title><meta name="keywords" content="掘金翻译计划,微服务"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="“微服务架构是一种将单体应用程序开发为一套小型服务的方法。”——马丁 · 福勒。   首先，我们需要明白什么是单体架构。因此，我将向你展示如何修改它的域,，以便为微服务架构做好准备。最后，我将会简要地告诉你微服务架构的基础知识，并讨论其优缺点。 单体架构每一种非垂直拆分的架构都是单体架构。软件设计中的垂直拆分意味着将应用程序划分为更多可部署的单元。这并不意味着单体架构不能水平划分。 单体这个词指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】5 分钟内从单体架构迁移到微服务架构">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/293a.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="“微服务架构是一种将单体应用程序开发为一套小型服务的方法。”——马丁 · 福勒。   首先，我们需要明白什么是单体架构。因此，我将向你展示如何修改它的域,，以便为微服务架构做好准备。最后，我将会简要地告诉你微服务架构的基础知识，并讨论其优缺点。 单体架构每一种非垂直拆分的架构都是单体架构。软件设计中的垂直拆分意味着将应用程序划分为更多可部署的单元。这并不意味着单体架构不能水平划分。 单体这个词指">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oixi4ktj318x0u0e81.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.286Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.287Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="掘金翻译计划">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oixi4ktj318x0u0e81.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/293a"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oixi4ktj318x0u0e81.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】5 分钟内从单体架构迁移到微服务架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.286Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.287Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/293a.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/293a.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>“微服务架构是一种将单体应用程序开发为一套小型服务的方法。”——马丁 · 福勒。</p>
+</blockquote>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oixi4ktj318x0u0e81.jpg" alt="Monolithic Architecture vs. Microservice Architecture"></p>
+<p>首先，我们需要明白什么是单体架构。因此，我将向你展示如何修改它的域,，以便为微服务架构做好准备。最后，我将会简要地告诉你微服务架构的基础知识，并讨论其优缺点。</p>
+<h2 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h2><p>每一种非垂直拆分的架构都是单体架构。软件设计中的垂直拆分意味着将应用程序划分为更多可部署的单元。这并不意味着单体架构不能<a target="_blank" rel="noopener" href="https://levelup.gitconnected.com/layers-in-software-architecture-that-every-sofware-architect-should-know-76b2452b9d9a">水平划分</a>。</p>
+<p>单体这个词指的是软件的体系结构是由一个后端单元组成。我之所以说后端，是因为我认为单体架构可以在具有多个 UI（如 Web 和移动设备）的同时，仍然可以被看作为一个整体。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oiyfcgrj309h0e7dgg.jpg" alt="Monolithic Architecture"></p>
+<p>组件之间的通信主要通过方法的调用。 如果你的前端和后端是在物理上隔离的，但是它们仍然是一个整体，例如 API 和 Web 客户端。</p>
+<p>除非你将后端划分为更多部署单元，否则在我看来你依旧是在使用单体架构。</p>
+<h2 id="单域模型"><a href="#单域模型" class="headerlink" title="单域模型"></a>单域模型</h2><blockquote>
+<p>“域是计算机程序的目标主题领域。 形式上，它代表特定编程项目的目标主题。”—— 维基百科</p>
+</blockquote>
+<p>用我的话说，域就是软件存在的原因和目的。我在 <a target="_blank" rel="noopener" href="https://levelup.gitconnected.com/3-domain-centric-architectures-every-software-developer-should-know-a15727ada79f">3 Domain-Centric Architectures Every Software Developer should Know</a> 这篇文章中写了有关域的几个观点。</p>
+<p>下图是一个将在线商城域可视化的结果。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oj5uhidj31kr0siwfk.jpg" alt="Single-Domain Model"></p>
+<p>Sales 和 Catalog 子域包含单个的 <strong>Product</strong> 实体。这种做法是不可取的，因为这将导致一个地方出现更多的问题。这违反了<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Separation_of_concerns">关注点分离原则</a>。</p>
+<p>强迫一个实体承担更多的责任，显然是不合理的。实体在这两种上下文中都包含未使用的属性。Sales 不需要知道产品的类别，并且对于 Catalog 来说，知道 Product 是如何将信息传递给客户并没有任何用处。</p>
+<p>为了避免这个问题，我们需要找到 Sales 和 Catalog 上下文的边界来将它们分开。这就引出接下来要说的限界上下文。</p>
+<h2 id="限界上下文"><a href="#限界上下文" class="headerlink" title="限界上下文"></a>限界上下文</h2><blockquote>
+<p>限界上下文是上下文的边界，参考 [Idapwiki.com](<a target="_blank" rel="noopener" href="https://ldapwiki.com/wiki/Bounded">https://ldapwiki.com/wiki/Bounded</a> Context)</p>
+</blockquote>
+<p>要指定限界上下文，我们需要识别出一个模型仍然有效的上下文范围。</p>
+<p>我们可以通过对域中的每个实体问一个简单的问题来验证模型，即：<strong>这个实体对于哪个上下文有效？</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oj7fmupj31pf0riwgp.jpg" alt="Specifying Entities Contexts"></p>
+<p>当一个实体对多个上下文有效时，那么它应该被划分到多个上下文中。每个实体都具有与上下文相对应的属性。这一步结束后，你的应用就准备好迁移到<strong>微服务架构</strong>了。</p>
+<p>下图是从在线商城域中对 Product 分离的实体类的可视化结果。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3ojbxttfj31yx0sfab7.jpg" alt="Multi-Domain Model"></p>
+<h2 id="微服务架构"><a href="#微服务架构" class="headerlink" title="微服务架构"></a>微服务架构</h2><p>微服务架构是因为微服务从而闻名。它是不断细分的单体。微服务将大型系统划分为较小的部分。</p>
+<p>限界上下文帮助我们找到一个微服务的最佳大小。微服务应具有足够小的模型，以最大程度减少与外部世界的通信，而出于存在的原因，则应足够大。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3ojcifbtj30y10u0gs9.jpg" alt="Microservices"></p>
+<p>微服务架构使项目具有独立性。该架构支持分离的开发团队、不同的操作系统、不同的编程语言以及不同的业务层架构，例如 [CQRS](<a target="_blank" rel="noopener" href="https://levelup.gitconnected.com/3-cqrs-architectures-that-every-software-architect-should">https://levelup.gitconnected.com/3-cqrs-architectures-that-every-software-architect-should</a> -know-a7f69aae8b6c)。</p>
+<p>每一个微服务对外都有一个明确定义的接口，主要通过 HTTP 传输，并以 JSON 的形式实现，例如 REST API。对于微服务之间的通信，推荐的解决方案是通过 <a target="_blank" rel="noopener" href="https://www.rabbitmq.com/">RabitMQ</a> 或 <a target="_blank" rel="noopener" href="https://azure.microsoft.com/cs-cz/services">Azure 服务总线</a> 之类的消息平台。</p>
+<p>如果没有适当的消息传递工具，那么微服务必须知道其他微服务的位置，并且这个位置是会被随意更改的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在大型应用程序中，微服务体系结构的开发成本曲线较好。小型应用程序无法从微服务中受益，因此应保持单体架构。</p>
+<p>微服务会有分布式系统的成本，比如负载平衡和网络延迟。这些问题可以通过任务编排器很好的解决，例如 <a target="_blank" rel="noopener" href="https://kubernetes.io/">Kubernetes </a> 和 <a target="_blank" rel="noopener" href="https://azure.microsoft.com/cs-cz/services/service-fabric/">Azure Service Fabric</a>。</p>
+<p>有了对以上这些内容的理解，接下来我推荐你去阅读 <a target="_blank" rel="noopener" href="https://app.pluralsight.com/library/courses/microservices-fundamentals/table-of-contents">Pluralsight course from Mark Heath — Microservices Fundamentals</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://martinfowler.com/microservices/">Martin Fowler’s blog post about microservices.</a></li>
+<li><a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/BoundedContext.html">Martin Fowler’s blog post about Bounded Context.</a></li>
+<li><a target="_blank" rel="noopener" href="https://app.pluralsight.com/library/courses/clean-architecture-patterns-practices-principles/table-of-contents">Pluralsight course Clean architecture patterns, practices, and principles</a>.</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/293a.html">https://blog.liangyueyong.cn/p/293a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a><a class="post-meta__tags" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></div><div class="post_share"><div class="social-share" data-image="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oixi4ktj318x0u0e81.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/6136.html"><img class="prev-cover" src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghqqbpvp0tj318y0u04h0.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】从头开始到最初的 10 个客户：我是如何设计并推出一个 SaaS 产品</div></div></a></div><div class="next-post pull-right"><a href="/p/1daa.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】Post-training 量化</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/cbb1.html" title="【译】人工智能何以留存"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&h=720&f=png&s=1025371" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】人工智能何以留存</div></div></a></div><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div><a href="/p/4e00.html" title="【译】JetPack Compose for Desktop 初体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】JetPack Compose for Desktop 初体验</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">单体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">单域模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E7%95%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">3.</span> <span class="toc-text">限界上下文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">微服务架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

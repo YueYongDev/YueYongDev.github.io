@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI绘画第二弹——图像风格迁移 | 斯是陋室</title><meta name="keywords" content="AI画家,TensorFlow"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="这篇文章是我的《AI 绘画系列》的第三篇，点击此处可以查看整个系列的文章本篇文章的源码可以在微信公众号「01 二进制」后台回复「图像风格迁移」获得  简介所谓图像风格迁移，是指将一幅内容图 A 的内容，和一幅风格图 B 的风格融合在一起，从而生成一张具有 A 图风格和 B 图内容的图片 C 的技术。目前这个技术已经得到了比较广泛的应用，这里安利一个 app——“大画家”，这个软件可以将用户的照片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI绘画第二弹——图像风格迁移">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/66c6.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="这篇文章是我的《AI 绘画系列》的第三篇，点击此处可以查看整个系列的文章本篇文章的源码可以在微信公众号「01 二进制」后台回复「图像风格迁移」获得  简介所谓图像风格迁移，是指将一幅内容图 A 的内容，和一幅风格图 B 的风格融合在一起，从而生成一张具有 A 图风格和 B 图内容的图片 C 的技术。目前这个技术已经得到了比较广泛的应用，这里安利一个 app——“大画家”，这个软件可以将用户的照片">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5666077-91e1cf6221072c85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2021-06-10T11:50:25.314Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.315Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="AI画家">
+<meta property="article:tag" content="TensorFlow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5666077-91e1cf6221072c85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/66c6"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(http://upload-images.jianshu.io/upload_images/5666077-91e1cf6221072c85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">AI绘画第二弹——图像风格迁移</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.314Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.315Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/66c6.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/66c6.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>这篇文章是我的《AI 绘画系列》的第三篇，点击<a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/mp/homepage?__biz=Mzg2ODAyNTgyMQ==&hid=4&sn=f69a637fac6b21c980f20fdd9af6753a&scene=18#wechat_redirect">此处</a>可以查看整个系列的文章<br>本篇文章的源码可以在微信公众号「01 二进制」后台回复「图像风格迁移」获得</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>所谓图像风格迁移，是指将一幅内容图 A 的内容，和一幅风格图 B 的风格融合在一起，从而生成一张具有 A 图风格和 B 图内容的图片 C 的技术。目前这个技术已经得到了比较广泛的应用，这里安利一个 app——“大画家”，这个软件可以将用户的照片自动变换为具有艺术家的风格的图片。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-687333c4c96b4bcd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>其实刚开始写这篇文章的时候我是准备详细介绍下原理的，但是后来发现公式实在是太多了，就算写了估计也没什么人看，而且这篇文章本来定位的用户就是只需要实现功能的新人。此外，有关风格迁移的原理解析的博客实在是太多了，所以这里我就把重点放在如何使用 TensorFlow 实现一个快速风格迁移的应用上，原理的解析就一带而过了。如果只想实现这个效果的可以跳到**”运行”**一节。</p>
+<p>第一步我们需要提前安装好 TensorFlow，如果有 GPU 的小伙伴可以参考我的这篇文章搭建一个 GPU 环境：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6qi9rnEhPdAqB_PNQh2EBw">《AI 绘画第一弹——用 GPU 为你的训练过程加速》</a>，如果打算直接用 CPU 运行的话，执行下面一行话就可以了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install numpy tensorflow scipy</span><br></pre></td></tr></table></figure>
+
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>本篇文章是基于<a href="https://link.juejin.im/?target=https://arxiv.org/abs/1508.06576">A Neural Algorithm of Artistic Style</a>一文提出的方法实现的，如果嫌看英文论文太麻烦的也可以查看我对这篇文章的翻译<a target="_blank" rel="noopener" href="https://juejin.im/post/5cb49a8af265da03a00fc535">【译】一种有关艺术风格迁移的神经网络算法</a>。</p>
+<p>为了将风格图的风格和内容图的内容进行融合，所生成的图片，在内容上应当尽可能接近内容图，在风格上应当尽可能接近风格图，因此需要定义<strong>内容损失函数</strong>和<strong>风格损失函数</strong>，经过加权后作为总的损失函数。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-dc3b7db48a9ef3f4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<h3 id="预训练模型"><a href="#预训练模型" class="headerlink" title="预训练模型"></a>预训练模型</h3><p>CNN 具有抽象和理解图像的能力，因此可以考虑将各个卷积层的输出作为图像的内容，这里我们采用了利用 VGG19 训练好的模型来进行迁移学习，一般认为，卷积神经网络的训练是对数据集特征的一步步抽取的过程，从简单的特征，到复杂的特征。训练好的模型学习到的是对图像特征的抽取方法，而该模型就是在 imagenet 数据集上预训练的模型，所以理论上来说，也可以直接用于抽取其他图像的特征，虽然效果可能没有在原有数据集上训练出的模型好，但是能够节省大量的训练时间，在特定情况下非常有用。</p>
+<h4 id="加载预训练模型"><a href="#加载预训练模型" class="headerlink" title="加载预训练模型"></a>加载预训练模型</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vggnet</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="comment"># 读取预训练的vgg模型</span></span><br><span class="line">    vgg = scipy.io.loadmat(settings.VGG_MODEL_PATH)</span><br><span class="line">    vgg_layers = vgg[<span class="string">&#x27;layers&#x27;</span>][<span class="number">0</span>]</span><br><span class="line">    net = &#123;&#125;</span><br><span class="line">    <span class="comment"># 使用预训练的模型参数构建vgg网络的卷积层和池化层</span></span><br><span class="line">    <span class="comment"># 全连接层不需要</span></span><br><span class="line">    <span class="comment"># 注意，除了input之外，这里参数都为constant，即常量</span></span><br><span class="line">    <span class="comment"># 和平时不同，我们并不训练vgg的参数，它们保持不变</span></span><br><span class="line">    <span class="comment"># 需要进行训练的是input，它即是我们最终生成的图像</span></span><br><span class="line">    net[<span class="string">&#x27;input&#x27;</span>] = tf.Variable(np.zeros([<span class="number">1</span>, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, <span class="number">3</span>]), dtype=tf.float32)</span><br><span class="line">    <span class="comment"># 参数对应的层数可以参考vgg模型图</span></span><br><span class="line">    net[<span class="string">&#x27;conv1_1&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;input&#x27;</span>], self.get_wb(vgg_layers, <span class="number">0</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv1_2&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv1_1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">2</span>))</span><br><span class="line">    net[<span class="string">&#x27;pool1&#x27;</span>] = self.pool(net[<span class="string">&#x27;conv1_2&#x27;</span>])</span><br><span class="line">    net[<span class="string">&#x27;conv2_1&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;pool1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">5</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv2_2&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv2_1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">7</span>))</span><br><span class="line">    net[<span class="string">&#x27;pool2&#x27;</span>] = self.pool(net[<span class="string">&#x27;conv2_2&#x27;</span>])</span><br><span class="line">    net[<span class="string">&#x27;conv3_1&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;pool2&#x27;</span>], self.get_wb(vgg_layers, <span class="number">10</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv3_2&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv3_1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">12</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv3_3&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv3_2&#x27;</span>], self.get_wb(vgg_layers, <span class="number">14</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv3_4&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv3_3&#x27;</span>], self.get_wb(vgg_layers, <span class="number">16</span>))</span><br><span class="line">    net[<span class="string">&#x27;pool3&#x27;</span>] = self.pool(net[<span class="string">&#x27;conv3_4&#x27;</span>])</span><br><span class="line">    net[<span class="string">&#x27;conv4_1&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;pool3&#x27;</span>], self.get_wb(vgg_layers, <span class="number">19</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv4_2&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv4_1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">21</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv4_3&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv4_2&#x27;</span>], self.get_wb(vgg_layers, <span class="number">23</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv4_4&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv4_3&#x27;</span>], self.get_wb(vgg_layers, <span class="number">25</span>))</span><br><span class="line">    net[<span class="string">&#x27;pool4&#x27;</span>] = self.pool(net[<span class="string">&#x27;conv4_4&#x27;</span>])</span><br><span class="line">    net[<span class="string">&#x27;conv5_1&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;pool4&#x27;</span>], self.get_wb(vgg_layers, <span class="number">28</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv5_2&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv5_1&#x27;</span>], self.get_wb(vgg_layers, <span class="number">30</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv5_3&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv5_2&#x27;</span>], self.get_wb(vgg_layers, <span class="number">32</span>))</span><br><span class="line">    net[<span class="string">&#x27;conv5_4&#x27;</span>] = self.conv_relu(net[<span class="string">&#x27;conv5_3&#x27;</span>], self.get_wb(vgg_layers, <span class="number">34</span>))</span><br><span class="line">    net[<span class="string">&#x27;pool5&#x27;</span>] = self.pool(net[<span class="string">&#x27;conv5_4&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> net</span><br></pre></td></tr></table></figure>
+
+<h3 id="训练思路"><a href="#训练思路" class="headerlink" title="训练思路"></a>训练思路</h3><p>我们使用 VGG 中的一些层的输出来表示图片的内容特征和风格特征。比如，我使用<code>[‘conv4_2’,’conv5_2’]</code>表示内容特征，使用<code>[‘conv1_1’,’conv2_1’,’conv3_1’,’conv4_1’]</code>表示风格特征。在<code>settings.py</code>中进行配置。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义计算内容损失的vgg层名称及对应权重的列表</span></span><br><span class="line">CONTENT_LOSS_LAYERS = [(<span class="string">&#x27;conv4_2&#x27;</span>, <span class="number">0.5</span>),(<span class="string">&#x27;conv5_2&#x27;</span>,<span class="number">0.5</span>)]</span><br><span class="line"><span class="comment"># 定义计算风格损失的vgg层名称及对应权重的列表</span></span><br><span class="line">STYLE_LOSS_LAYERS = [(<span class="string">&#x27;conv1_1&#x27;</span>, <span class="number">0.2</span>), (<span class="string">&#x27;conv2_1&#x27;</span>, <span class="number">0.2</span>), (<span class="string">&#x27;conv3_1&#x27;</span>, <span class="number">0.2</span>), (<span class="string">&#x27;conv4_1&#x27;</span>, <span class="number">0.2</span>), (<span class="string">&#x27;conv5_1&#x27;</span>, <span class="number">0.2</span>)]</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-ce8bc18588bfd81a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<h3 id="内容损失函数"><a href="#内容损失函数" class="headerlink" title="内容损失函数"></a>内容损失函数</h3><p><img src="http://upload-images.jianshu.io/upload_images/5666077-ba26b2cfd7085d7c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image-20190429151634583"></p>
+<p>其中，X 是噪声图片的特征矩阵，P 是内容图片的特征矩阵。M 是 P 的长*宽，N 是信道数。最终的内容损失为，每一层的内容损失加权和，再对层数取平均。</p>
+<p>我知道很多人一看到数学公式就会头疼，简单理解就是这个公式可以让模型在训练过程中不断的抽取图片的内容。</p>
+<h3 id="风格损失函数"><a href="#风格损失函数" class="headerlink" title="风格损失函数"></a>风格损失函数</h3><p>计算风格损失。我们使用风格图像在指定层上的特征矩阵的 GRAM 矩阵来衡量其风格，风格损失可以定义为风格图像和噪音图像特征矩阵的格莱姆矩阵的差值的 L2 范数。</p>
+<p>对于每一层的风格损失函数，我们有：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-02d023bc371abd56.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>其中 M 是特征矩阵的长*宽，N 是特征矩阵的信道数。G 为噪音图像特征的 Gram 矩阵，A 为风格图片特征的 GRAM 矩阵。最终的风格损失为，每一层的风格损失加权和，再对层数取平均。</p>
+<p>同样的，看不懂公式没关系，你就把它理解为这个公式可以在训练过程中获取图片的风格。</p>
+<h3 id="计算总损失函数并训练模型"><a href="#计算总损失函数并训练模型" class="headerlink" title="计算总损失函数并训练模型"></a>计算总损失函数并训练模型</h3><p>最后我们只需要将内容损失函数和风格损失函数带入刚开始的公式中即可，要做的就是控制一些风格的权重和内容的权重：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 内容损失权重</span></span><br><span class="line">ALPHA = <span class="number">1</span></span><br><span class="line"><span class="comment"># 风格损失权重</span></span><br><span class="line">BETA = <span class="number">500</span></span><br></pre></td></tr></table></figure>
+
+<p>ALPHA 越大，则最后生成的图片内容信息越大；同理，BETA 越大，则最后生成的图片风格化更严重。</p>
+<p>当训练开始时，我们根据内容图片和噪声，生成一张噪声图片。并将噪声图片喂给网络，计算 loss，再根据 loss 调整噪声图片。将调整后的图片喂给网络，重新计算 loss，再调整，再计算…直到达到指定迭代次数，此时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可。</p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>如果对上述原理不感兴趣的，想直接运行代码的可以去微信公众号「01 二进制」后台回复「图像风格迁移」获得源码。接下来我们来说说如何使用这个代码跑出自己的绘画。</p>
+<p>首先看下项目结构：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-85ad0639285e8eba.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>images 下有两张图片，分别是内容图和风格图，output 下是训练过程中产生的文件，.mat 文件就是预训练模型，models.py 是我们实现的用于读取预训练模型的文件，settings.py 是配置文件，train.py 是最终的训练文件。</p>
+<p>想要运行该项目，我们只需要执行<code>python train.py</code>即可，想更改风格和内容的的话只要在 images 文件中更换原先的图片即可。当然你也可以在<code>settings.py</code>中修改路径：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 内容图片路径</span></span><br><span class="line">CONTENT_IMAGE = <span class="string">&#x27;images/content.jpg&#x27;</span></span><br><span class="line"><span class="comment"># 风格图片路径</span></span><br><span class="line">STYLE_IMAGE = <span class="string">&#x27;images/style.jpg&#x27;</span></span><br><span class="line"><span class="comment"># 输出图片路径</span></span><br><span class="line">OUTPUT_IMAGE = <span class="string">&#x27;output/output&#x27;</span></span><br><span class="line"><span class="comment"># 预训练的vgg模型路径</span></span><br><span class="line">VGG_MODEL_PATH = <span class="string">&#x27;imagenet-vgg-verydeep-19.mat&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们来看看训练后的图片：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-ce3f700cb326a49d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>虽然通过上述代码我们可以实现图像的风格迁移，但是他有一个最大的缺点，就是无法保存训练好的模型，每次转换风格都要重新跑一遍，如果使用 CPU 跑 1000 轮的话大约是在 30 分钟左右，因此推荐大家使用 GPU 进行训练。</p>
+<p>但是即使使用上了 GPU，训练时间也无法满足商业使用的，那有没有什么办法可以保存训练好的风格模型，然后直接快速生成目标图片呢？当然是有的，斯坦福的李飞飞发表过一篇《Perceptual Losses for Real-Time Style Transfer and Super-Resolution》，通过使用 perceptual loss 来替代 per-pixels loss 使用 pre-trained 的 vgg model 来简化原先的 loss 计算，增加一个 transform Network，直接生成 Content image 的 style。这里就不再多说了，感兴趣的可以参考我下面给出的两个链接：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5ba4e029e51d450e9874eaf3">《深度有趣 | 30 快速图像风格迁移》</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_25737169/article/details/79192211">《风格迁移背后原理及 tensorflow 实现》</a></li>
+</ol>
+<p>以上就是本篇文章的全部内容，个人做下来感觉还是挺有意思的，因个人能力有限，文中如有纰漏错误之处，还请各位大佬指正，万分感谢！</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1508.06576v1.pdf">A Neural Algorithm of Artistic Style</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a595130080/article/details/79182843">深度学习实战（一）快速理解实现风格迁移</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5ba255fd6fb9a05d3c7ff06d">深度有趣 | 04 图像风格迁移</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/czp_374/article/details/81185603">学习笔记：图像风格迁移</a></li>
+</ol>
+<hr>
+<p>欢迎关注我的微信公众号：「01 二进制」，关注后即可获得博主认真收集的计算机资料</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-68889db7a454e503?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/66c6.html">https://blog.liangyueyong.cn/p/66c6.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI%E7%94%BB%E5%AE%B6/">AI画家</a><a class="post-meta__tags" href="/tags/TensorFlow/">TensorFlow</a></div><div class="post_share"><div class="social-share" data-image="http://upload-images.jianshu.io/upload_images/5666077-91e1cf6221072c85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/3d71.html"><img class="prev-cover" src="http://upload-images.jianshu.io/upload_images/5666077-d57fa69ae73bf8c4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">AI画家第三弹——毕业设计大杀器之Flask</div></div></a></div><div class="next-post pull-right"><a href="/p/28be.html"><img class="next-cover" src="https://upload-images.jianshu.io/upload_images/5666077-ab3b7c5c7a11281d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">AI换脸——汝怎饰品如面</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/3d71.html" title="AI画家第三弹——毕业设计大杀器之Flask"><img class="cover" src="http://upload-images.jianshu.io/upload_images/5666077-d57fa69ae73bf8c4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第三弹——毕业设计大杀器之Flask</div></div></a></div><div><a href="/p/a56b.html" title="AI画家第四弹——利用Flask发布风格迁移API"><img class="cover" src="http://upload-images.jianshu.io/upload_images/5666077-172f3e6d74027f33?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第四弹——利用Flask发布风格迁移API</div></div></a></div><div><a href="/p/257a.html" title="AI画家第五弹——从0到1部署你的RESTful API"><img class="cover" src="http://upload-images.jianshu.io/upload_images/5666077-92489cf0e2045c42?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第五弹——从0到1部署你的RESTful API</div></div></a></div><div><a href="/p/96d2.html" title="AI画家第六弹——终章"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">AI画家第六弹——终章</div></div></a></div><div><a href="/p/ec16.html" title="【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">准备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">预训练模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.1.</span> <span class="toc-text">加载预训练模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E6%80%9D%E8%B7%AF"><span class="toc-number">2.2.</span> <span class="toc-text">训练思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.</span> <span class="toc-text">内容损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A3%8E%E6%A0%BC%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.</span> <span class="toc-text">风格损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%80%BB%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E5%B9%B6%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.5.</span> <span class="toc-text">计算总损失函数并训练模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

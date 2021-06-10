@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI换脸——汝怎饰品如面 | 斯是陋室</title><meta name="keywords" content="其他"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="事先说明，该篇文章中的代码是我无意中发现的，这里仅做一个分享，文末会给出参考文章，不喜勿喷。 完整源码和预训练模型可在公众号：「01 二进制」后台回复：「AI 换脸」获取  前言作为一个经常逛 b 站的肥宅，前段时间无意中看到了一个名为”换脸哥”做的换脸视频，让杨幂“穿越”到了 1994 年版的《射雕英雄传》里，“代替”了朱茵，“出演”了黄蓉这个角色。视频如下（b 站视频已经被删了，只能转载知乎">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI换脸——汝怎饰品如面">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/28be.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="事先说明，该篇文章中的代码是我无意中发现的，这里仅做一个分享，文末会给出参考文章，不喜勿喷。 完整源码和预训练模型可在公众号：「01 二进制」后台回复：「AI 换脸」获取  前言作为一个经常逛 b 站的肥宅，前段时间无意中看到了一个名为”换脸哥”做的换脸视频，让杨幂“穿越”到了 1994 年版的《射雕英雄传》里，“代替”了朱茵，“出演”了黄蓉这个角色。视频如下（b 站视频已经被删了，只能转载知乎">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5666077-ab3b7c5c7a11281d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2021-06-10T11:50:25.313Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.313Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="其他">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5666077-ab3b7c5c7a11281d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/28be"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://upload-images.jianshu.io/upload_images/5666077-ab3b7c5c7a11281d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">AI换脸——汝怎饰品如面</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.313Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.313Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/28be.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/28be.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>事先说明，该篇文章中的代码是我无意中发现的，这里仅做一个分享，文末会给出参考文章，不喜勿喷。</p>
+<p>完整源码和预训练模型可在公众号：「01 二进制」后台回复：「AI 换脸」获取</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为一个经常逛 b 站的肥宅，前段时间无意中看到了一个名为”换脸哥”做的换脸视频，让杨幂“穿越”到了 1994 年版的《射雕英雄传》里，“代替”了朱茵，“出演”了黄蓉这个角色。视频如下（b 站视频已经被删了，只能转载知乎的视频了，原地址是<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57863071">杨幂“换脸”，AI 换脸究竟有多可怕 - 科技富能量的文章 - 知乎</a>）：</p>
+<p><video src="http://mpvideo.qpic.cn/tjg_3868025821_50000_4374234d39244a4d8a5825488ed395c3.f10002.mp4?dis_k=9bb8c446acafa3fff362e83e380299dd&dis_t=1554306632"></video></p>
+<p>看完我便虎躯一震，这也太厉害了吧，这种技术一旦流行起来，ab 不用去片场就能拍戏了啊，真的是躺着赚钱啊。这要是运用到 H 片上，岂不是 😅😅😅</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-118e397b50981cd6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>言归正传，作为一个 coder，在看到这个视频之后我就很想知道这究竟是怎么做出来的，在查阅了一些资料后，我才发现最悲伤的事情莫过于，好不容易把源码找到了，数据集下载好了，结果显卡带不起来…</p>
+<blockquote>
+<p>Tips：这里给出我之前找到的两个有关视频换脸的仓库，有兴趣的自己去了解下：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/joshua-wu/deepfakes_faceswap">deepfakes_faceswap</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/goberoi/faceit">FaceIt</a></p>
+</li>
+</ul>
+</blockquote>
+<p>既然条件不允许，那我们只能降低成本，既然视频里的脸不好换，那就退而求其次，换一下图片里面的脸，果然在我的苦苦寻觅后，我找到了一个低配版的 Python 换脸大法：</p>
+<p><a target="_blank" rel="noopener" href="https://matthewearl.github.io/2015/07/28/switching-eds-with-python/">《Switching Eds: Face swapping with Python, dlib, and OpenCV》</a></p>
+<blockquote>
+<p>以下内容均参考上述所标注的文章，在这感谢原作者。</p>
+</blockquote>
+<p>接下来我将会介绍如何通过一段简短的 Python 脚本（200 行左右）将一张图片中面部特征自动替换为另外一张图片中的面部特征。</p>
+<p>具体过程分为四个步骤：</p>
+<ul>
+<li>检测面部标志；</li>
+<li>旋转、缩放和平移图 2 以适应图 1；</li>
+<li>调整图 2 的白平衡以匹配图 1；</li>
+<li>将图 2 的特征融合到图 1 中；</li>
+</ul>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><ul>
+<li>MacOS 10.14.3</li>
+<li>Python 3.7</li>
+<li>PyCharm</li>
+<li>用到的库有：<ul>
+<li>numpy</li>
+<li>dlib</li>
+<li>opencv-python</li>
+</ul>
+</li>
+</ul>
+<h2 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h2><p>numpy 大家应该都很熟悉了，这里我简单介绍下 dlib 和 opencv。</p>
+<h3 id="dlib"><a href="#dlib" class="headerlink" title="dlib"></a>dlib</h3><p>官网介绍其为：A toolkit for making real world machine learning and data analysis applications，简单来说他就是一个开源的机器学习库，包含了很多机器学习的算法。同时对外提供了 C++和 Python 的接口。使用 dlib 可以大大简化开发，比如人脸识别，特征点检测之类的工作都可以很轻松实现。同时也有很多基于 dlib 开发的应用和开源库，比如 face_recogintion 库（据说识别率高达 93%，有兴趣的可以查阅相关资料）。python 下的安装也很简单，执行<code>pip install dlib</code>即可。</p>
+<h3 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h3><p>OpenCV 是 Intel® 开源计算机视觉库。它由一系列 C 函数和少量 C++ 类构成，实现了图像处理和计算机视觉方面的很多通用算法。是计算机视觉领域非常重要的一个开源库。官网地址：<a target="_blank" rel="noopener" href="https://opencv.org/">https://opencv.org/</a></p>
+<h2 id="开始换脸"><a href="#开始换脸" class="headerlink" title="开始换脸"></a>开始换脸</h2><h3 id="提取面部特征"><a href="#提取面部特征" class="headerlink" title="提取面部特征"></a>提取面部特征</h3><p>既然要换脸，我们肯定要先在图片中找到人脸，dlib 中有一个函数<code>get_frontal_face_detector()</code>实现了面部特征提取，核心算法来自于 Vahid Kazemi 和 Josephine Sullivan 的论文《One Millisecond Face Alignment with an Ensemble of Regression Tree》，我也没有读过这篇论文就不解释了。提取面部特征的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 面部检测器</span></span><br><span class="line">detector = dlib.get_frontal_face_detector()</span><br><span class="line"><span class="comment"># 特征提取器</span></span><br><span class="line">predictor = dlib.shape_predictor(<span class="string">&#x27;shape_predictor_68_face_landmarks.dat&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GetLandmarks</span>(<span class="params">img_path</span>):</span></span><br><span class="line">    img = cv2.imread(img_path, cv2.IMREAD_COLOR)</span><br><span class="line">    rects = detector(img, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">if</span> len(rects) &gt; <span class="number">1</span>:</span><br><span class="line">        print(<span class="string">&#x27;[Warning]: More than one face in picture, only choose one randomly...&#x27;</span>)</span><br><span class="line">        rects = rects[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">elif</span> len(rects) == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">&#x27;[Error]: No face detected...&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">return</span> img, np.matrix([[p.x, p.y] <span class="keyword">for</span> p <span class="keyword">in</span> predictor(img, rects[<span class="number">0</span>]).parts()])</span><br></pre></td></tr></table></figure>
+
+<p>get_landmarks() 函数接受一个图片，经过处理后以 numpy 数组的形式进行处理，并返回一个 68x2 的元素矩阵。矩阵的每一行与输入图像中特定特征点的 x，y 坐标相对应。</p>
+<p>特征提取器（predictor）需要一个大概的边界框作为算法的输入。这将由传统的面部检测器（detector）提供。该面部检测器会返回一个矩形列表，其中每一个矩形与图像中的一张人脸相对应。</p>
+<blockquote>
+<p>生成 predictor 需要预先训练好的模型。该模型可在微信公众号「01 二进制」后台回复”AI 换脸”获得。</p>
+</blockquote>
+<h3 id="人脸对齐"><a href="#人脸对齐" class="headerlink" title="人脸对齐"></a>人脸对齐</h3><p>有了上述方法，我们就可以提取出图片中的人脸了，但是两张照片中的人脸方向肯定都是不一致的（毕竟你不能保证每张都是证件照啊），就像下面这两张图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-e8eae9769ff5da48?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image-20190403222900051"></p>
+<p>这两个人脸的方向明显不一致啊，所以我们还需要对人脸进行对齐。我们现在已经获取到每张图片中人脸矩形的坐标了，剩下的就是弄明白如何旋转、平移和缩放第一个向量的所有点，使其尽可能匹配第二个向量中的点就可以了。这里运用到了一个名为<strong>普氏分析法（Ordinary Procrustes Analysis）</strong>的方法解决这个问题的，数学能力有限，数学依据参考注释中的链接，这里就直接放出代码吧：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># refer:</span></span><br><span class="line"><span class="comment"># 	https://en.wikipedia.org/wiki/Procrustes_analysis#Ordinary_Procrustes_analysis</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">TransferPoints</span>(<span class="params">points1, points2</span>):</span></span><br><span class="line">    points1 = points1.astype(np.float64)</span><br><span class="line">    points2 = points2.astype(np.float64)</span><br><span class="line">    c1 = np.mean(points1, axis=<span class="number">0</span>)</span><br><span class="line">    c2 = np.mean(points2, axis=<span class="number">0</span>)</span><br><span class="line">    points1 -= c1</span><br><span class="line">    points2 -= c2</span><br><span class="line">    s1 = np.std(points1)</span><br><span class="line">    s2 = np.std(points2)</span><br><span class="line">    points1 /= s1</span><br><span class="line">    points2 /= s2</span><br><span class="line">    <span class="comment"># 奇异值分解</span></span><br><span class="line">    U, S, Vt = np.linalg.svd(points1.T * points2)</span><br><span class="line">    R = (U * Vt).T</span><br><span class="line">    <span class="keyword">return</span> np.vstack([np.hstack(((s2 / s1) * R, c2.T - (s2 / s1) * R * c1.T)), np.matrix([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>])])</span><br></pre></td></tr></table></figure>
+
+<p>之后我们再把对齐的结果利用 OpenCV 的 cv2.warpAffine 函数，将第二个图片映射到第一个图片上：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">WarpImg</span>(<span class="params">img, M, dshape</span>):</span></span><br><span class="line">    output_img = np.zeros(dshape, dtype=img.dtype)</span><br><span class="line">    cv2.warpAffine(img,</span><br><span class="line">                   M[:<span class="number">2</span>],</span><br><span class="line">                   (dshape[<span class="number">1</span>], dshape[<span class="number">0</span>]),</span><br><span class="line">                   dst=output_img,</span><br><span class="line">                   borderMode=cv2.BORDER_TRANSPARENT,</span><br><span class="line">                   flags=cv2.WARP_INVERSE_MAP)</span><br><span class="line">    <span class="keyword">return</span> output_img</span><br></pre></td></tr></table></figure>
+
+<h3 id="校正图片颜色"><a href="#校正图片颜色" class="headerlink" title="校正图片颜色"></a>校正图片颜色</h3><p>两张图片由于不同的<strong>肤色</strong>和<strong>光线</strong>造成了覆盖区域边缘的不连续。所以我们需要修正它：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ModifyColor</span>(<span class="params">img1, img2, landmarks1</span>):</span></span><br><span class="line">    blur_amount = <span class="number">0.6</span> * np.linalg.norm(</span><br><span class="line">        np.mean(landmarks1[LEFT_EYE_POINTS], axis=<span class="number">0</span>) - np.mean(landmarks1[RIGHT_EYE_POINTS], axis=<span class="number">0</span>))</span><br><span class="line">    blur_amount = int(blur_amount)</span><br><span class="line">    <span class="keyword">if</span> blur_amount % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">        blur_amount += <span class="number">1</span></span><br><span class="line">    img1_blur = cv2.GaussianBlur(img1, (blur_amount, blur_amount), <span class="number">0</span>)</span><br><span class="line">    img2_blur = cv2.GaussianBlur(img2, (blur_amount, blur_amount), <span class="number">0</span>)</span><br><span class="line">    img2_blur += (<span class="number">128</span> * (img2_blur &lt;= <span class="number">1.0</span>)).astype(img2_blur.dtype)</span><br><span class="line">    <span class="keyword">return</span> (img2.astype(np.float64) * img1_blur.astype(np.float64) / img2_blur.astype(np.float64))</span><br></pre></td></tr></table></figure>
+
+<h3 id="图片融合"><a href="#图片融合" class="headerlink" title="图片融合"></a>图片融合</h3><p>用一个蒙版（mask）来选择图 2 和图 1 应被最终显示的部分：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-063a559211d46243?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>值为 1 (白色)的地方为图 2 应显示的区域，值为 0 (黑色)的地方为图 1 应显示的区域。值在 0 和 1 之间的地方为图 1 图 2 的混合区域。</p>
+<p>这是生成上述内容的代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GetFaceMask</span>(<span class="params">img, landmarks</span>):</span></span><br><span class="line">    img = np.zeros(img.shape[:<span class="number">2</span>], dtype=np.float64)</span><br><span class="line">    groups = [</span><br><span class="line">        LEFT_EYE_POINTS + RIGHT_EYE_POINTS + LEFT_BROW_POINTS + RIGHT_BROW_POINTS,</span><br><span class="line">        NOSE_POINTS + MOUTH_POINTS,</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> groups:</span><br><span class="line">        DrawConvexHull(img, landmarks[group], color=<span class="number">1</span>)</span><br><span class="line">    img = np.array([img, img, img]).transpose((<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>))</span><br><span class="line">    img = (cv2.GaussianBlur(img, (<span class="number">11</span>, <span class="number">11</span>), <span class="number">0</span>) &gt; <span class="number">0</span>) * <span class="number">1.0</span></span><br><span class="line">    img = cv2.GaussianBlur(img, (<span class="number">11</span>, <span class="number">11</span>), <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DrawConvexHull</span>(<span class="params">img, points, color</span>):</span></span><br><span class="line">    points = cv2.convexHull(points)</span><br><span class="line">    cv2.fillConvexPoly(img, points, color=color)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ModifyColor</span>(<span class="params">img1, img2, landmarks1</span>):</span></span><br><span class="line">    blur_amount = <span class="number">0.6</span> * np.linalg.norm(</span><br><span class="line">        np.mean(landmarks1[LEFT_EYE_POINTS], axis=<span class="number">0</span>) - np.mean(landmarks1[RIGHT_EYE_POINTS], axis=<span class="number">0</span>))</span><br><span class="line">    blur_amount = int(blur_amount)</span><br><span class="line">    <span class="keyword">if</span> blur_amount % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">        blur_amount += <span class="number">1</span></span><br><span class="line">    img1_blur = cv2.GaussianBlur(img1, (blur_amount, blur_amount), <span class="number">0</span>)</span><br><span class="line">    img2_blur = cv2.GaussianBlur(img2, (blur_amount, blur_amount), <span class="number">0</span>)</span><br><span class="line">    img2_blur += (<span class="number">128</span> * (img2_blur &lt;= <span class="number">1.0</span>)).astype(img2_blur.dtype)</span><br><span class="line">    <span class="keyword">return</span> (img2.astype(np.float64) * img1_blur.astype(np.float64) / img2_blur.astype(np.float64))</span><br></pre></td></tr></table></figure>
+
+<p><code>GetFaceMask()</code>函数定义是：为一张图像和一个标志矩阵生成一个蒙版。蒙版会画出两个白色的凸多边形：一个是眼睛周围的区域，一个是鼻子和嘴部周围的区域。之后，蒙版的边缘区域向外羽化 11 个像素，这可以帮助消除剩下的不连续部分。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>本文参考了下述文章：</p>
+<ol>
+<li><a href="https://link.juejin.im/?target=https://matthewearl.github.io/2015/07/28/switching-eds-with-python/">《Switching Eds: Face swapping with Python, dlib, and OpenCV》</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5ad60e19f265da239707600d">《萌新如何用 Python 实现人脸替换？》</a></li>
+</ol>
+<blockquote>
+<p>完整源码和预训练模型可在公众号：「01 二进制」后台回复：「AI 换脸」获取</p>
+</blockquote>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>至此，一个低配版的 AI 换脸就完成了，结果就如开头那样。此次实验虽然已有换脸的雏形，但是精度还远远不够，而且这种换脸如果用到视频中肯定是不堪入目的，毕竟做得好的已经是下面这样了：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-62297fd4a6b1ad8a?imageMogr2/auto-orient/strip"></p>
+<blockquote>
+<p>方法教给大家了，图片素材大家可以自己找，玩一玩，要是能转发到朋友圈让更多人看到就更好了！</p>
+</blockquote>
+<hr>
+<p>下篇更新”美国校队蔡徐坤”打篮球视频的 txt 版，这里先放个预览的 GIF 图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-ed6773e4585cead7?imageMogr2/auto-orient/strip"></p>
+<p>喜欢的小伙伴可以长按下方二维码关注哦～。👇</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5666077-117f041185d9be17?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/28be.html">https://blog.liangyueyong.cn/p/28be.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%85%B6%E4%BB%96/">其他</a></div><div class="post_share"><div class="social-share" data-image="https://upload-images.jianshu.io/upload_images/5666077-ab3b7c5c7a11281d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/66c6.html"><img class="prev-cover" src="http://upload-images.jianshu.io/upload_images/5666077-91e1cf6221072c85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">AI绘画第二弹——图像风格迁移</div></div></a></div><div class="next-post pull-right"><a href="/p/afc.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java 中链表与数组间的相互转换</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/3e02.html" title="为什么我建议你去写博客？"><img class="cover" src="https://tva1.sinaimg.cn/large/0081Kckwly1gkburs4eqbj31900u0ql3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">为什么我建议你去写博客？</div></div></a></div><div><a href="/p/dff4.html" title="DO,VO,DTO 你知道吗？"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggwloquallj30p00anac3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">DO,VO,DTO 你知道吗？</div></div></a></div><div><a href="/p/431c.html" title="你的系统可用性 5 个 9 了吗？"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giln3b89k1j30p00anq4t.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">你的系统可用性 5 个 9 了吗？</div></div></a></div><div><a href="/p/7819.html" title="想追女神？先学 Synchronized 吧"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gitqh5kzgyj30v00cwdza.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">想追女神？先学 Synchronized 吧</div></div></a></div><div><a href="/p/ee77.html" title="聊一聊 2038 年问题"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdtf806d6oj30p00ank6y.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">聊一聊 2038 年问题</div></div></a></div><div><a href="/p/373c.html" title="费米推理——理科生的脑筋急转弯"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">费米推理——理科生的脑筋急转弯</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">实验环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E8%AF%B4%E6%98%8E"><span class="toc-number">3.</span> <span class="toc-text">工具说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dlib"><span class="toc-number">3.1.</span> <span class="toc-text">dlib</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opencv"><span class="toc-number">3.2.</span> <span class="toc-text">opencv</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E6%8D%A2%E8%84%B8"><span class="toc-number">4.</span> <span class="toc-text">开始换脸</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E9%9D%A2%E9%83%A8%E7%89%B9%E5%BE%81"><span class="toc-number">4.1.</span> <span class="toc-text">提取面部特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%BA%E8%84%B8%E5%AF%B9%E9%BD%90"><span class="toc-number">4.2.</span> <span class="toc-text">人脸对齐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%A1%E6%AD%A3%E5%9B%BE%E7%89%87%E9%A2%9C%E8%89%B2"><span class="toc-number">4.3.</span> <span class="toc-text">校正图片颜色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E8%9E%8D%E5%90%88"><span class="toc-number">4.4.</span> <span class="toc-text">图片融合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">6.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】前端 vs 后端：哪一个适合你？ | 斯是陋室</title><meta name="keywords" content="掘金翻译计划"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="本文翻译自Frontend vs Backend: Which One Is Right For You?，如有疑问可在公众号「01二进制」后台回复「微信」和我联系  经常会有初学者来问我刚开始学习编程的时候应该学些什么？问这个问题就跟一个医学生询问应该专注研究哪个领域一样。根本没有一个标准答案。但我还是想提供一些指导，并就这个问题提出一些自己的看法。希望这篇文章可以给刚开始职业生涯的你一些值得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】前端 vs 后端：哪一个适合你？">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/ff05.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="本文翻译自Frontend vs Backend: Which One Is Right For You?，如有疑问可在公众号「01二进制」后台回复「微信」和我联系  经常会有初学者来问我刚开始学习编程的时候应该学些什么？问这个问题就跟一个医学生询问应该专注研究哪个领域一样。根本没有一个标准答案。但我还是想提供一些指导，并就这个问题提出一些自己的看法。希望这篇文章可以给刚开始职业生涯的你一些值得">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769d1d6d6?w=1000&h=420&f=png&s=14755">
+<meta property="article:published_time" content="2021-06-10T11:50:25.294Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.294Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="掘金翻译计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769d1d6d6?w=1000&h=420&f=png&s=14755"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/ff05"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769d1d6d6?w=1000&amp;h=420&amp;f=png&amp;s=14755)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】前端 vs 后端：哪一个适合你？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.294Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.294Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/ff05.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/ff05.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>本文翻译自<a target="_blank" rel="noopener" href="https://dev.to/molly_struve/frontend-vs-backend-which-one-is-right-for-you-5gjg">Frontend vs Backend: Which One Is Right For You?</a>，如有疑问可在公众号「01二进制」后台回复「微信」和我联系</p>
+</blockquote>
+<p>经常会有初学者来问我刚开始学习编程的时候应该学些什么？问这个问题就跟一个医学生询问应该专注研究哪个领域一样。根本没有一个标准答案。但我还是想提供一些指导，并就这个问题提出一些自己的看法。希望这篇文章可以给刚开始职业生涯的你一些值得思考的东西。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>在刚开始学习软件开发的时候，首先要经历的心理斗争就是我应该把关注点放在哪，前端还是后端？在我们深入了解两个领域的特征之前，我们先来看看它们的定义。</p>
+<h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><blockquote>
+<p>指的是网站的表示层以及它与后端数据的交互方式。例如 HTML、CSS、JavaScript 和 Angular 等。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769c1652e?w=880&h=1245&f=png&s=60425"><img src="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769c1652e?w=880&h=1245&f=png&s=60425"></a></p>
+<h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><blockquote>
+<p>指的是应用程序的数据处理层。这一层负责与数据库通信，并确定将哪些信息发送到要显示的前端。例如 Ruby、Rails、Python、Java 等。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769fa8d81?w=880&h=1231&f=jpeg&s=56280"><img src="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769fa8d81?w=880&h=1231&f=jpeg&s=56280"></a></p>
+<p>好的，现在我们知道它们是什么了，但是你又该如何选择哪一个作为职业的方向呢？老实说，它取决于你的个人喜好以及你选择成为一个开发者的初衷。</p>
+<h2 id="职业满足感"><a href="#职业满足感" class="headerlink" title="职业满足感"></a>职业满足感</h2><p>如果你选择成为一名开发人员是因为你想获得职业满足感，并做一些你喜欢的事情，那么我的建议是，当你开始时，前后端都要做。同时涉猎前端和后端，这样你就能感受到你更喜欢的是什么。这么做会很辛苦吗？当然会，但是这也会极大地增加你找到喜欢做的事情的机会。</p>
+<p>在前端和后端生态系统中，仍然有许多你可以选择并且能做得非常出色的专业。当你开始的时候，试着去了解一些基本的东西，不要太担心会沉迷其中。试一试水，看看当你用它的时候，其中一个方向是否真的能吸引到你。同时，你要意识到，无论你选择哪个，一开始都会很困难。我想说的是，在你决定要把重点放在哪里之前，给自己一年或两年的时间来研究整个流程。这将给你足够的时间来解决最初的“哇，这太糟糕了，因为它很难”的问题，同时还能让你真正评估它是否是你喜欢使用的技术。</p>
+<p>虽然每个人都有不同的品味，但是看看其他开发人员喜欢使用哪些语言和技术也是很有趣的。2019 年 StackOverflow 调查了<a target="_blank" rel="noopener" href="https://insights.stackoverflow.com/survey/2019#technology-_-most-loved-dreaded-and-wanted-languages">最受欢迎的语言</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2019/7/23/16c1db676a078c6b?w=880&h=677&f=png&s=18013"><img src="https://user-gold-cdn.xitu.io/2019/7/23/16c1db676a078c6b?w=880&h=677&f=png&s=18013"></a></p>
+<p>前后端通吃的另一个好处是，你可以了解它们之间是如何协同工作的。无论你决定在未来关注哪个方面，这都非常有用。如果你了解另一半的工作原理，那么你就可以在项目中创建更好的代码和接口。</p>
+<p>最后，当你在工作时横跨前后端，你可能会决定不进行选择了！你可能希望通吃前后端，并成为一个全栈工程师。这也是完全可以的！</p>
+<h2 id="工资-稳定性"><a href="#工资-稳定性" class="headerlink" title="工资/稳定性"></a>工资/稳定性</h2><p>如果你从事开发的职业动机是为了工资和稳定，那么同时学习这两个方向可能是在浪费你的时间。如果你想尽快从事一行职业，那么就对你想从事的领域做一些调查。找出前端和后端的工资趋势。此外，尝试找出市场上最需要哪种类型的开发人员。</p>
+<p>我不知道前端和后端哪个工资更高，但有一些调查试图回答这个问题。我们可以看看 2019 年 StackOverflow 的调查，该调查将开发者的<a target="_blank" rel="noopener" href="https://insights.stackoverflow.com/survey/2019#work-_-salary-by-developer-type">薪资按类型</a>进行了细分。</p>
+<h3 id="全球"><a href="#全球" class="headerlink" title="全球"></a>全球</h3><ol>
+<li>全栈工程师 $57k  </li>
+<li>后端工程师 $56k  </li>
+<li>前端工程师 $52k</li>
+</ol>
+<h3 id="美国"><a href="#美国" class="headerlink" title="美国"></a>美国</h3><ol>
+<li>后端工程师 $116k  </li>
+<li>全栈工程师 $110k  </li>
+<li>前端工程师 $103k</li>
+</ol>
+<p>此外，它还<a target="_blank" rel="noopener" href="https://insights.stackoverflow.com/survey/2019#top-paying-technologies">根据技术</a>细分了薪资。下面是每项调查的样本。</p>
+<h3 id="全球-1"><a href="#全球-1" class="headerlink" title="全球"></a>全球</h3><ul>
+<li>Clojure $90k</li>
+<li>Go $80k</li>
+<li>Python $63k</li>
+<li>Swift $59k</li>
+<li>JavaScript $56k</li>
+<li>HTML/CSS $55k</li>
+</ul>
+<h3 id="美国-1"><a href="#美国-1" class="headerlink" title="美国"></a>美国</h3><ul>
+<li>Scala $143k</li>
+<li>Clojure $139k</li>
+<li>Go $136k</li>
+<li>Swift $120k</li>
+<li>Python $116k</li>
+<li>JavaScript $110k</li>
+<li>HTML/CSS $105k</li>
+</ul>
+<p>需要注意的是，这些工资和趋势可能会因你的工作地点和是否在寻找远程工作而有所不同。因此，你需要自己做好调查。这很简单，只需要查看求职公告板并搜索后端和前端技术，看看都有哪些。</p>
+<h2 id="我为什么选择后端"><a href="#我为什么选择后端" class="headerlink" title="我为什么选择后端"></a>我为什么选择后端</h2><p>我想我应该在这里加上一段为什么我最终选择了后端，希望它可以在其他人做决定时帮助他们。当我转行成为一名开发人员时，我寻求工作满足感，并决定开始跨整个工作栈。在真正转向后端之前，我做了 3 年的全栈开发。吸引我来到后台的是 Ruby 的简洁。JavaScript 和前端语言对我来说总是缺乏组织性。我还热衷于优化代码性能。我喜欢想办法让事情运行得更好更快。后端似乎给了我更多的机会。</p>
+<p>最后，我不是一个非常注重视觉或艺术的人。有些人可以看看网页，然后想办法把它放在什么地方。我从来都不擅长这个，所以后端让我更自然、更舒服。</p>
+<p>如果你想深入了解其他人的观点，请查看这个讨论前端和后端 Web 开发的 <a target="_blank" rel="noopener" href="https://wakelet.com/wake/7d71f467-89ba-49cb-a196-4e32657369ac">CodeNewbie Chat</a>。你还可以查看周二开始的 dev.to thread，我将会询问人们如何选择在前端还是后端工作以及其原因。</p>
+<p><a target="_blank" rel="noopener" href="https://dev.to/molly_struve/frontend-vs-backend-which-do-you-prefer-and-why-5a9e">Frontend vs Backend, which do you prefer and why?</a></p>
+<h2 id="没有什么是永恒的"><a href="#没有什么是永恒的" class="headerlink" title="没有什么是永恒的"></a>没有什么是永恒的</h2><p>无论你决定专注于什么，要知道没有什么是永恒的。如果你走错了一条路，你总是可以悬崖勒马的。软件工程的一个伟大之处在于，它把所有的东西都整合在一起。了解一个领域只会帮助你的成长并在另一个领域做得更好。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/ff05.html">https://blog.liangyueyong.cn/p/ff05.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a></div><div class="post_share"><div class="social-share" data-image="https://user-gold-cdn.xitu.io/2019/7/23/16c1db6769d1d6d6?w=1000&amp;h=420&amp;f=png&amp;s=14755" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/2d8c.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】回答有关Flutter APP开发的问题</div></div></a></div><div class="next-post pull-right"><a href="/p/ba89.html"><img class="next-cover" src="https://user-gold-cdn.xitu.io/2019/1/13/168460c02e49438b?w=1000&amp;h=466&amp;f=jpeg&amp;s=86348" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】利用 Python中的 Bokeh 实现数据可视化， 第三部分： 制作一个完整的仪表盘</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/8245.html" title="【译】为用户提供安全可靠的体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】为用户提供安全可靠的体验</div></div></a></div><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div><a href="/p/4e00.html" title="【译】JetPack Compose for Desktop 初体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】JetPack Compose for Desktop 初体验</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF"><span class="toc-number">1.1.</span> <span class="toc-text">前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF"><span class="toc-number">1.2.</span> <span class="toc-text">后端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%8C%E4%B8%9A%E6%BB%A1%E8%B6%B3%E6%84%9F"><span class="toc-number">2.</span> <span class="toc-text">职业满足感</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E8%B5%84-%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="toc-number">3.</span> <span class="toc-text">工资&#x2F;稳定性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E7%90%83"><span class="toc-number">3.1.</span> <span class="toc-text">全球</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%8E%E5%9B%BD"><span class="toc-number">3.2.</span> <span class="toc-text">美国</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E7%90%83-1"><span class="toc-number">3.3.</span> <span class="toc-text">全球</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%8E%E5%9B%BD-1"><span class="toc-number">3.4.</span> <span class="toc-text">美国</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9%E5%90%8E%E7%AB%AF"><span class="toc-number">4.</span> <span class="toc-text">我为什么选择后端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88%E6%98%AF%E6%B0%B8%E6%81%92%E7%9A%84"><span class="toc-number">5.</span> <span class="toc-text">没有什么是永恒的</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】Flutter 挑战之 WhatsApp | 斯是陋室</title><meta name="keywords" content="Flutter,掘金翻译计划"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="Flutter Challenges 是一项尝试利用 Flutter 重新创建特定的应用程序 UI 或设计的挑战。此次挑战将尝试 Whatsapp Android 应用程序的主界面。 请注意将重点放在 UI 上而不是实际获取消息。 开始WhatsApp 的主界面包括：  一个带有搜索操作和菜单的 AppBar 在 AppBar 的底部有四个标签 一个用于拍照的相机标签 一个用于多种用途的 Floa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Flutter 挑战之 WhatsApp">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/349f.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="Flutter Challenges 是一项尝试利用 Flutter 重新创建特定的应用程序 UI 或设计的挑战。此次挑战将尝试 Whatsapp Android 应用程序的主界面。 请注意将重点放在 UI 上而不是实际获取消息。 开始WhatsApp 的主界面包括：  一个带有搜索操作和菜单的 AppBar 在 AppBar 的底部有四个标签 一个用于拍照的相机标签 一个用于多种用途的 Floa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/8/13/165313996de131ba?w=1600&h=1380&f=jpeg&s=163345">
+<meta property="article:published_time" content="2021-06-10T11:50:25.298Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.298Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="Flutter">
+<meta property="article:tag" content="掘金翻译计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/8/13/165313996de131ba?w=1600&h=1380&f=jpeg&s=163345"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/349f"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://user-gold-cdn.xitu.io/2018/8/13/165313996de131ba?w=1600&amp;h=1380&amp;f=jpeg&amp;s=163345)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】Flutter 挑战之 WhatsApp</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.298Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.298Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/349f.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/349f.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Flutter Challenges 是一项尝试利用 Flutter 重新创建特定的应用程序 UI 或设计的挑战。<br>此次挑战将尝试 Whatsapp Android 应用程序的主界面。 请注意将重点放在 UI 上而不是实际获取消息。</p>
+<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>WhatsApp 的主界面包括：</p>
+<ol>
+<li>一个带有搜索操作和菜单的 AppBar</li>
+<li>在 AppBar 的底部有四个标签</li>
+<li>一个用于拍照的相机标签</li>
+<li>一个用于多种用途的 FloatingActionButton</li>
+<li>一个“聊天”标签可查看所有对话</li>
+<li>一个“状态”选项卡可查看所有状态</li>
+<li>一个“打电话”选项卡可查看所有的通话记录</li>
+</ol>
+<a id="more"></a>
+
+<h4 id="项目设置"><a href="#项目设置" class="headerlink" title="项目设置"></a>项目设置</h4><p>让我们创建一个名为 whatsapp_ui 的 Flutter 项目并删除所有默认代码， 只留下一个带有默认应用栏的空白屏幕。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import &#39;package:flutter&#x2F;material.dart&#39;;</span><br><span class="line"></span><br><span class="line">void main() &#x3D;&gt; runApp(new MyApp());</span><br><span class="line"></span><br><span class="line">class MyApp extends StatelessWidget &#123;</span><br><span class="line">    @override</span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line">        return new MaterialApp(</span><br><span class="line">            title: &#39;Flutter Demo&#39;,</span><br><span class="line">            theme: new ThemeData(</span><br><span class="line">                primarySwatch: Colors.blue,</span><br><span class="line">            ),</span><br><span class="line">            home: new MyHomePage(),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyHomePage extends StatefulWidget &#123;</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    _MyHomePageState createState() &#x3D;&gt; new _MyHomePageState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class _MyHomePageState extends State &lt; MyHomePage &gt; &#123;</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line">        return new Scaffold(</span><br><span class="line">            appBar: new AppBar(</span><br><span class="line">                title: new Text(&quot;WhatsApp&quot;),</span><br><span class="line">            ),</span><br><span class="line">            body: new Center(</span><br><span class="line">                child: new Column(</span><br><span class="line">                    mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">                    children: &lt; Widget &gt; [</span><br><span class="line"></span><br><span class="line">                    ],</span><br><span class="line">                ),</span><br><span class="line">            ),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="The-AppBar"><a href="#The-AppBar" class="headerlink" title="The AppBar"></a>The AppBar</h4><p>AppBar 具有应用程序的标题， 以及两个操作： 搜索和菜单。</p>
+<p>将其添加到 AppBar 中，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">appBar: new AppBar(</span><br><span class="line">    title: new Text(&quot;WhatsApp&quot;, style: TextStyle(color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.w600), ),</span><br><span class="line">    actions: &lt; Widget &gt; [</span><br><span class="line">        Padding(</span><br><span class="line">            padding: const EdgeInsets.only(right: 20.0),</span><br><span class="line">                child: Icon(Icons.search),</span><br><span class="line">        ),</span><br><span class="line">        Padding(</span><br><span class="line">            padding: const EdgeInsets.only(right: 16.0),</span><br><span class="line">                child: Icon(Icons.more_vert),</span><br><span class="line">        ),</span><br><span class="line">    ],</span><br><span class="line">    backgroundColor: whatsAppGreen,</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>代码结果如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/13/1653139964ee8954?w=1073&h=142&f=png&s=9468"></p>
+<p>现在继续</p>
+<h4 id="The-Tabs"><a href="#The-Tabs" class="headerlink" title="The Tabs"></a>The Tabs</h4><p>tabs（选项卡）是 AppBar 的简单扩展， Flutter 使它们非常容易实现。</p>
+<p>AppBar 有一个“底部”字段， 用于保存我们的标签：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bottom: TabBar(</span><br><span class="line">    tabs: [</span><br><span class="line">        Tab(icon: Icon(Icons.camera_alt), ),</span><br><span class="line">        Tab(child: Text(&quot;CHATS&quot;), ),</span><br><span class="line">        Tab(child: Text(&quot;STATUS&quot;, )),</span><br><span class="line">        Tab(child: Text(&quot;CALLS&quot;, )),</span><br><span class="line">    ], indicatorColor: Colors.white,</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>此外， 我们需要一个 TabController 来实现这一点。</p>
+<p>创建一个新的 TabController。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TabController tabController;</span><br><span class="line"></span><br><span class="line">@override</span><br><span class="line">void initState() &#123;</span><br><span class="line">    &#x2F;&#x2F; TODO: implement initState</span><br><span class="line">    super.initState();</span><br><span class="line"></span><br><span class="line">    tabController &#x3D; TabController(vsync: this, length: 4);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在将该控制器添加到 TabBar 的 “controller” 字段中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bottom: TabBar(</span><br><span class="line">    tabs: [</span><br><span class="line">        Tab(icon: Icon(Icons.camera_alt), ),</span><br><span class="line">        Tab(child: Text(&quot;CHATS&quot;), ),</span><br><span class="line">        Tab(child: Text(&quot;STATUS&quot;, )),</span><br><span class="line">        Tab(child: Text(&quot;CALLS&quot;, )),</span><br><span class="line">    ], indicatorColor: Colors.white,</span><br><span class="line">    controller: tabController,</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>而对于 TabBarView</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">body: TabBarView(</span><br><span class="line">    controller: tabController,</span><br><span class="line">    children: [</span><br><span class="line">        Icon(Icons.camera_alt),</span><br><span class="line">        Text(&quot;Chat Screen&quot;),</span><br><span class="line">        Text(&quot;Status Screen&quot;),</span><br><span class="line">        Text(&quot;Call Screen&quot;),</span><br><span class="line">    ],</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/13/165313996933669e?w=1076&h=280&f=png&s=17766"></p>
+<p>现在， 在转到各个页面之前， 我们将添加选项卡所代表的页面。 用以下方法切换脚手架的现有“正文”代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">body: TabBarView(</span><br><span class="line">    children: [</span><br><span class="line">        Icon(Icons.camera_alt),</span><br><span class="line">        Text(&quot;Chat Screen&quot;),</span><br><span class="line">        Text(&quot;Status Screen&quot;),</span><br><span class="line">        Text(&quot;Call Screen&quot;),</span><br><span class="line">    ],</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>子项代表选项卡所用的页面。 现在整个页面都是一个 Text 小部件。</p>
+<h4 id="悬浮按钮"><a href="#悬浮按钮" class="headerlink" title="悬浮按钮"></a>悬浮按钮</h4><p>Floating Action Button 根据屏幕上的页面而变化。</p>
+<p>首先在脚手架中添加一个 FloatingActionButton。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">floatingActionButton: FloatingActionButton(</span><br><span class="line">    onPressed: () &#123;&#125;,</span><br><span class="line">    child: fabIcon,</span><br><span class="line">    backgroundColor: whatsAppGreenLight,</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>“fabIcon” 字段只存储要显示的图标， 因为我们需要根据显示的屏幕更改显示的图标。</p>
+<p>要监听选项卡选定的更改， 需要给 TabController 添加一个监听器。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tabController &#x3D; TabController(vsync: this, length: 4)..addListener(() &#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>现在， 当标签控制器实现页面已更改时， 请更改 FAB 图标。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tabController &#x3D; TabController(vsync: this, length: 4)..addListener(() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">        switch (tabController.index) &#123;</span><br><span class="line">            case 0:</span><br><span class="line">                break;</span><br><span class="line">            case 1:</span><br><span class="line">                fabIcon &#x3D; Icons.message;</span><br><span class="line">                break;</span><br><span class="line">            case 2:</span><br><span class="line">                fabIcon &#x3D; Icons.camera_enhance;</span><br><span class="line">                break;</span><br><span class="line">            case 3:</span><br><span class="line">                fabIcon &#x3D; Icons.call;</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/13/165313a02db535b4?w=1080&h=1920&f=png&s=60991"></p>
+<p>继续，</p>
+<h4 id="聊天界面"><a href="#聊天界面" class="headerlink" title="聊天界面"></a>聊天界面</h4><p>聊天屏幕有一个我们需要显示的消息列表。 要创建消息列表， 我们使用 ListView.builder() 并构造我们的项目。</p>
+<p>让我们来看看聊天界面的列表项。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/13/165313996a8bae05?w=656&h=160&f=png&s=30988"></p>
+<p>最外面的小部件是一行图标和另一行</p>
+<p>第二行内部是一列， 包含一行和一个文本小部件。</p>
+<p>该行具有标题和消息日期。</p>
+<p>让我们构建一个聊天项模型作为用于存储列表项详细信息的类。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class ChatItemModel &#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    String mostRecentMessage;</span><br><span class="line">    String messageDate;</span><br><span class="line"></span><br><span class="line">    ChatItemModel(this.name, this.mostRecentMessage, this.messageDate);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在， 为简洁起见， 我省略了添加个人资料图片。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">itemBuilder: (context, position) &#123;</span><br><span class="line">    ChatItemModel chatItem &#x3D; ChatHelper.getChatItem(position);</span><br><span class="line"></span><br><span class="line">    return Column(</span><br><span class="line">        children: &lt; Widget &gt; [</span><br><span class="line">            Padding(</span><br><span class="line">                padding: const EdgeInsets.all(8.0),</span><br><span class="line">                    child: Row(</span><br><span class="line">                        children: &lt; Widget &gt; [</span><br><span class="line">                            Icon(</span><br><span class="line">                                Icons.account_circle,</span><br><span class="line">                                size: 64.0,</span><br><span class="line">                            ),</span><br><span class="line">                            Expanded(</span><br><span class="line">                                child: Padding(</span><br><span class="line">                                    padding: const EdgeInsets.all(8.0),</span><br><span class="line">                                        child: Column(</span><br><span class="line">                                            crossAxisAlignment: CrossAxisAlignment.start,</span><br><span class="line">                                            children: &lt; Widget &gt; [</span><br><span class="line">                                                Row(</span><br><span class="line">                                                    mainAxisAlignment:</span><br><span class="line">                                                    MainAxisAlignment.spaceBetween,</span><br><span class="line">                                                    children: &lt; Widget &gt; [</span><br><span class="line">                                                        Text(</span><br><span class="line">                                                            chatItem.name,</span><br><span class="line">                                                            style: TextStyle(</span><br><span class="line">                                                                fontWeight: FontWeight.w500,</span><br><span class="line">                                                                fontSize: 20.0),</span><br><span class="line">                                                        ),</span><br><span class="line">                                                        Text(</span><br><span class="line">                                                            chatItem.messageDate,</span><br><span class="line">                                                            style: TextStyle(color: Colors.black45),</span><br><span class="line">                                                        ),</span><br><span class="line">                                                    ],</span><br><span class="line">                                                ),</span><br><span class="line">                                                Padding(</span><br><span class="line">                                                    padding: const EdgeInsets.only(top: 2.0),</span><br><span class="line">                                                        child: Text(</span><br><span class="line">                                                            chatItem.mostRecentMessage,</span><br><span class="line">                                                            style: TextStyle(</span><br><span class="line">                                                                color: Colors.black45, fontSize: 16.0),</span><br><span class="line">                                                        ),</span><br><span class="line">                                                )</span><br><span class="line">                                            ],</span><br><span class="line">                                        ),</span><br><span class="line">                                ),</span><br><span class="line">                            )</span><br><span class="line">                        ],</span><br><span class="line">                    ),</span><br><span class="line">            ),</span><br><span class="line">            Divider(),</span><br><span class="line">        ],</span><br><span class="line">    );</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>创建第一个列表后， 结果如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/13/165313996c68741b?w=1080&h=1920&f=png&s=139052"></p>
+<p>我们可以类似地在其他屏幕上的屏幕上创建其他选项卡。 完整的示例托管在 GitHub 上。</p>
+<p>GitHub 链接 : <a target="_blank" rel="noopener" href="https://github.com/deven98/WhatsappFlutter">https://github.com/deven98/WhatsappFlutter</a></p>
+<p>感谢您阅读此 Flutter 挑战。 随意提及您可能想要在 Flutter 中重新创建的任何应用程序。 如果你喜欢它， 一定要留下掌声， 再见。</p>
+<p>不要忘了： <a target="_blank" rel="noopener" href="https://blog.usejournal.com/flutter-challenge-the-medium-app-5f64a0f3c764">The Medium App in Flutter</a></p>
+<blockquote>
+<p>如果发现译文存在错误或其他需要改进的地方， 欢迎到 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a> 对译文进行修改并 PR， 也可获得相应奖励积分。 文章开头的 <strong>本文永久链接</strong> 即为本文在 GitHub 上的 MarkDown 链接。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a> 是一个翻译优质互联网技术文章的社区， 文章来源为 <a target="_blank" rel="noopener" href="https://juejin.im/">掘金</a> 上的英文分享文章。 内容覆盖 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#android">Android</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#ios">iOS</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%89%8D%E7%AB%AF">前端</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%90%8E%E7%AB%AF">后端</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%8C%BA%E5%9D%97%E9%93%BE">区块链</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E4%BA%A7%E5%93%81">产品</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E8%AE%BE%E8%AE%A1">设计</a>、 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD">人工智能</a>等领域， 想要查看更多优质译文请持续关注 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a>、 <a target="_blank" rel="noopener" href="http://weibo.com/juejinfanyi">官方微博</a>、 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/juejinfanyi">知乎专栏</a>。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/349f.html">https://blog.liangyueyong.cn/p/349f.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Flutter/">Flutter</a><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a></div><div class="post_share"><div class="social-share" data-image="https://user-gold-cdn.xitu.io/2018/8/13/165313996de131ba?w=1600&amp;h=1380&amp;f=jpeg&amp;s=163345" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/a92c.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】模型优化</div></div></a></div><div class="next-post pull-right"><a href="/p/e593.html"><img class="next-cover" src="https://user-gold-cdn.xitu.io/2018/11/16/1671a9358d506438?w=1280&amp;h=448&amp;f=jpeg&amp;s=55428" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】在Android上实现Google Inbox样式的动画</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/31dd.html" title="【译】Slidable： 一个有关 Flutter 的故事"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/7/30/164e93653902d36d?w=800&h=694&f=png&s=62625" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Slidable： 一个有关 Flutter 的故事</div></div></a></div><div><a href="/p/2d8c.html" title="【译】回答有关Flutter APP开发的问题"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】回答有关Flutter APP开发的问题</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div><div><a href="/p/ab06.html" title="Flutter数据存储之shared_preferences"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter数据存储之shared_preferences</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">开始</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">项目设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#The-AppBar"><span class="toc-number">3.</span> <span class="toc-text">The AppBar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#The-Tabs"><span class="toc-number">4.</span> <span class="toc-text">The Tabs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%82%AC%E6%B5%AE%E6%8C%89%E9%92%AE"><span class="toc-number">5.</span> <span class="toc-text">悬浮按钮</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2"><span class="toc-number">6.</span> <span class="toc-text">聊天界面</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

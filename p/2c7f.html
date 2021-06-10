@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库 | 斯是陋室</title><meta name="keywords" content="数据库,掘金翻译计划"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="很多开发者在开始一个新项目的时候，通常会使用 JSON，CSV 或者其他 Flat File 来模拟真实存放在数据库中的数据。这是因为他们总是在没有真实的数据库环境限制和是否需要自己创建模拟数据库之间左右为难。既然这样，为什么不使用 Docker Compose 定义一个可以在几秒钟内创建、销毁和重新创建的 PostgreSQL 数据库和监视工具？  正确创建配置两个容器的 Docker 命令过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/2c7f.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="很多开发者在开始一个新项目的时候，通常会使用 JSON，CSV 或者其他 Flat File 来模拟真实存放在数据库中的数据。这是因为他们总是在没有真实的数据库环境限制和是否需要自己创建模拟数据库之间左右为难。既然这样，为什么不使用 Docker Compose 定义一个可以在几秒钟内创建、销毁和重新创建的 PostgreSQL 数据库和监视工具？  正确创建配置两个容器的 Docker 命令过">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.285Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.286Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="掘金翻译计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/2c7f"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.285Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.286Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/2c7f.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/2c7f.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3owt7o15j31900u0e81.jpg"></p>
+<p>很多开发者在开始一个新项目的时候，通常会使用 JSON，CSV 或者其他 Flat File 来模拟真实存放在数据库中的数据。这是因为他们总是在没有真实的数据库环境限制和是否需要自己创建模拟数据库之间左右为难。既然这样，为什么不使用 Docker Compose 定义一个可以在几秒钟内创建、销毁和重新创建的 PostgreSQL 数据库<strong>和监视工具</strong>？</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3owyvf4xj30sq0dmq3n.jpg" alt="Image source: Author"></p>
+<p>正确创建配置两个容器的 Docker 命令过于冗长。而使用 Docker Compose，你只需要记住 <code>up</code> 命令和 <code>down</code> 命令！</p>
+<p><code>Up</code> 命令将创建指定版本的 PostgreSQL 数据库和一个 GUI 管理工具。<code>Down</code> 命令会将其关闭并删除。</p>
+<h2 id="基于私有容器的数据库的好处"><a href="#基于私有容器的数据库的好处" class="headerlink" title="基于私有容器的数据库的好处"></a>基于私有容器的数据库的好处</h2><ul>
+<li>不同版本的 PostgreSQL 在行为和功能上存在差异，因此开发人员应针对一个数据库版本进行长期开发。你可以选择的一个版本是 9.6.12，另一个可以是 12.4。</li>
+<li>大多数程序员都不是数据库管理员或 SQL 专家。可视化工具可以让他们直观地验证其代码的运行效果并支持手动修改数据。</li>
+<li>项目的不同阶段需要不同类型的存储方案。在项目早期，非持久型数据库可以最大程度地减少麻烦。在项目的后期阶段，持久型数据库提供了更实际的方案。</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3ox20uwuj30r80aqjrm.jpg" alt="Create and recreate a database with simple commands"></p>
+<h2 id="建立开发堆栈"><a href="#建立开发堆栈" class="headerlink" title="建立开发堆栈"></a>建立开发堆栈</h2><p>下面所展示的这份 <code>docker-compose.yml</code> 文件定义了一个运行特定版本 PostgreSQL 和 pgAdmin 4（Postgres 最常用的管理工具）的 PostgreSQL 容器。该文件的内容值得我们详细的探讨。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:9.6.12-alpine</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">some-postgres</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;~/Documents/docker_pgsql_init:/docker-entrypoint-initdb.d&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;~/Documents/docker_pgsql_volume:/var/lib/postgresql/data&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">5432</span><span class="string">:5432</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_PASSWORD=mysecret</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">restart_policy:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">on-failure</span></span><br><span class="line">        <span class="attr">max_attempts:</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">pgadmin:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">dpage/pgadmin4</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">some-pgadmin</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;PWD&#125;/servers.json:/pgadmin4/servers.json</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:80</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGADMIN_DEFAULT_EMAIL=user@domain.com</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGADMIN_DEFAULT_PASSWORD=admin</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">restart_policy:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">on-failure</span></span><br><span class="line">        <span class="attr">max_attempts:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Docker-Compose-的文件结构"><a href="#Docker-Compose-的文件结构" class="headerlink" title="Docker Compose 的文件结构"></a>Docker Compose 的文件结构</h4><p>该文件定义了两个要创建的“服务”：Postgres 和 pgAdmin。每个服务都包含一个从 Docker Hub 拉取的容器。Postgres 和 pgAdmin 将分别开放 5432 端口和 8080 端口。将你写的任何程序指向主机名“localhost”，然后用浏览器访问 <a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a> 即可访问 pgAdmin。</p>
+<p>继续阅读有关如何将 pgAdmin 指向 Postgres 的说明。</p>
+<h4 id="PostgreSQL-的版本"><a href="#PostgreSQL-的版本" class="headerlink" title="PostgreSQL 的版本"></a>PostgreSQL 的版本</h4><p>在定义 Postgres 容器的这一行中，你需要准确指定所需的 Postgres 版本。在这里，版本是一个标签，而 <code>9.6.12-alpine</code> 就是示例中使用的版本。点击<a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres?tab=tags">这里查看其他可用的版本</a>。</p>
+<h4 id="Postgres-的存储"><a href="#Postgres-的存储" class="headerlink" title="Postgres 的存储"></a>Postgres 的存储</h4><p>上面的 <code>docker-compose.yml</code> 文件为 Postgres 指定了两个 volume 映射。这两个映射将使 Postgres 可以访问你计算机上的目录。</p>
+<ol>
+<li>被映射到 <code>/docker-entrypoint-initdb.d</code> 的文件夹包含了初始化 Postgres 将会用到的 SQL 文件。将所需的 SQL 文件和 Shell 脚本放在该目录中，它们将会按字母顺序自动执行。</li>
+<li>被映射到 <code>/var/lib/postgresql/data</code> 的文件夹存放了数据库持久化存储所需要的实际文件。</li>
+</ol>
+<p>当 Postgres 启动时，他的简单运行流程如下图所示。如果数据库中没有数据，那么它将执行被映射到 <code>/docker-entrypoint-initdb.d</code> 目录中的每个 SQL 文件和 Shell 脚本（按字母顺序）。如果被映射到 <code>/var/lib/postgresql/data</code> 目录的文件夹中有数据，那么它将会忽略掉这些文件。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3ox6qqebj30s40843yw.jpg"></p>
+<p>你是否需要挂载这两个目录？这个得视情况而定。下表描述了通过 Postgres 的两个不同映射得到的一个预期结果。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3ox7u71sj31ci0dnjtw.jpg"></p>
+<p>我的建议是对这两个文件目录都做映射。如果你不想再初始化你的数据库，你可以从 init 目录中删除文件。你也可以在你的计算机上删除任何可能已经持久化的数据（当你下一次运行 <code>docker-compose up</code> 命令时，Docker 将会在其位置重新创建一个空文件夹）。</p>
+<p><strong>专业提示</strong>：你可以将 CSV 文件放在计算机的 init 文件夹中，然后在 init 目录中通过适当的 SQL 命令将 CSV 文件中的数据填充到数据表中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE Employee(id, first_name, last_name, salary);</span><br><span class="line">COPY Employee FROM &#39;&#x2F;docker-entrypoint-initdb.d&#x2F;emp.csv&#39;</span><br><span class="line">    WITH (FORMAT CSV, HEADER);</span><br></pre></td></tr></table></figure>
+
+<h4 id="pgAdmin-的存储"><a href="#pgAdmin-的存储" class="headerlink" title="pgAdmin 的存储"></a>pgAdmin 的存储</h4><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxagvaoj30dw0f70tc.jpg"></p>
+<p>尽管 pgAdmin 只是一个用于查看和配置数据库的工具，但必须配置其与数据库的连接。这可以通过可视化工具中的 <code>add server</code>指令完成。这里需要注意的是，主机名（the hostname）是我们在 YML 文件中配置的 <code>container_name</code> 这一参数的名称，即 <code>some-postgres</code>。同样地，密码也已经在 YML 文件中指定了，即 <code>mysecret</code>。</p>
+<p>另一种方法是通过在 JSON 文件中指定这些配置（除了密码之外的所有配置），通过这种方式可以免去大量的单击和输入操作。为了避免手动配置 pgAdmin 到 Postgres 的连接，我们需要将该 JSON 文件映射到容器 <code>/pgadmin4/servers.json</code> 上（在示例 YML 文件中的第 22 行）。</p>
+<p>设置文件可以指定 pgAdmin 和 Postgres 之间的多个连接（以不同用户的身份连接或者连接到多个不同的数据库）。下面是只有一个数据库连接的示例。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;Servers&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;1&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;Name&quot;</span>: <span class="string">&quot;my-postgres&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;Group&quot;</span>: <span class="string">&quot;Servers&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;Port&quot;</span>: <span class="number">5432</span>,</span><br><span class="line">            <span class="attr">&quot;Username&quot;</span>: <span class="string">&quot;postgres&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;Host&quot;</span>: <span class="string">&quot;some-postgres&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;SSLMode&quot;</span>: <span class="string">&quot;prefer&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;MaintenanceDB&quot;</span>: <span class="string">&quot;postgres&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><p><code>container_name</code> 参数仅仅只表示一个名字。但是 pgAdmin 将使用这个名称访问 5432 端口上的数据库。原因如下图所示。这两个容器通过私有网络相互连接，因此可以通过它们的主机名（容器名）也就是 <code>some-postgres</code> 和 <code>some-pgadmin</code> 相互访问。然而，你的主机（也就是你的计算机和 web 浏览器）只能访问容器对外暴露的 5432 端口和 8080 端口，因此你可以通过 <code>localhost:5432</code> 和 <code>localhost:8080</code> 访问它们。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxctcuoj30o30aeaac.jpg"></p>
+<p>内部网络的名称可以在 compose 文件中指定，但是为一个从未被代码引用的网络命名没有任何价值！如果你还是好奇，可以随时查看你的私人及临时网络的名称。在下面的代码片段中，我从桌面运行了 Docker Compose，因此将该网络命名为 <code>desktop_default</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">23a6be9b8021        bridge              bridge              local</span><br><span class="line">49a120440f88        desktop_default     bridge              local</span><br><span class="line">44a949b56fa7        host                host                local</span><br><span class="line">3892b16dca2d        none                null                local</span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-和-docker-compose-命令"><a href="#Docker-和-docker-compose-命令" class="headerlink" title="Docker 和 docker-compose 命令"></a>Docker 和 docker-compose 命令</h2><p>在这里，我必须承认我在前言中过于简化了命令操作，但只是稍微简化了一点。</p>
+<p><strong>为了启动容器</strong>，可以使用 <code>docker-compose up -d</code>。<code>-d</code> 参数指定这是一个 <code>detached</code> 模式，它将会在后台运行，并且不会影响你在命令提示符中执行其他命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ docker-compose up -d</span><br><span class="line">Creating network &quot;desktop_default&quot; with the default driver</span><br><span class="line">Creating some-postgres ... done</span><br><span class="line">Creating some-pgadmin  ... done</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<p><strong>为了关闭并删除容器</strong>，你可以使用 <code>docker-compose down -v</code>。<code>-v</code> 参数表示删除容器在运行时使用的 volume。这个<strong>不会</strong>删除计算机映射到容器上的目录。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ docker-compose down -v</span><br><span class="line">Stopping some-pgadmin  ... done</span><br><span class="line">Stopping some-postgres ... done</span><br><span class="line">Removing some-pgadmin  ... done</span><br><span class="line">Removing some-postgres ... done</span><br><span class="line">Removing network desktop_default</span><br></pre></td></tr></table></figure>
+
+<p>随着时间的推移，如果不使用 <code>-v</code> 标志，就会累积不必要的 volume。你可以使用 <code>docker volume ls</code> 来验证这一点。</p>
+<p>如果要调试一个没有正确启动的容器，请使用 <code>docker logs [container_name]</code>。例如，由于 init 目录中的一个 SQL 文件中出现错误，数据库可能无法正确初始化。通过执行 <code>docker logs some-postgres</code> 命令，可以生成容器启动时记录的日志，通过对该日志的查阅，我在一个特殊命名的 SQL 文件中发现一个错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-entrypoint.sh: running &#x2F;docker-entrypoint-initdb.d&#x2F;broken.sql</span><br><span class="line">ERROR:  syntax error at end of input at character 34</span><br><span class="line">STATEMENT:  CREATE TABLE Songs(id, name, year</span><br><span class="line">psql:&#x2F;docker-entrypoint-initdb.d&#x2F;broken.sql:1: ERROR:  syntax error at end of input</span><br><span class="line">LINE 1: CREATE TABLE Song(id, name, year</span><br></pre></td></tr></table></figure>
+
+<p>日志告诉我在 <code>broken.sql</code> 文件的第 1 行有一个错误。该命令缺少右括号和分号。我可以修复这个错误，并使用 <code>down</code> 和 <code>up</code> 来验证。</p>
+<hr>
+<h2 id="使用-Python"><a href="#使用-Python" class="headerlink" title="使用 Python"></a>使用 Python</h2><p>使用 localhost 作为 YML 文件中指定的主机名和密码，连接到数据库很容易。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> psycopg2</span><br><span class="line"></span><br><span class="line"><span class="comment"># connect to DB</span></span><br><span class="line">conn = psycopg2.connect(host=<span class="string">&quot;localhost&quot;</span>, dbname=<span class="string">&quot;postgres&quot;</span>, user=<span class="string">&quot;postgres&quot;</span>,</span><br><span class="line">    password=<span class="string">&quot;mysecret&quot;</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line"><span class="comment"># execute SQL commands in SQL file</span></span><br><span class="line">cursor.execute(open(<span class="string">&quot;emp.sql&quot;</span>, <span class="string">&quot;r&quot;</span>).read())</span><br><span class="line"></span><br><span class="line"><span class="comment"># retrieve data from the database</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT * FROM Employee&quot;</span>)</span><br><span class="line">print(cursor.fetchall())</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-pgAdmin"><a href="#使用-pgAdmin" class="headerlink" title="使用 pgAdmin"></a>使用 pgAdmin</h2><p>简单的访问 <a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a> 即可进入登录界面，使用你在 <code>docker-compose.yml</code> 文件中定义的用户名和密码登录即可（在我们的示例中是 <code>user@domain.com</code> 和 <code>admin</code>）。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxg40e4j30v80kl41q.jpg"></p>
+<p>如果你使用的是本文之前讨论的 <code>servers.json</code> 文件来指定连接细节，你将会在展开用户界面左侧的导航树时，收到系统要求你输入 Postgres 数据库的密码的提示。在我们示例的 <code>docker-compose.yml</code> 文件中，这个密码是 <code>mysecret</code>。如果你并没有创建 <code>servers.json</code> 文件或文件中有错误，你就必须手动添加服务器。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxjaovuj30n808k0to.jpg"></p>
+<p>现在，你应该能够查看和操作数据库了。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxlpf60j30v80klaf3.jpg"></p>
+<h2 id="进入-PSQL"><a href="#进入-PSQL" class="headerlink" title="进入 PSQL"></a>进入 PSQL</h2><p>有时候，开发者需要一个熟悉的命令行。Docker 使得访问 PSQL 和执行高级用户命令等操作变得更加容易。执行下面的命令进入 PSQL 命令行。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxp4146j30ty080aaa.jpg"></p>
+<p>连接后，你就可以执行所有 PSQL 命令，例如，输入 <code>\i</code> 用于导入外部数据库，输入 <code>\dt</code> 显示数据表的描述，输入 <code>\df</code> 显示函数的描述。想要退出，可以使用 <code>\q</code> 命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ docker exec -it some-postgres psql -U postgres</span><br><span class="line"></span><br><span class="line">psql (9.6.12)</span><br><span class="line">Type &quot;help&quot; for help.</span><br><span class="line"></span><br><span class="line">postgres&#x3D;# \dt</span><br><span class="line">List of relations</span><br><span class="line">Schema |     Name     | Type  |  Owner</span><br><span class="line">--------+--------------+-------+----------</span><br><span class="line">public | peak         | table | postgres</span><br><span class="line">public | climb        | table | postgres</span><br><span class="line">public | climber      | table | postgres</span><br></pre></td></tr></table></figure>
+
+<h2 id="pgAdmin-的替代品"><a href="#pgAdmin-的替代品" class="headerlink" title="pgAdmin 的替代品"></a>pgAdmin 的替代品</h2><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxr8dtwj30v80klgpx.jpg" alt="Adminer is a much simpler interface"></p>
+<p>pgAdmin 是 PostgreSQL 最常见的 GUI 管理工具，但我们还有其他选择。Adminer 的使用更加简单，并且你可能已经拥有使用它的经验了，因为它支持多种风格的 SQL。如果你是刚开始使用 PostgreSQL 或者只有非常简单的需求，那么它可能是一个更合适你的工具。</p>
+<p>在登录界面上，设置主机名为 <code>some-postgres</code> ，密码为 <code>mysecret</code>。</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl3oxsrhp0j308a0783yl.jpg"></p>
+<p>要在你的环境中用 Adminer 替换 pgAdmin，你需要在 <code>docker-compose.yml</code> 中替换几行有关 pgAdmin 容器的定义。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">adminer:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">adminer</span></span><br><span class="line">  <span class="attr">container_name:</span> <span class="string">some-adminer</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br><span class="line">  <span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">restart_policy:</span></span><br><span class="line">      <span class="attr">condition:</span> <span class="string">on-failure</span></span><br><span class="line">      <span class="attr">max_attempts:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>所有优秀的开发者都依赖于产品文档和其他人员的经验。这是我在创建工作流程和编写本文时引用的参考资料。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres">https://hub.docker.com/_/postgres</a></li>
+<li><a target="_blank" rel="noopener" href="https://hub.docker.com/_/adminer">https://hub.docker.com/_/adminer</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/">https://docs.docker.com/compose/compose-file/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html">https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://technology.amis.nl/2020/01/02/pgadmin-in-docker-provision-connections-and-passwords/">https://technology.amis.nl/2020/01/02/pgadmin-in-docker-provision-connections-and-passwords/</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42248198/how-to-mount-a-single-file-in-a-volume">https://stackoverflow.com/questions/42248198/how-to-mount-a-single-file-in-a-volume</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/2c7f.html">https://blog.liangyueyong.cn/p/2c7f.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a></div><div class="post_share"><div class="social-share" data-image="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/1daa.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】Post-training 量化</div></div></a></div><div class="next-post pull-right"><a href="/p/4e00.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】JetPack Compose for Desktop 初体验</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/8245.html" title="【译】为用户提供安全可靠的体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】为用户提供安全可靠的体验</div></div></a></div><div><a href="/p/7980.html" title="在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️）"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️）</div></div></a></div><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/3bd2.html" title="【译】使用 GraphQL 的 6 个月"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gem4qzxal7j30z30neqaz.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】使用 GraphQL 的 6 个月</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%A7%81%E6%9C%89%E5%AE%B9%E5%99%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.</span> <span class="toc-text">基于私有容器的数据库的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%BC%80%E5%8F%91%E5%A0%86%E6%A0%88"><span class="toc-number">2.</span> <span class="toc-text">建立开发堆栈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker-Compose-%E7%9A%84%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">2.0.1.</span> <span class="toc-text">Docker Compose 的文件结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PostgreSQL-%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">2.0.2.</span> <span class="toc-text">PostgreSQL 的版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Postgres-%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">2.0.3.</span> <span class="toc-text">Postgres 的存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pgAdmin-%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">2.0.4.</span> <span class="toc-text">pgAdmin 的存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">2.0.5.</span> <span class="toc-text">网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-%E5%92%8C-docker-compose-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">Docker 和 docker-compose 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Python"><span class="toc-number">4.</span> <span class="toc-text">使用 Python</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-pgAdmin"><span class="toc-number">5.</span> <span class="toc-text">使用 pgAdmin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5-PSQL"><span class="toc-number">6.</span> <span class="toc-text">进入 PSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pgAdmin-%E7%9A%84%E6%9B%BF%E4%BB%A3%E5%93%81"><span class="toc-number">7.</span> <span class="toc-text">pgAdmin 的替代品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">8.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

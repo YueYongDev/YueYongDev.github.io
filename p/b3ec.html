@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Python 管理哪家强？ | 斯是陋室</title><meta name="keywords" content="其他,python"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="之前介绍过《利用pyenv管理多个版本的python》，pyenv 是一个非常好用的 Python 版本管理工具，利用它我们可以在同一台电脑上安装多个版本的 Python ，这个过程非常简单。Mac系统的电脑一行命令就可以安装了： brew install pyenv  pyenv 的安装和使用详见开篇提到的文章，这里不再赘述。 今天主要是想介绍另一个非常好用的 Python 工具——**”Pi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 管理哪家强？">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/b3ec.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="之前介绍过《利用pyenv管理多个版本的python》，pyenv 是一个非常好用的 Python 版本管理工具，利用它我们可以在同一台电脑上安装多个版本的 Python ，这个过程非常简单。Mac系统的电脑一行命令就可以安装了： brew install pyenv  pyenv 的安装和使用详见开篇提到的文章，这里不再赘述。 今天主要是想介绍另一个非常好用的 Python 工具——**”Pi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.321Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.321Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="其他">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/b3ec"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">Python 管理哪家强？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.321Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.321Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/b3ec.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/b3ec.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g13dkeueaoj30k009g75s.jpg" alt="Pipenv - The Officially Recommended Python Packaging Tool"></p>
+<p>之前介绍过<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2ODAyNTgyMQ==&mid=2247483652&idx=1&sn=5679544151f62a06b3935a713ad42fc5&chksm=ceb3d5b6f9c45ca072623be7ce1c7794a467b01d0f3149d4e20a7455c5c5e7dc5df39d9cf623&token=155766547&lang=zh_CN#rd">《利用pyenv管理多个版本的python》</a>，pyenv 是一个非常好用的 Python 版本管理工具，利用它我们可以在同一台电脑上安装多个版本的 Python ，这个过程非常简单。Mac系统的电脑一行命令就可以安装了：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install pyenv</span><br></pre></td></tr></table></figure>
+
+<p>pyenv 的安装和使用详见开篇提到的文章，这里不再赘述。</p>
+<p>今天主要是想介绍另一个非常好用的 Python 工具——**”Pipenv”**</p>
+<h2 id="Pipenv是什么？"><a href="#Pipenv是什么？" class="headerlink" title="Pipenv是什么？"></a>Pipenv是什么？</h2><blockquote>
+<p><strong>Pipenv</strong> is a tool that aims to bring the best of all packaging worlds (bundler, composer, npm, cargo, yarn, etc.) to the Python world. <em>Windows is a first-class citizen, in our world.</em></p>
+<p>It automatically creates and manages a virtualenv for your projects, as well as adds/removes packages from your <code>Pipfile</code> as you install/uninstall packages. It also generates the ever-important <code>Pipfile.lock</code>, which is used to produce deterministic builds.</p>
+</blockquote>
+<p>上段引用自官方文档，简单来说就是 Pipenv 是希望成为 Python 界最好的包管理工具，成为 Python 界的 <em>npm</em>。你可以使用 Pipenv 这一个工具来安装、卸载、跟踪和记录依赖性，并创建、使用和组织你的虚拟环境。<br>当你使用它启动一个项目时，如果你还没有使用虚拟环境的话，Pipenv 将自动为该项目创建一个虚拟环境。<br>Pipenv 使用 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 来管理依赖包，并且在使用 pipenv 添加或删除包时，自动维护 Pipfile 文件，同时生成 Pipfile.lock 来锁定安装包的版本和依赖信息，避免构建错误。相比pip需要手动维护requirements.txt 中的安装包和版本，具有很大的进步。</p>
+<h2 id="为什么要使用-Pipenv"><a href="#为什么要使用-Pipenv" class="headerlink" title="为什么要使用 Pipenv"></a>为什么要使用 Pipenv</h2><p>设想一个场景：你手头有多个开发项目，其中项目 A 和项目 B 要求用 Python3，项目C需要用 Python2，而项目 A 和项目 B 又要求第三方依赖包相互独立，互不干扰。</p>
+<p>这个时候，为了满足版本的不同我们需要使用 Pyenv 安装多个版本的 Python ，同时为了使不同项目之间隔离开来，我们可以使用 Pipenv 创建虚拟的开发环境。</p>
+<p>那有的人就要问了，<code>virtualenv</code>不就可以创建虚拟环境了吗，为什么还要使用 Pipenv ，这里先卖个关子，文末我再来比较这些常见工具之间的差异性。</p>
+<h2 id="使用-Pipenv"><a href="#使用-Pipenv" class="headerlink" title="使用 Pipenv"></a>使用 Pipenv</h2><h3 id="安装-Pipenv"><a href="#安装-Pipenv" class="headerlink" title="安装 Pipenv"></a>安装 Pipenv</h3><p>如果你是Mac电脑，那么推荐使用Homebrew来安装。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install pipenv</span><br></pre></td></tr></table></figure>
+
+<p>如果不是Mac电脑，建议 使用Python3的pip3 安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install pipenv</span><br></pre></td></tr></table></figure>
+
+<p>执行pipenv，可以查看pipenv的帮助信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv</span><br></pre></td></tr></table></figure>
+
+<p>如果出现如下信息，就说明安装成功了：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g13bfa496rj30vo0kadqb.jpg" alt="image-20190315112449577"></p>
+<h3 id="为项目创建虚拟环境"><a href="#为项目创建虚拟环境" class="headerlink" title="为项目创建虚拟环境"></a>为项目创建虚拟环境</h3><p>默认地，虚拟环境会创建在<code>~/.local/share/virtualenvs</code>目录里面。<br>如果我们希望在每个项目的根目录下保存虚拟环境目录（.venv），需要在 <code>.bashrc</code> 或 <code>.bash_profile</code> 中配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export PIPENV_VENV_IN_PROJECT&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>要想使配置生效，执行下<code>source ~/.bashrc</code>或者<code>source ~/.bash_profile</code>即可使环境变量生效。<br>接下来我们为项目创建虚拟环境。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir pipenv_demo		</span><br><span class="line">cd pipenv_demo</span><br><span class="line">pipenv --python 3.6.7 # 为当前初始化一个版本为 3.6.7 的python环境</span><br></pre></td></tr></table></figure>
+
+<h3 id="首次运行"><a href="#首次运行" class="headerlink" title="首次运行"></a>首次运行</h3><p>如果是第一次在项目中运行 <code>pipenv</code> 命令的话，会在项目中创建一个名为 <code>Pipfile</code> 的文件，文件内容类似下面这样。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[[source]]</span><br><span class="line">url &#x3D; &quot;https:&#x2F;&#x2F;pypi.org&#x2F;simple&quot;</span><br><span class="line">verify_ssl &#x3D; true</span><br><span class="line">name &#x3D; &quot;pypi&quot;</span><br><span class="line"></span><br><span class="line">[packages]</span><br><span class="line">requests-html &#x3D; &quot;*&quot;</span><br><span class="line"></span><br><span class="line">[dev-packages]</span><br><span class="line"></span><br><span class="line">[requires]</span><br><span class="line">python_version &#x3D; &quot;3.7&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这个文件就类似于 maven 中的 <code>pom.xml</code>、npm 中的 <code>package.json</code> 文件。如果运行过install、update等命令的话，还会创建一个<code>Pipfile.lock</code>文件，类似npm中的lock文件。这两个文件就是pipenv用于管理第三方库的配置文件，如果同时使用版本控制软件的话，需要将它们也加入进去。</p>
+<blockquote>
+<p>Tips：对于这个文件我们需要先做一件事，就是更改 <strong>[[source]]</strong> 中的 url 为国内镜像。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[[source]]</span><br><span class="line"> url &#x3D; &quot;https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple&quot;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="安装项目依赖"><a href="#安装项目依赖" class="headerlink" title="安装项目依赖"></a>安装项目依赖</h4><p>如果我想在项目中安装requests这个包，运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv install requests</span><br></pre></td></tr></table></figure>
+
+<p>如果需要指定具体版本号，可以这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv install requests&#x3D;&#x3D;2.13.0</span><br></pre></td></tr></table></figure>
+
+
+<p>如果是第一次运行pipenv的话，会先创建Pipfile文件，否则会修改Pipfile文件。</p>
+<p>该命令还有一个常用参数-d或–dev，用于安装仅供开发使用的包。</p>
+<blockquote>
+<p>Tips：用 git 管理项目时候，要把 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 加入版本跟踪。这样 clone 了这个项目的同学，只需要执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv install</span><br></pre></td></tr></table></figure>
+
+<p>就可以安装所有的Pipfile中 [packages]部分的包了，并且自动为项目在自己电脑上创建了虚拟环境。</p>
+</blockquote>
+<h4 id="卸载某个依赖"><a href="#卸载某个依赖" class="headerlink" title="卸载某个依赖"></a>卸载某个依赖</h4><p>相应的还有命令来卸载第三方包，该命令还有两个参数<code>--all</code>和<code>--all-dev</code>用于卸载所有包和所有开发包。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv uninstall requests</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新项目依赖"><a href="#更新项目依赖" class="headerlink" title="更新项目依赖"></a>更新项目依赖</h4><p>查看所有需要更新的包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv update --outdated</span><br></pre></td></tr></table></figure>
+
+<p>更新所有包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv update</span><br></pre></td></tr></table></figure>
+
+<p>更新指定的包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv update &lt;包名&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipenv -h  # 查看帮助</span><br><span class="line">pipenv graph  # 查看已安装的包</span><br><span class="line">pipenv shell  # 启动shell</span><br><span class="line">pipenv run python hello.py  # 运行脚本</span><br></pre></td></tr></table></figure>
+
+<h3 id="Python-管理哪家强？"><a href="#Python-管理哪家强？" class="headerlink" title="Python 管理哪家强？"></a>Python 管理哪家强？</h3><p>还记得在最开始提出的问题吗？明明<code>virtualenv</code>就可以创建虚拟环境了吗，为什么还要使用 Pipenv 呢？</p>
+<p>接下来我们来横向对比下几个常见的容易弄混的 python 管理工具（我在初学的时候总是分不清😂）</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>介绍</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pip</td>
+<td>包管理工具</td>
+<td></td>
+</tr>
+<tr>
+<td>virtualenv</td>
+<td>虚拟环境管理工具</td>
+<td>切换目录</td>
+</tr>
+<tr>
+<td>virtualenvwrapper</td>
+<td>虚拟环境管理工具加强版</td>
+<td></td>
+</tr>
+<tr>
+<td>pyenv</td>
+<td>python版本管理工具</td>
+<td>修改环境变量</td>
+</tr>
+<tr>
+<td>pyenv-virtualenv</td>
+<td>虚拟环境管理工具</td>
+<td></td>
+</tr>
+<tr>
+<td>pipenv</td>
+<td>项目环境管理工具</td>
+<td></td>
+</tr>
+<tr>
+<td>anaconda</td>
+<td>一个包含180+的科学包及其依赖项的发行版本（不只是 Python 可用）</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>同时在推荐一个我在 stackoverflow 上看到的回答：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38217545/what-is-the-difference-between-pyenv-virtualenv-anaconda/39928067#39928067">What is the difference between pyenv, virtualenv, anaconda?</a></p>
+<h3 id="实践建议："><a href="#实践建议：" class="headerlink" title="实践建议："></a>实践建议：</h3><p>建议团队内开发人员，在自己电脑上都安装 pyenv 和 pipenv 。Pipfile 和 Pipfile.lock 加入版本跟踪，.venv 不要加入版本管理。为自己的每一个项目建立独立的虚拟环境。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38217545/what-is-the-difference-between-pyenv-virtualenv-anaconda/39928067#39928067">What is the difference between pyenv, virtualenv, anaconda?</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuchunming033/article/details/79582617">利用pipenv和pyenv管理多个相互独立的Python虚拟开发环境</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011054333/article/details/82891847">pipenv快速入门</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/b3ec.html">https://blog.liangyueyong.cn/p/b3ec.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%85%B6%E4%BB%96/">其他</a><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/1282.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">mac下利用pyenv管理多个版本的python</div></div></a></div><div class="next-post pull-right"><a href="/p/3f5e.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ISE头条号海报生成器</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/3f5e.html" title="ISE头条号海报生成器"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">ISE头条号海报生成器</div></div></a></div><div><a href="/p/7839.html" title="利用Python让你的命令行像坤坤一样会打篮球"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">利用Python让你的命令行像坤坤一样会打篮球</div></div></a></div><div><a href="/p/4d94.html" title="利用 Python 破解 ZIP 或 RAR 文件密码"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">利用 Python 破解 ZIP 或 RAR 文件密码</div></div></a></div><div><a href="/p/33d6.html" title="趣玩Python——利用python摇身一变社会人"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">趣玩Python——利用python摇身一变社会人</div></div></a></div><div><a href="/p/1f44.html" title="趣玩Python——如何帮女朋友快速抢票"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gibbgdcy7wj30g20b8mxo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">趣玩Python——如何帮女朋友快速抢票</div></div></a></div><div><a href="/p/a973.html" title="准备开一个新系列"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">准备开一个新系列</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pipenv%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Pipenv是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-Pipenv"><span class="toc-number">2.</span> <span class="toc-text">为什么要使用 Pipenv</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Pipenv"><span class="toc-number">3.</span> <span class="toc-text">使用 Pipenv</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Pipenv"><span class="toc-number">3.1.</span> <span class="toc-text">安装 Pipenv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="toc-number">3.2.</span> <span class="toc-text">为项目创建虚拟环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E6%AC%A1%E8%BF%90%E8%A1%8C"><span class="toc-number">3.3.</span> <span class="toc-text">首次运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96"><span class="toc-number">3.4.1.</span> <span class="toc-text">安装项目依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%9F%90%E4%B8%AA%E4%BE%9D%E8%B5%96"><span class="toc-number">3.4.2.</span> <span class="toc-text">卸载某个依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96"><span class="toc-number">3.4.3.</span> <span class="toc-text">更新项目依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.4.</span> <span class="toc-text">其他命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-%E7%AE%A1%E7%90%86%E5%93%AA%E5%AE%B6%E5%BC%BA%EF%BC%9F"><span class="toc-number">3.5.</span> <span class="toc-text">Python 管理哪家强？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="toc-number">3.6.</span> <span class="toc-text">实践建议：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.7.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

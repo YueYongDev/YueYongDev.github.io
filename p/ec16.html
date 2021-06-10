@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型 | 斯是陋室</title><meta name="keywords" content="TensorFlow,其他翻译,Effective TensorFlow"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="**本文翻译自： 《Debugging TensorFlow models》， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **  与常规python代码相比， TensorFlow的符号特性使的TensorFlow的代码调试变得相对困难。 这里我介绍一些TensorFlow附带的工具， 使调试更容易。  使用TensorFlow时最常见的错误可能是传递形状错">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/ec16.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="**本文翻译自： 《Debugging TensorFlow models》， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **  与常规python代码相比， TensorFlow的符号特性使的TensorFlow的代码调试变得相对困难。 这里我介绍一些TensorFlow附带的工具， 使调试更容易。  使用TensorFlow时最常见的错误可能是传递形状错">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.272Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.273Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="TensorFlow">
+<meta property="article:tag" content="其他翻译">
+<meta property="article:tag" content="Effective TensorFlow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/ec16"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】Effective TensorFlow Chapter11——在TensorFlow中调试模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.272Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.273Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/ec16.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/ec16.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fzpym7tmc9j30u00gwjrj.jpg"></p>
+<blockquote>
+<p>**本文翻译自： <a target="_blank" rel="noopener" href="https://github.com/vahidk/EffectiveTensorflow#debugging-tensorflow-models">《Debugging TensorFlow models》</a>， 如有侵权请联系删除， 仅限于学术交流， 请勿商用。 如有谬误， 请联系指出。 **</p>
+</blockquote>
+<p>与常规python代码相比， TensorFlow的符号特性使的TensorFlow的代码调试变得相对困难。 这里我介绍一些TensorFlow附带的工具， 使调试更容易。 </p>
+<p>使用TensorFlow时最常见的错误可能是传递形状错误的张量。 许多TensorFlow操作可以在不同秩(rank)和形状(shape)的张量上操作。 这在使用API时很方便， 但在出现问题时可能会导致额外的麻烦。 </p>
+<p>例如， 考虑下面这个 <code>tf.matmul</code> 操作， 它可以使两个矩阵相乘： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.random_uniform([<span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = tf.random_uniform([<span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line">c = tf.matmul(a, b)  <span class="comment"># c is a tensor of shape [2, 4]</span></span><br></pre></td></tr></table></figure>
+
+<p>但是下面这个函数也可以实现矩阵乘法： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.random_uniform([<span class="number">10</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = tf.random_uniform([<span class="number">10</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line">tf.matmul(a, b)  <span class="comment"># c is a tensor of shape [10, 2, 4]</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是我们之前在<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2ODAyNTgyMQ==&mid=2247483775&idx=1&sn=4c45383acd0639d5756c5ee3a10e934c&chksm=ceb3d5cdf9c45cdb46639bb612a534f10136d2bb2f6cfa6b9dc7679a810ef715f412d22dd9a1&scene=0&subscene=131&clicktime=1551345932&ascene=7&devicetype=android-26&version=2700033a&nettype=cmnet&abtest_cookie=BAABAAoACwASABMABAAjlx4AWpkeAMKZHgDTmR4AAAA=&lang=zh_CN&pass_ticket=LFRQeZhcjp8CTkBbwi5u5192kHLrJlWbmRsLlTV8jeXk/QHp2ZIgzvFKrbrX+Ut3&wx_header=1">广播部分</a>谈到的一个支持广播的添加操作的例子： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a &#x3D; tf.constant([</span><br><span class="line">    [1.],</span><br><span class="line">    [2.]</span><br><span class="line">])</span><br><span class="line">b &#x3D; tf.constant([1., 2.])</span><br><span class="line">c &#x3D; a + b# c is a tensor of shape[2, 2]</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用 <code>tf.assert *</code> 操作验证您的张量</strong></p>
+<p>减少不必要行为可能性的一种方法是使用 <code>tf.assert * </code> 操作验证中间张量的秩(rank)或形状(shape)。 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = tf.constant([[<span class="number">1.</span>], [<span class="number">2.</span>]])</span><br><span class="line">b = tf.constant([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line">check_a = tf.assert_rank(a, <span class="number">1</span>)  <span class="comment"># This will raise an InvalidArgumentError exception</span></span><br><span class="line">check_b = tf.assert_rank(b, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">with</span> tf.control_dependencies([check_a, check_b]):</span><br><span class="line">    c = a + b  <span class="comment"># c is a tensor of shape [2, 2]</span></span><br></pre></td></tr></table></figure>
+
+<p>请记住， 断言节点和其他操作一样都属于TensorFlow中图（Graph）的一部分， 如果不进行评估， 则会在执行 <code>Session.run()</code> 期间进行剔除。 因此， 请确保为断言操作创建显式依赖项， 以强制TensorFlow执行它们。 </p>
+<p>你还可以在运行时使用断言验证张量的值： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">check_pos = tf.assert_positive(a)</span><br></pre></td></tr></table></figure>
+
+<p>有关断言操作的<a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_guides/python/check_ops">详细信息</a>， 请参阅官方文档。 </p>
+<p><strong>使用 <code>tf.Print</code> 打印张量值</strong></p>
+<p>另一个对调试有帮助的内置函数是 <code>tf.Print</code> ， 它可以将给定的张量记录到标准错误堆栈中： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">input_copy = tf.Print(input, tensors_to_print_list)</span><br></pre></td></tr></table></figure>
+
+<p>注意一下， <code>tf.Print</code> 函数将其第一个参数的副本作为返回值输出。 一种让 <code>tf.Print</code> 强制运行的方式是将其输出传递给另一个操作去执行。 例如， 如果我们想在添加它们之前就打印张量a和b的值， 我们可以这样做： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = ...</span><br><span class="line">b = ...</span><br><span class="line">a = tf.Print(a, [a, b])</span><br><span class="line">c = a + b</span><br></pre></td></tr></table></figure>
+
+<p>或者， 我们可以手动定义控件依赖项。 </p>
+<p><strong>利用 <code>tf.compute_gradient_error</code> 检查梯度变化的值</strong></p>
+<p>并不是TensorFlow中的所有操作都有梯度变化， 并且很容易在无意中构建出TensorFlow无法计算梯度变化的图。 </p>
+<p>让我们来看个例子： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">non_differentiable_softmax_entropy</span>(<span class="params">logits</span>):</span></span><br><span class="line">    probs = tf.nn.softmax(logits)</span><br><span class="line">    <span class="keyword">return</span> tf.nn.softmax_cross_entropy_with_logits(labels=probs, logits=logits)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(<span class="string">&quot;w&quot;</span>, shape=[<span class="number">5</span>])</span><br><span class="line">y = -non_differentiable_softmax_entropy(w)</span><br><span class="line"></span><br><span class="line">opt = tf.train.AdamOptimizer()</span><br><span class="line">train_op = opt.minimize(y)</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">    sess.run(train_op)</span><br><span class="line"></span><br><span class="line">print(sess.run(tf.nn.softmax(w)))</span><br></pre></td></tr></table></figure>
+
+<p>我们正在使用 <code>tf.nn.softmax_cross_entropy_with_logits </code> 定义一个分类分布上的熵。 然后我们使用Adam优化器来找到具有最大熵的权重。 如果你通过了信息论的课程， 你就会知道均匀分布包含最大熵。 所以你预计他的结果应该会是 <code>[0.2, 0.2, 0.2, 0.2, 0.2]</code> 。 但是你执行这段代码的话会得到一个你意想不到的结果： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[ <span class="number">0.34081486</span>  <span class="number">0.24287023</span>  <span class="number">0.23465775</span>  <span class="number">0.08935683</span>  <span class="number">0.09230034</span>]</span><br></pre></td></tr></table></figure>
+
+<p>事实证明， <code>tf.nn.softmax_cross_entropy_with_logits</code> 对标签有未定义的梯度变化！ 但是， 如果我们不知道这个现象， 我们又怎么能发现这个问题呢？ </p>
+<p>幸运的是， TensorFlow带有一个数值微分器， 可用于查找符号梯度误差。 让我们看看我们如何使用它： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session():</span><br><span class="line">    diff = tf.test.compute_gradient_error(w, [<span class="number">5</span>], y, [])</span><br><span class="line">    print(diff)</span><br></pre></td></tr></table></figure>
+
+<p>如果你运行它， 你会发现数值和符号之间的差异非常大（我试了下大约为0.06  -  0.1）。 </p>
+<p>现在让我们更改下我们的函数并再次执行下： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax_entropy</span>(<span class="params">logits, dim=<span class="number">-1</span></span>):</span></span><br><span class="line">    plogp = tf.nn.softmax(logits, dim) * tf.nn.log_softmax(logits, dim)</span><br><span class="line">    <span class="keyword">return</span> -tf.reduce_sum(plogp, dim)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(<span class="string">&quot;w&quot;</span>, shape=[<span class="number">5</span>])</span><br><span class="line">y = -softmax_entropy(w)</span><br><span class="line"></span><br><span class="line">print(w.get_shape())</span><br><span class="line">print(y.get_shape())</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    diff = tf.test.compute_gradient_error(w, [<span class="number">5</span>], y, [])</span><br><span class="line">    print(diff)</span><br></pre></td></tr></table></figure>
+
+<p>差异应该在0.0001左右， 这个结果看起来好多了。 </p>
+<p>现在， 如果再次使用正确的版本运行优化器， 你可以看到最终权重为： </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[ <span class="number">0.2</span>  <span class="number">0.2</span>  <span class="number">0.2</span>  <span class="number">0.2</span>  <span class="number">0.2</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这就是我们想要的答案。 </p>
+<p><a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_guides/python/summary">TensorFlow summaries</a>和<a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_guides/python/tfdbg">tfdbg(TensorFlow Debugger)</a>是另外两个用于调试的工具， 请参阅官方文档以了解更多信息。 </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/ec16.html">https://blog.liangyueyong.cn/p/ec16.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TensorFlow/">TensorFlow</a><a class="post-meta__tags" href="/tags/%E5%85%B6%E4%BB%96%E7%BF%BB%E8%AF%91/">其他翻译</a><a class="post-meta__tags" href="/tags/Effective-TensorFlow/">Effective TensorFlow</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/ec16.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】Effective TensorFlow Chapter12——TensorFlow中的数值稳定性</div></div></a></div><div class="next-post pull-right"><a href="/p/1229.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】Effective TensorFlow Chapter10——在TensorFlow中利用多GPU处理并行数据</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/4efb.html" title="【译】Effective TensorFlow Chapter6——在TensorFlow中， 利用运算符重载"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter6——在TensorFlow中， 利用运算符重载</div></div></a></div><div><a href="/p/87a1.html" title="【译】Effective TensorFlow Chapter4——TensorFlow中的Broadcast机制的优缺点"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter4——TensorFlow中的Broadcast机制的优缺点</div></div></a></div><div><a href="/p/9793.html" title="【译】Effective TensorFlow Chapter2——理解静态和动态形状"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter2——理解静态和动态形状</div></div></a></div><div><a href="/p/e376.html" title="【译】Effective TensorFlow Chapter3——理解变量域Scope以及何时应该使用它们"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter3——理解变量域Scope以及何时应该使用它们</div></div></a></div><div><a href="/p/4a8e.html" title="【译】Effective TensorFlow Chapter5——在TensorFlow中， 给模型“喂”数据"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter5——在TensorFlow中， 给模型“喂”数据</div></div></a></div><div><a href="/p/2f4d.html" title="【译】Effective TensorFlow Chapter1——TensorFlow 基础"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Effective TensorFlow Chapter1——TensorFlow 基础</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

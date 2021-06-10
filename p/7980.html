@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️） | 斯是陋室</title><meta name="keywords" content="数据库"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言和标题一样，本文的主要内容就是在腾讯云 Ubuntu18.04 上安装配置 MySQL 5.7，之所以要写这篇文章是因为前两天和朋友讨论现在的 mysql 设置 root 账户的密码上和以前不一样了而且后续的操作也比以前麻烦了，他不信相信，然后为了向他验证我的说法，我就把我的一台暂时闲置的腾讯云服务器重装了下系统（程序员较起真来就是这么不讲理 😜）  这不，虽然我证实了我说的，但我也付出了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️）">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/7980.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="前言和标题一样，本文的主要内容就是在腾讯云 Ubuntu18.04 上安装配置 MySQL 5.7，之所以要写这篇文章是因为前两天和朋友讨论现在的 mysql 设置 root 账户的密码上和以前不一样了而且后续的操作也比以前麻烦了，他不信相信，然后为了向他验证我的说法，我就把我的一台暂时闲置的腾讯云服务器重装了下系统（程序员较起真来就是这么不讲理 😜）  这不，虽然我证实了我说的，但我也付出了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.329Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.330Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/7980"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.329Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.330Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/7980.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/7980.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5x0th0e8jj31mi0tc7ea.jpg"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>和标题一样，本文的主要内容就是在腾讯云 Ubuntu18.04 上安装配置 MySQL 5.7，之所以要写这篇文章是因为前两天和朋友讨论现在的 mysql 设置 root 账户的密码上和以前不一样了而且后续的操作也比以前麻烦了，他不信相信，然后为了向他验证我的说法，我就把我的一台暂时闲置的腾讯云服务器重装了下系统（程序员较起真来就是这么不讲理 😜）</p>
+<p><img src="http://ww2.sinaimg.cn/bmiddle/006tNc79ly1g5wwtpbjojj30si0s00zo.jpg"></p>
+<p>这不，虽然我证实了我说的，但我也付出了要重新配置我这台服务器的惨痛代价，既然这样倒不如把安装配置的过程记录下。话不多说，我们就开始吧。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li>一台腾讯云服务器</li>
+<li>系统环境为 Ubuntu 18.04</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装 mysql 非常简单，只需要执行下面两个命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install mysql-server</span><br><span class="line">sudo apt-get install mysql-client</span><br></pre></td></tr></table></figure>
+
+<p>检查 MySQL 是否运行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo netstat -tap | grep mysql</span><br></pre></td></tr></table></figure>
+
+<p>如果成功安装，我的会显示如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcp6       0      0 [::]:1030               [::]:*                  LISTEN      5743/mysqld</span><br></pre></td></tr></table></figure>
+
+<p>顺便在这里提一下 **重启/打开/关闭 MySQL ** 的方法是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql restart/start/stop</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>虽然我们可以通过执行两个命令就能很方便的安装好 MySQL，但是我在安装过程中并没有出现要我写用户名和密码的地方，这让我一脸懵逼，索性在终端输入<code>mysql -u root -p</code>之后，要求我输入密码，可是我并不知道密码，心想可能默认密码就是空吧，直接回车不对，随便输入一个密码也不对，终于在查找了很多资料后，我找到了解决方案。</p>
+<h3 id="查看初始用户名和密码"><a href="#查看初始用户名和密码" class="headerlink" title="查看初始用户名和密码"></a>查看初始用户名和密码</h3><p>查看一个文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo cat /etc/mysql/debian.cnf</span><br></pre></td></tr></table></figure>
+
+<p>在这个文件里面有着 MySQL 默认的用户名和用户密码，<br>最最重要的是：用户名默认的不是 root，而是 debian-sys-maint，如下所示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Automatically generated for Debian scripts. DO NOT TOUCH!</span></span><br><span class="line">[client]</span><br><span class="line">host     = localhost</span><br><span class="line">user     = debian-sys-maint</span><br><span class="line">password = skFz7zS0Fl1t2QHK</span><br><span class="line">socket   = /var/run/mysqld/mysqld.sock</span><br><span class="line">[mysql_upgrade]</span><br><span class="line">host     = localhost</span><br><span class="line">user     = debian-sys-maint</span><br><span class="line">password = skFz7zS0Fl1t2QHK</span><br><span class="line">socket   = /var/run/mysqld/mysqld.sock</span><br></pre></td></tr></table></figure>
+
+<p>记下这里的 <strong><em>user</em></strong> 和 <strong><em>password</em></strong>，然后到终端里输入 <code>mysql -u debian-sys-maint -p </code>，随即会让我们输入密码，此时输入我们刚才记下的密码即可进入 mysql 的 shell 环境了。</p>
+<h3 id="更改访问账户和密码"><a href="#更改访问账户和密码" class="headerlink" title="更改访问账户和密码"></a>更改访问账户和密码</h3><p>每次都这么登录自然很麻烦，因此先想到了更改 root 密码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; update mysql.user set authentication_string&#x3D;password(&#39;password&#39;) where user&#x3D;&#39;root&#39;and Host &#x3D; &#39;localhost&#39;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tips:这里说明下，在 MySQL 5.7 password 字段已从<code>mysql.user</code>表中删除，新的字段名是<code>authenticalion_string</code>。</p>
+</blockquote>
+<p>然后你以为在终端输入<code>mysql -u root -p</code>，然后再输入你刚才设置的密码就可以访问了吗？</p>
+<p><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5wxjbrmjaj30f708cglv.jpg"></p>
+<p>天真，怎么会那么简单，想要成长，怎么能不被无情的现实蹂躏一番。</p>
+<p><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5wxg7dpxxj30ve0300ta.jpg"></p>
+<p>可我明明就已经改过密码了，为啥还是登陆不进去。</p>
+<p>于是我又开始在度娘上搜索，终于找到了问题的原因：</p>
+<blockquote>
+<p>原因是因为在最近的 Ubuntu 安装（当然也可能是其他安装）中，MySQL 默认使用了<code>UNIX auth_socket plugin</code>插件。</p>
+<p>简单来说这意味着当<code>db_users</code>使用数据库时，<strong>将会通过系统用户认证表进行认证</strong>。</p>
+</blockquote>
+<p>你可以通过下面的命令看看你的 root 用户是否设置成了这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; USE mysql;</span><br><span class="line">mysql&gt; SELECT User, Host, plugin FROM mysql.user;</span><br><span class="line"></span><br><span class="line">+------------------+-----------------------+</span><br><span class="line">| User             | plugin                |</span><br><span class="line">+------------------+-----------------------+</span><br><span class="line">| root             | auth_socket           |</span><br><span class="line">| mysql.sys        | mysql_native_password |</span><br><span class="line">| debian-sys-maint | mysql_native_password |</span><br><span class="line">+------------------+-----------------------+</span><br></pre></td></tr></table></figure>
+
+<p>如果是这样的话就说明 root 用户正在使用<code>auth_socket</code>插件，对于这种问题，有两种解决方案：</p>
+<ol>
+<li><p><strong>设置你的 root 用户使用 mysql_native_password 插件</strong></p>
+</li>
+<li><p><strong>创建一个与你的系统用户一致的新的数据库用户（推荐）</strong></p>
+</li>
+</ol>
+<h4 id="设置-root-用户使用-mysql-native-password-插件"><a href="#设置-root-用户使用-mysql-native-password-插件" class="headerlink" title="设置 root 用户使用 mysql_native_password 插件"></a><strong>设置 root 用户使用 mysql_native_password 插件</strong></h4><p>因为不推荐采用这种方式，所以这里只是给出要执行的命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; use mysql;</span><br><span class="line">mysql&gt; update user set plugin&#x3D;&#39;mysql_native_password&#39; where user&#x3D;&#39;root&#39;;</span><br><span class="line">mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;123456&#39;;</span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br><span class="line">mysql&gt; exit;</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建一个新用户"><a href="#创建一个新用户" class="headerlink" title="创建一个新用户"></a>创建一个新用户</h4><p>重点来说下这种方式。之所以要新建一个用户，不单单是为了解决修改 root 账户密码的情况。我们知道，当一个项目的体量上去了，数据库的维护就变得非常重要了，如果发展到一定程度后用户名仍然是 root（如果这时候还开通了外网访问），那安全性就会大大降低。况且每个项目的开发人员肯定不止一个，不同 coder 的权限等级也不一样，能对数据库进行的操作肯定也是不一样的。所以综上所述，我依旧推荐在刚开始安装 mysql 时就新建一个用户进行配置。</p>
+<p><strong>命令：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE USER &#39;username&#39;@&#39;host&#39; IDENTIFIED BY &#39;password&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<ul>
+<li>username：你将创建的用户名</li>
+<li>host：指定该用户在哪个主机上可以登陆，如果是本地用户可用 localhost，如果想让该用户可以<strong>从任意远程主机登陆</strong>，可以使用通配符<code>%</code></li>
+<li>password：该用户的登陆密码，密码可以为空，如果为空则该用户可以不需要密码登陆服务器</li>
+</ul>
+<p><strong>举例：</strong></p>
+<p>如果我想创建一个用户名为”lyy”，密码为 123456，且<strong>允许从任意远程主机登陆</strong>，可以执行下面这条命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE USER &#39;lyy&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="给新创建的用户授权"><a href="#给新创建的用户授权" class="headerlink" title="给新创建的用户授权"></a>给新创建的用户授权</h4><p><strong>命令：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GRANT privileges ON databasename.tablename TO &#39;username&#39;@&#39;host&#39;</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<ul>
+<li>privileges：用户的操作权限，如<code>SELECT</code>，<code>INSERT</code>，<code>UPDATE</code>等，如果要授予所的权限则使用<code>ALL</code></li>
+<li>databasename：数据库名</li>
+<li>tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用<code>*</code>表示，如<code>*.*</code></li>
+</ul>
+<p><strong>例子：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GRANT SELECT, INSERT ON test.user TO &#39;lyy&#39;@&#39;%&#39;;</span><br><span class="line">GRANT ALL ON *.* TO &#39;lyy&#39;@&#39;%&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们在回到 shell 环境中，执行<code>mysql -u lyy -p</code>然后输入密码就可以进入 mysql 的 shell 环境了。</p>
+<blockquote>
+<p>Tips：如果想要更新某个用户的密码只需要执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update user set authentication_string&#x3D;password(&#39;password&#39;) where user&#x3D;&#39;username&#39; and host&#x3D;&#39;host&#39;;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="设置-mysql-可以外网访问"><a href="#设置-mysql-可以外网访问" class="headerlink" title="设置 mysql 可以外网访问"></a>设置 mysql 可以外网访问</h3><p>在使用 mysql 的过程中，我们往往都会使用 Navicat 等工具对数据库进行可视化管理，这时就需要设置 mysql 外网访问了。</p>
+<p>设置过程分为两步：</p>
+<ol>
+<li>设置用户可以<strong>从任意远程主机登陆</strong></li>
+<li>修改配置文件，注释掉 <code>bind_ip_address</code></li>
+</ol>
+<p>第一步在上面已经说过了，这里来说下第二步：</p>
+<p>mysql 5.7 的配置文件路径在：<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>，当我们执行<code>sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf</code>命令时结果如下所示：</p>
+<p><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5wzesj2e2j30zq0pkjva.jpg"></p>
+<p>在<code>bind-address</code>前添加<code>#</code>注释掉该行即可。</p>
+<blockquote>
+<p>Tips：出于安全考虑，如果我们想要修改 mysql 的启动端口，可以修改上述图片中的 <strong>port</strong> 部分为自己想要的端口号。</p>
+</blockquote>
+<p>在这一切都弄好之后别忘了重新启动下 mysql 哦 😯</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service restart mysql</span><br></pre></td></tr></table></figure>
+
+<h2 id="连接到-MySQL"><a href="#连接到-MySQL" class="headerlink" title="连接到 MySQL"></a>连接到 MySQL</h2><p>这里我们使用 Navicat 连接到 mysql，其实步骤很简单，打开软件-&gt;新建链接-&gt;编辑信息就可以了，如下所示：</p>
+<p><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5wzr04welj30ok0d4ta4.jpg" alt="WX20190812-164325@2x"></p>
+<p>至于怎么下载安装破解 Navicat 这里就不多说了。</p>
+<h2 id="删除-mysql"><a href="#删除-mysql" class="headerlink" title="删除 mysql"></a>删除 mysql</h2><p>最后说下如何卸载 mysql</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get autoremove --purge mysql-server-5.7</span><br><span class="line">sudo apt-get remove mysql-server</span><br><span class="line">sudo apt-get autoremove mysql-server</span><br><span class="line">sudo apt-get remove mysql-common</span><br></pre></td></tr></table></figure>
+
+<p>上面的可能会有些是多余的，之后需要清理残余数据</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg -l |grep ^rc|awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> |sudo xargs dpkg -P</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5x01onq5yj31970oxq5a.jpg"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/7980.html">https://blog.liangyueyong.cn/p/7980.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/adf2.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Flutter主题切换——让你的APP也能一键换肤</div></div></a></div><div class="next-post pull-right"><a href="/p/d8d0.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">在 Flutter 中使用 WebView</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/e25d.html" title="聊一聊数据库（MySQL）设计中的数据类型优化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">聊一聊数据库（MySQL）设计中的数据类型优化</div></div></a></div><div><a href="/p/2c7f.html" title="【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库"><img class="cover" src="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%9D%E5%A7%8B%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81"><span class="toc-number">4.1.</span> <span class="toc-text">查看初始用户名和密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E8%AE%BF%E9%97%AE%E8%B4%A6%E6%88%B7%E5%92%8C%E5%AF%86%E7%A0%81"><span class="toc-number">4.2.</span> <span class="toc-text">更改访问账户和密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-root-%E7%94%A8%E6%88%B7%E4%BD%BF%E7%94%A8-mysql-native-password-%E6%8F%92%E4%BB%B6"><span class="toc-number">4.2.1.</span> <span class="toc-text">设置 root 用户使用 mysql_native_password 插件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%94%A8%E6%88%B7"><span class="toc-number">4.2.2.</span> <span class="toc-text">创建一个新用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%99%E6%96%B0%E5%88%9B%E5%BB%BA%E7%9A%84%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83"><span class="toc-number">4.2.3.</span> <span class="toc-text">给新创建的用户授权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-mysql-%E5%8F%AF%E4%BB%A5%E5%A4%96%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-number">4.3.</span> <span class="toc-text">设置 mysql 可以外网访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0-MySQL"><span class="toc-number">5.</span> <span class="toc-text">连接到 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4-mysql"><span class="toc-number">6.</span> <span class="toc-text">删除 mysql</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

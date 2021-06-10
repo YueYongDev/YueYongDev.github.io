@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】人工智能何以留存 | 斯是陋室</title><meta name="keywords" content="掘金翻译计划"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="本文翻译自 https:&#x2F;&#x2F;medium.com&#x2F;hackernoon&#x2F;why-ai-is-here-to-stay-9c75b1868b9b ，本文的主旨是从人人交互过度到人际交互，帮助我们更好的理解什么是人工智能。但是不得不说，这篇文章是真的很难翻译，原文读起来大致可以理解，但是真想重新组织语言将文章翻译的有条有理真的好难啊，英语好的朋友可以自行阅读原文，之后我会努力提高自己的姿势水平，争取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】人工智能何以留存">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/cbb1.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="本文翻译自 https:&#x2F;&#x2F;medium.com&#x2F;hackernoon&#x2F;why-ai-is-here-to-stay-9c75b1868b9b ，本文的主旨是从人人交互过度到人际交互，帮助我们更好的理解什么是人工智能。但是不得不说，这篇文章是真的很难翻译，原文读起来大致可以理解，但是真想重新组织语言将文章翻译的有条有理真的好难啊，英语好的朋友可以自行阅读原文，之后我会努力提高自己的姿势水平，争取">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&h=720&f=png&s=1025371">
+<meta property="article:published_time" content="2021-06-10T11:50:25.291Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.291Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="掘金翻译计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&h=720&f=png&s=1025371"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/cbb1"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&amp;h=720&amp;f=png&amp;s=1025371)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】人工智能何以留存</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.291Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.291Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/cbb1.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/cbb1.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>本文翻译自 <a target="_blank" rel="noopener" href="https://medium.com/hackernoon/why-ai-is-here-to-stay-9c75b1868b9b">https://medium.com/hackernoon/why-ai-is-here-to-stay-9c75b1868b9b</a> ，本文的主旨是从人人交互过度到人际交互，帮助我们更好的理解什么是人工智能。但是不得不说，这篇文章是真的很难翻译，原文读起来大致可以理解，但是真想重新组织语言将文章翻译的有条有理真的好难啊，英语好的朋友可以自行阅读原文，之后我会努力提高自己的姿势水平，争取为大家带来更多优质的译文。</p>
+</blockquote>
+<h2 id="人机之间的沟通革命"><a href="#人机之间的沟通革命" class="headerlink" title="人机之间的沟通革命"></a>人机之间的沟通革命</h2><p>如果你曾经参加过<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_ai">人工智能</a>会议，我敢打赌你一定会遇到一个目光十分平静的镀铬机器人，这张图片是从一堆<a target="_blank" rel="noopener" href="https://twitter.com/hmason/status/1123750831587827713">令人毛骨悚然的机器人图库</a>中精心挑选的，以至于现如今，任何一个营销团队都无法拒绝在广告牌上贴出这张图。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&h=720&f=png&s=1025371"></p>
+<p>很明显，我使用了玲珑蓝（<a target="_blank" rel="noopener" href="http://bit.ly/octarineai">octarine-blue</a>）的科幻艺术配色来吸引疲惫的读者阅读我的<a target="_blank" rel="noopener" href="https://medium.com/@kozyrkov">博客</a>，对此我感到十分抱歉。虽然这种方法十分奏效，不过遗憾的是，这些图像几乎与<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_ai">人工智能无关</a>。</p>
+<h2 id="机器人技术令人振奋，但大多没有用处；"><a href="#机器人技术令人振奋，但大多没有用处；" class="headerlink" title="机器人技术令人振奋，但大多没有用处；"></a>机器人技术令人振奋，但大多没有用处；</h2><h2 id="如今的人工智能大多无聊，但却非常有用。"><a href="#如今的人工智能大多无聊，但却非常有用。" class="headerlink" title="如今的人工智能大多无聊，但却非常有用。"></a>如今的人工智能大多无聊，但却非常有用。</h2><p>也许你认为我们都应该为自己感到羞耻，但是不用担心，<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_ai">人工智能</a><a target="_blank" rel="noopener" href="http://bit.ly/quaesita_island">太有用了</a>，以至于无论我们怎么喊“狼来了”，它都不会消失。理由如下。</p>
+<h2 id="人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。"><a href="#人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。" class="headerlink" title="人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。"></a>人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。</h2><p>营销人员四处奔走，试图用科幻噱头来吸引你的注意力，但你长期在<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_ai">人工智能</a>上消费的原因并不是因为这些噱头。真正的原因是与机器进行交流。</p>
+<p><a target="_blank" rel="noopener" href="http://bit.ly/quaesita_simplest">人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。</a>这种与机器交谈的新方式为何如此有用？为什么它会是一场技术革命？为了理解这些，让我们先暂时忘记计算机，然后把关注点放到人上面。我会摊开所有底牌，然后帮你揭开人工智能用途的层层迷雾。</p>
+<h2 id="人与人之间如何交谈"><a href="#人与人之间如何交谈" class="headerlink" title="人与人之间如何交谈"></a>人与人之间如何交谈</h2><p>我们通过两种方式向别人表达我们的意愿。一个是通过明确的指令，另一个是通过举例。</p>
+<p>如果你想学习如何预测我要点的星巴克订单，你可以在我的旅行中跟随我。你可能会注意到，我在美国机场会点一杯四盎司的浓缩咖啡，但是到了台北、孟买和内罗毕就变成了一杯拿铁。这是怎么回事？再举几个例子，你可能就能自己找出规律了。这就是人工智所要做的 —— <a target="_blank" rel="noopener" href="http://bit.ly/quaesita_emperor">将实例转化为指令</a>。如果你只看到我点了一两次星巴克（没有足够的<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_hist">数据</a>），或者你只观察到 50 次我在街上同一个地方订购我常喝的卡布奇诺咖啡（<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_biasdef">无关紧要的数据</a>，因为地点不是星巴克），那你将不可能把这些弄清楚。人工智能也是如此。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0c5bc7b8?w=960&h=639&f=jpeg&s=106879"></p>
+<p>当然，我也可以把我的星巴克规则告诉你，因为表达起来非常容易：<strong>“如果他们有 B 奶（ half and half），点一中杯四盎司的浓缩咖啡，然后加满 B 奶</strong>（别批判我的喜好）<strong>。如果没有，那就点一份中杯拿铁。”</strong></p>
+<blockquote>
+<p>Tips：星巴克的 B 奶是一半牛奶一半奶油的混合物，配方：是<strong>1份浓缩咖啡+0.75份热牛奶和0.75份鲜奶油混合+0.5份奶泡</strong></p>
+</blockquote>
+<p>这里的重点是，如果我教一个人类驴友，让他能够使用两种交流方式自然是非常好的。当明确的指令易于提出和表达时，我就可以像人们几十年来一直与电脑交谈一样为朋友编写程序：<strong>如果是这样的话，就那样做。</strong></p>
+<p>但如果我甚至不知道为什么我在纽约的某些日子点一杯卡布奇诺，而在其他日子点馥芮白呢？我不能给你公式，因为<strong>即使是我也不知道</strong>。但我想请你试试看，看你能不能找出规律。也许会有一个规律，也许没有，但你至少可以<strong>尝试</strong>着算出来，这很棒。没有<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_emperor">机器学习或者人工智能</a>，计算机就无法<strong>尝试</strong><a target="_blank" rel="noopener" href="http://bit.ly/quaesita_emperor">找到一个模式</a>。那样的话要么是明确的指示，要么就是失败。</p>
+<h2 id="人工智能是关于人类的自我表达。"><a href="#人工智能是关于人类的自我表达。" class="headerlink" title="人工智能是关于人类的自我表达。"></a>人工智能是关于人类的自我表达。</h2><p>也许你会发现在有些地凭方气味就能做到这些。你可能不知道为什么这样会有效（也许这种气味会引发一种与我父亲在去完剧院后喝卡布奇诺相关的感觉，但是你无法获得这些信息）但你会意识到，你能够准确预测我要做什么。最终，你会自信满满的说：<strong>“这次是白咖啡？我知道了。”</strong> 我会目瞪口呆地站在那里，因为我不知道你是怎么知道的。过一段时间我就不会担心了，我会<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_donttrust">相信你</a>。只要我的偏好不变，你就会一直做对，<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_xai">即使我们</a>都不知道为什么。</p>
+<h2 id="我给出明确指令这一过程是传统编程。我要求你学会从相关例子中学习-这才是机器学习和人工智能的本质。"><a href="#我给出明确指令这一过程是传统编程。我要求你学会从相关例子中学习-这才是机器学习和人工智能的本质。" class="headerlink" title="我给出明确指令这一过程是传统编程。我要求你学会从相关例子中学习,这才是机器学习和人工智能的本质。"></a>我给出明确指令这一过程是<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_simplest">传统编程</a>。我要求你学会从相关例子中学习,这才是<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_emperor">机器学习和人工智能的本质</a>。</h2><p>所以这就是为什么<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_fad">人工智能并不是昙花一现</a>：在现实生活中，如果我不能够聪明地提出指示，我就无法放弃依靠举例教学的能力。我很确定，当我在现实世界中磕磕绊绊时，我更多地是用例子而不是指令来与他人交流。</p>
+<p>人工智能意味着我可以用第二种方式与电脑交流——通过例子——而不仅仅是指令，你是认真地要求我突然把自己的嘴塞住吗？请记住，在过去，我们必须主要依赖指令，只是因为我们不能用另一种方法来做，部分原因是，处理所有这些示例将<a target="_blank" rel="noopener" href="http://bit.ly/forbes_ai">使上世纪可怜的台式机的 CPU 不堪重负</a>。</p>
+<p>但是现在人类已经通过实例解锁了向机器表达自己的能力，为什么我们会突然完全放弃这个选择呢？这第二种与计算机交谈的方式太重要了，不能像昨日的垫肩那样抛弃掉。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a184b9c3f?w=600&h=284&f=jpeg&s=37046"></p>
+<p>我们应该放弃的是期望有一种通用的方式与计算机就每个问题进行通信。说出你的意愿，并以最佳方式说出来。有时你想要提供指令，有时你想要提供大量示例。</p>
+<h2 id="有些任务太复杂了，你无法记住它们的指令"><a href="#有些任务太复杂了，你无法记住它们的指令" class="headerlink" title="有些任务太复杂了，你无法记住它们的指令"></a>有些任务太复杂了，你无法记住它们的指令</h2><p>因为人工智能允许你自动化处理那些无法言说的东西，就是在某些情况下我们只会做出唯一的选择，但我们却无法细化成特定的指令。你还不够聪明去弄清楚这些模式是什么意思，或者这些指令是如此的复杂以至于当你读到第七千行时你忘记了第一行。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a1aa3a4df?w=600&h=400&f=jpeg&s=81118" alt="Want to memorize all this? Me neither. Computers don’t mind, though."></p>
+<p>计算机不介意记忆冗长乏味的<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_hist">示例集</a>或指令手册。他们可以快速地浏览这些例子，即使这是一项你根本不想碰的任务。<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_fad">有些任务太复杂了，你无法记住它们的指令</a>。当所有<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_fad">容易实现的任务</a>都通过直接而明确的指令自动完成时，就需要处理复杂的任务。在那个领域，除了人工智能谁都做不了。</p>
+<p>如果这些任务非常复杂，你可能无法完美地自动化它们，但是使用人工智能你仍然可以做得比什么都没做好（不要忘记建立<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_policy">安全网</a>）。如果你确实获得了完美的表现，我的第一直觉就是想知道你的任务<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_fad">是否如此简单，以至于你真的应该以传统方式解决它</a>。不要用人工智能转换美元和美分……说真的，你在做什么？！这就是你可能在面对复杂问题而求助于人工智能的老套路。这也是为什么<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_first">人工智能的第一步</a>是从任务开始，并反复检查没有人工智能你是否就不能解决它。这也是为什么<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_first">人工智能的第一步</a>是从任务开始，并反复检查没有人工智能你是否就不能解决它。</p>
+<p><strong>如果你渴望开始让 AI 对你有用，那么这里有<a target="_blank" rel="noopener" href="http://bit.ly/quaesita_dmguide">一个指南</a>，决策者应该在所有人甚至思考数据或技术细节之前阅读。</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/cbb1.html">https://blog.liangyueyong.cn/p/cbb1.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a></div><div class="post_share"><div class="social-share" data-image="https://user-gold-cdn.xitu.io/2019/8/8/16c7123a0e654fc8?w=1280&amp;h=720&amp;f=png&amp;s=1025371" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/dfc1.html"><img class="prev-cover" src="https://cdn-images-1.medium.com/max/2242/1*i9yyyuT1hxMj1K7ZGP4vDg.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】使用 SVG 和 Vue.Js 构建动态树图</div></div></a></div><div class="next-post pull-right"><a href="/p/8245.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】为用户提供安全可靠的体验</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/8245.html" title="【译】为用户提供安全可靠的体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】为用户提供安全可靠的体验</div></div></a></div><div><a href="/p/f628.html" title="【译】13 个你应该选择/考虑使用 Flutter 的理由"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/1/29/16897b9ec5be1179?w=800&h=304&f=png&s=35970" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】13 个你应该选择/考虑使用 Flutter 的理由</div></div></a></div><div><a href="/p/16e3.html" title="【译】Flutter 系列入门教程五： 网格"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/8/7/165127b80ba17804?w=600&h=338&f=png&s=167924" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 系列入门教程五： 网格</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div><a href="/p/4e00.html" title="【译】JetPack Compose for Desktop 初体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】JetPack Compose for Desktop 初体验</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E6%9C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B2%9F%E9%80%9A%E9%9D%A9%E5%91%BD"><span class="toc-number">1.</span> <span class="toc-text">人机之间的沟通革命</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%8A%80%E6%9C%AF%E4%BB%A4%E4%BA%BA%E6%8C%AF%E5%A5%8B%EF%BC%8C%E4%BD%86%E5%A4%A7%E5%A4%9A%E6%B2%A1%E6%9C%89%E7%94%A8%E5%A4%84%EF%BC%9B"><span class="toc-number">2.</span> <span class="toc-text">机器人技术令人振奋，但大多没有用处；</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BB%8A%E7%9A%84%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%A4%A7%E5%A4%9A%E6%97%A0%E8%81%8A%EF%BC%8C%E4%BD%86%E5%8D%B4%E9%9D%9E%E5%B8%B8%E6%9C%89%E7%94%A8%E3%80%82"><span class="toc-number">3.</span> <span class="toc-text">如今的人工智能大多无聊，但却非常有用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%BA%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8C%E6%9D%A5%E5%91%8A%E8%AF%89%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A6%81%E5%81%9A%E4%BB%80%E4%B9%88%E4%BA%8B%E3%80%82"><span class="toc-number">4.</span> <span class="toc-text">人工智能为程序员提供了另一种方法，来告诉计算机要做什么事。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E4%B8%8E%E4%BA%BA%E4%B9%8B%E9%97%B4%E5%A6%82%E4%BD%95%E4%BA%A4%E8%B0%88"><span class="toc-number">5.</span> <span class="toc-text">人与人之间如何交谈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%98%AF%E5%85%B3%E4%BA%8E%E4%BA%BA%E7%B1%BB%E7%9A%84%E8%87%AA%E6%88%91%E8%A1%A8%E8%BE%BE%E3%80%82"><span class="toc-number">6.</span> <span class="toc-text">人工智能是关于人类的自我表达。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%BB%99%E5%87%BA%E6%98%8E%E7%A1%AE%E6%8C%87%E4%BB%A4%E8%BF%99%E4%B8%80%E8%BF%87%E7%A8%8B%E6%98%AF%E4%BC%A0%E7%BB%9F%E7%BC%96%E7%A8%8B%E3%80%82%E6%88%91%E8%A6%81%E6%B1%82%E4%BD%A0%E5%AD%A6%E4%BC%9A%E4%BB%8E%E7%9B%B8%E5%85%B3%E4%BE%8B%E5%AD%90%E4%B8%AD%E5%AD%A6%E4%B9%A0-%E8%BF%99%E6%89%8D%E6%98%AF%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%92%8C%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9A%84%E6%9C%AC%E8%B4%A8%E3%80%82"><span class="toc-number">7.</span> <span class="toc-text">我给出明确指令这一过程是传统编程。我要求你学会从相关例子中学习,这才是机器学习和人工智能的本质。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E4%BA%9B%E4%BB%BB%E5%8A%A1%E5%A4%AA%E5%A4%8D%E6%9D%82%E4%BA%86%EF%BC%8C%E4%BD%A0%E6%97%A0%E6%B3%95%E8%AE%B0%E4%BD%8F%E5%AE%83%E4%BB%AC%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">8.</span> <span class="toc-text">有些任务太复杂了，你无法记住它们的指令</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flutter主题切换——让你的APP也能一键换肤 | 斯是陋室</title><meta name="keywords" content="Flutter"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="为了让你的 App 更美观，主题切换已经是一个必不可少的功能了，但如果想在传统的 Android 和 iOS 上分别适配不同的主题相当繁琐。但这一切，在 Flutter 中都非常容易实现。今天我们就来看看，如何在 Flutter 中给你的 App 添加换肤功能。我们要实现的效果如下：   添加依赖在该案例中，我使用到了 provider 和 flustars 两个库，简单介绍一下这两个库： pro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter主题切换——让你的APP也能一键换肤">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/adf2.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="为了让你的 App 更美观，主题切换已经是一个必不可少的功能了，但如果想在传统的 Android 和 iOS 上分别适配不同的主题相当繁琐。但这一切，在 Flutter 中都非常容易实现。今天我们就来看看，如何在 Flutter 中给你的 App 添加换肤功能。我们要实现的效果如下：   添加依赖在该案例中，我使用到了 provider 和 flustars 两个库，简单介绍一下这两个库： pro">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.330Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.330Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/adf2"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">Flutter主题切换——让你的APP也能一键换肤</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.330Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.330Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/adf2.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/adf2.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>为了让你的 App 更美观，主题切换已经是一个必不可少的功能了，但如果想在传统的 Android 和 iOS 上分别适配不同的主题相当繁琐。但这一切，在 Flutter 中都非常容易实现。今天我们就来看看，如何在 Flutter 中给你的 App 添加换肤功能。我们要实现的效果如下：</p>
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge4zj2hqp4g30io12ywz4.gif" style="zoom:33%;" />
+
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>在该案例中，我使用到了 <code>provider</code> 和 <code>flustars</code> 两个库，简单介绍一下这两个库：</p>
+<h3 id="provider"><a href="#provider" class="headerlink" title="provider"></a>provider</h3><p>官方推荐的<strong>状态管理</strong>库，相比其他状态管理库使用起来比较方便。</p>
+<blockquote>
+<p>状态管理：通俗的讲，当我们想在多个页面（组件/Widget）之间共享状态（数据），或者一个页面（组件/Widget）中的多个子组件之间共享状态（数据），这个时候我们就可以用 Flutter 中的状态管理来管理统一的状态（数据），实现不同组件直接的传值和数据共享。</p>
+</blockquote>
+<h3 id="flustars"><a href="#flustars" class="headerlink" title="flustars"></a>flustars</h3><p>号称“Flutter 全网最全常用工具类”，其中包括了<code>SpUtil</code>、<code>ScreenUtil</code>、<code>TimelineUtil</code>等常见工具类，这里我们要使用的是<code>SpUtil</code>这个部分，用于存储用户所选择的主题信息。</p>
+<hr>
+<p>以上就是关于我们使用的两个第三方库的介绍，如果想要使用，我们需要在<code>pubspec.yaml</code>文件中添加如下内容：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">provider:</span> <span class="string">^4.0.5</span></span><br><span class="line"><span class="attr">flustars:</span> <span class="string">^0.2.6+1</span></span><br></pre></td></tr></table></figure>
+
+<p>准备工作做好了，接下来我们就开始编码吧。</p>
+<h2 id="添加主题样式"><a href="#添加主题样式" class="headerlink" title="添加主题样式"></a>添加主题样式</h2><p>我们需要先想好自己所需要切换的主题样式列表，如果觉得麻烦的可以直接用下面的内容：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Color&gt; themeColorMap = &#123;</span><br><span class="line">  <span class="string">&#x27;gray&#x27;</span>: Colors.grey,</span><br><span class="line">  <span class="string">&#x27;blue&#x27;</span>: Colors.blue,</span><br><span class="line">  <span class="string">&#x27;blueAccent&#x27;</span>: Colors.blueAccent,</span><br><span class="line">  <span class="string">&#x27;cyan&#x27;</span>: Colors.cyan,</span><br><span class="line">  <span class="string">&#x27;deepPurple&#x27;</span>: Colors.purple,</span><br><span class="line">  <span class="string">&#x27;deepPurpleAccent&#x27;</span>: Colors.deepPurpleAccent,</span><br><span class="line">  <span class="string">&#x27;deepOrange&#x27;</span>: Colors.orange,</span><br><span class="line">  <span class="string">&#x27;green&#x27;</span>: Colors.green,</span><br><span class="line">  <span class="string">&#x27;indigo&#x27;</span>: Colors.indigo,</span><br><span class="line">  <span class="string">&#x27;indigoAccent&#x27;</span>: Colors.indigoAccent,</span><br><span class="line">  <span class="string">&#x27;orange&#x27;</span>: Colors.orange,</span><br><span class="line">  <span class="string">&#x27;purple&#x27;</span>: Colors.purple,</span><br><span class="line">  <span class="string">&#x27;pink&#x27;</span>: Colors.pink,</span><br><span class="line">  <span class="string">&#x27;red&#x27;</span>: Colors.red,</span><br><span class="line">  <span class="string">&#x27;teal&#x27;</span>: Colors.teal,</span><br><span class="line">  <span class="string">&#x27;black&#x27;</span>: Colors.black,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-Provider-进行全局状态管理"><a href="#使用-Provider-进行全局状态管理" class="headerlink" title="使用 Provider 进行全局状态管理"></a>使用 Provider 进行全局状态管理</h2><p>然后我们就需要使用 Provider 来进行全局的状态管理了。首先先创建一个<code>app_provider.dart</code>文件，然后添加如下代码：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppInfoProvider</span> <span class="title">with</span> <span class="title">ChangeNotifier</span> </span>&#123;</span><br><span class="line">  <span class="built_in">String</span> _themeColor = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">String</span> <span class="keyword">get</span> themeColor =&gt; _themeColor;</span><br><span class="line"></span><br><span class="line">  setTheme(<span class="built_in">String</span> themeColor) &#123;</span><br><span class="line">    _themeColor = themeColor;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为是全局的状态管理，接下来我们需要在<code>main.dart</code>文件中配置一下刚才创建的 provider，有多个状态管理就使用 MultiProvider，单个的使用 Provider.value 就行了。（考虑到未来项目的扩展，这里我就直接使用 MultiProvider）了</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  Color _themeColor;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MultiProvider(</span><br><span class="line">      providers: [ChangeNotifierProvider.value(value: AppInfoProvider())],</span><br><span class="line">      child: Consumer&lt;AppInfoProvider&gt;(</span><br><span class="line">        builder: (context, appInfo, _) &#123;</span><br><span class="line">          <span class="built_in">String</span> colorKey = appInfo.themeColor;</span><br><span class="line">          <span class="keyword">if</span> (themeColorMap[colorKey] != <span class="keyword">null</span>) &#123;</span><br><span class="line">            _themeColor = themeColorMap[colorKey];</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> MaterialApp(</span><br><span class="line">            title: <span class="string">&#x27;Flutter Demo&#x27;</span>,</span><br><span class="line">            theme: ThemeData(</span><br><span class="line">              primaryColor: _themeColor,</span><br><span class="line">              floatingActionButtonTheme:</span><br><span class="line">                  FloatingActionButtonThemeData(backgroundColor: _themeColor),</span><br><span class="line">            ),</span><br><span class="line">            home: MyHomePage(title: <span class="string">&#x27;Flutter Theme Change demo&#x27;</span>),</span><br><span class="line">          );</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果想要在某个地方改变主题，我们只需要执行下面这行代码即可。</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">Provider.of&lt;AppInfoProvider&gt;(context).setTheme(colorKey);</span><br></pre></td></tr></table></figure>
+
+<p>我们先来说说上面这段代码，重点就在于 ThemeData 的设置：</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge4y775ad5j31g406udha.jpg"></p>
+<p>我们看看<code>ThemeData</code>部分数据定义：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">ThemeData(&#123;</span><br><span class="line">  Brightness brightness, <span class="comment">//深色还是浅色</span></span><br><span class="line">  MaterialColor primarySwatch, <span class="comment">//主题颜色样本，见下面介绍</span></span><br><span class="line">  Color primaryColor, <span class="comment">//主色，决定导航栏颜色</span></span><br><span class="line">  Color accentColor, <span class="comment">//次级色，决定大多数Widget的颜色，如进度条、开关等。</span></span><br><span class="line">  Color cardColor, <span class="comment">//卡片颜色</span></span><br><span class="line">  Color dividerColor, <span class="comment">//分割线颜色</span></span><br><span class="line">  ButtonThemeData buttonTheme, <span class="comment">//按钮主题</span></span><br><span class="line">  Color cursorColor, <span class="comment">//输入框光标颜色</span></span><br><span class="line">  Color dialogBackgroundColor,<span class="comment">//对话框背景颜色</span></span><br><span class="line">  <span class="built_in">String</span> fontFamily, <span class="comment">//文字字体</span></span><br><span class="line">  TextTheme textTheme,<span class="comment">// 字体主题，包括标题、body等文字样式</span></span><br><span class="line">  IconThemeData iconTheme, <span class="comment">// Icon的默认样式</span></span><br><span class="line">  TargetPlatform platform, <span class="comment">//指定平台，应用特定平台控件风格</span></span><br><span class="line">  ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上面只是<code>ThemeData</code>的一小部分属性，完整的数据定义读者可以查看 SDK。</p>
+<blockquote>
+<p>之所以使用<code>floatingActionButtonTheme</code>单独设置<code>floatingActionButton</code>而不是使用<code>accentTextTheme</code>，是因为会有警告 ⚠️<code>The support for configuring the foreground color of FloatingActionButtons using ThemeData.accentIconTheme has been deprecated. Please use ThemeData.floatingActionButtonTheme instead. See https://flutter.dev/go/remove-fab-accent-theme-dependency. This feature was deprecated after v1.13.2.</code>意思就是这个属性将会在<code>1.13.2</code>中被废弃。不过并不影响我们现在的使用。</p>
+</blockquote>
+<p>更多关于主题的内容可以参考 👉<a target="_blank" rel="noopener" href="https://book.flutterchina.club/chapter7/theme.html">颜色和主题</a></p>
+<h2 id="持久化选择的主题"><a href="#持久化选择的主题" class="headerlink" title="持久化选择的主题"></a>持久化选择的主题</h2><p>这里就需要使用到一开始提到的<code>flustars</code>中的<code>SpUtil</code>了，我们一般会在页面初始化加载的时候读取保存的颜色信息，所以我们需要在初始化页面配置如下代码：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="built_in">String</span> _colorKey;</span><br><span class="line"></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">  _initAsync();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="keyword">void</span>&gt; _initAsync() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> SpUtil.getInstance();</span><br><span class="line">  _colorKey = SpUtil.getString(<span class="string">&#x27;key_theme_color&#x27;</span>, defValue: <span class="string">&#x27;blue&#x27;</span>);</span><br><span class="line">  <span class="comment">// 设置初始化主题颜色</span></span><br><span class="line">  Provider.of&lt;AppInfoProvider&gt;(context, listen: <span class="keyword">false</span>).setTheme(_colorKey);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>await SpUtil.getInstance();</code>这段代码用于加载<code>SpUtil</code>库，通过看源码我们知道，这个库采用了<strong>单例模式</strong>，当然，这不是这篇文章的重点。</p>
+</blockquote>
+<p>上面这段代码用于初始化主题，我们通过<code>SpUtil.getString(&#39;key_theme_color&#39;, defValue: &#39;blue&#39;);</code>获取保存的主题信息，然后再使用<code>Provider.of&lt;AppInfoProvider&gt;(context, listen: false).setTheme(_colorKey);</code>设置主题即可。</p>
+<p>初始化主题弄好了，那选择的代码又如何编写呢？</p>
+<p>很简单，只需要才合适的地方调用下面的代码就可以了。</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">setState(() &#123;</span><br><span class="line">  _colorKey = key;</span><br><span class="line">&#125;);</span><br><span class="line">SpHelper.putString(<span class="string">&#x27;key_theme_color&#x27;</span>, key);</span><br><span class="line">Provider.of&lt;AppInfoProvider&gt;(context).setTheme(key);</span><br></pre></td></tr></table></figure>
+
+<p>思路和上面大同小异，无非是将<code>getString</code>换成了<code>putString</code>。</p>
+<h2 id="切换主题控件的编写"><a href="#切换主题控件的编写" class="headerlink" title="切换主题控件的编写"></a>切换主题控件的编写</h2><p>上面的代码提供了切换主题的思路，但是对于用户来说，他们所要做的是有一个界面可以让他们直接切换主题，因此，下面我们来编写切换主题的控件。</p>
+<p>因为切换主题通常会在设置界面中出现，所以这里我用了一个<code>ExpansionTile</code>，这是一个可以展开的<code>ListTile</code>，代码如下：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">…………</span><br><span class="line">ExpansionTile(</span><br><span class="line">  leading: Icon(Icons.color_lens),</span><br><span class="line">  title: Text(<span class="string">&#x27;颜色主题&#x27;</span>),</span><br><span class="line">  initiallyExpanded: <span class="keyword">false</span>,</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">    Padding(</span><br><span class="line">      padding: EdgeInsets.only(left: <span class="number">10</span>, right: <span class="number">10</span>, bottom: <span class="number">10</span>),</span><br><span class="line">      child: Wrap(</span><br><span class="line">        spacing: <span class="number">8</span>,</span><br><span class="line">        runSpacing: <span class="number">8</span>,</span><br><span class="line">        children: themeColorMap.keys.map((key) &#123;</span><br><span class="line">          Color value = themeColorMap[key];</span><br><span class="line">          <span class="keyword">return</span> InkWell(</span><br><span class="line">            onTap: () &#123;</span><br><span class="line">              setState(() &#123;</span><br><span class="line">                _colorKey = key;</span><br><span class="line">              &#125;);</span><br><span class="line">              SpUtil.putString(<span class="string">&#x27;key_theme_color&#x27;</span>, key);</span><br><span class="line">              Provider.of&lt;AppInfoProvider&gt;(context, listen: <span class="keyword">false</span>)</span><br><span class="line">                  .setTheme(key);</span><br><span class="line">            &#125;,</span><br><span class="line">            child: Container(</span><br><span class="line">              width: <span class="number">40</span>,</span><br><span class="line">              height: <span class="number">40</span>,</span><br><span class="line">              color: value,</span><br><span class="line">              child: _colorKey == key</span><br><span class="line">                  ? Icon(</span><br><span class="line">                      Icons.done,</span><br><span class="line">                      color: Colors.white,</span><br><span class="line">                    )</span><br><span class="line">                  : <span class="keyword">null</span>,</span><br><span class="line">            ),</span><br><span class="line">          );</span><br><span class="line">        &#125;).toList(),</span><br><span class="line">      ),</span><br><span class="line">    )</span><br><span class="line">  ],</span><br><span class="line">),</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge4zei70qqj30gu06amx9.jpg"></p>
+<p>上面这段代码就是将我们最开始选定的一些主题<code>themeColorMap</code>展示出来，告诉用户可以切换哪些主题。其中<code>onTap</code>内的代码就是上一节中提到的设置颜色主题的方法，<code>InkWell</code>主要用于提供主题色的点击效果，换成<code>GestureDetector</code>也是可以的。</p>
+<p>至此我们的换肤功能也就完成了，想要获取完整代码的可以关注公众号「01 二进制」，后台回复「Flutter 主题切换」。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>以上就是关于如何在 Flutter 中切换主题的详细内容了。可以看出，相较于原生应用主题的适配，在 Flutter 中实现换肤的功能简单很多了。</p>
+<p>最后来发布一篇预告，因为 iOS 13 和 Android 10 系统上都新增了「深色模式」，在文中我也提到了<code>ThemeData</code>的<code>Brightness brightness</code>属性用于表示深色还是浅色。下一篇文章我就来聊一聊深色模式的适配。</p>
+<p>如果你觉得我的文章对你有所帮助，不妨给个赞 👍 或者关注支持一下。</p>
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge4zz9ffphj30go0goabc.jpg" alt="黑白大气神秘简约微信公众号二维码" style="zoom:75%;" />
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/adf2.html">https://blog.liangyueyong.cn/p/adf2.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Flutter/">Flutter</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/f791.html"><img class="prev-cover" src="http://upload-images.jianshu.io/upload_images/5666077-ec4c28054545163e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">当 Python 遇到了你的微信好友</div></div></a></div><div class="next-post pull-right"><a href="/p/7980.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">在腾讯云 Ubuntu18.04 安装配置 MySQL 5.7（踩坑警告⚠️）</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/dbb1.html" title="【译】Flutter 可能是移动应用程序开发的最佳解决方案"><img class="cover" src="https://tva1.sinaimg.cn/large/006tNbRwgy1gakrzw219gj30hv09odgr.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Flutter 可能是移动应用程序开发的最佳解决方案</div></div></a></div><div><a href="/p/c346.html" title="一统江湖？——Flutter for All Screens初体验"><img class="cover" src="https://upload-images.jianshu.io/upload_images/5666077-729709c648e99453?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">一统江湖？——Flutter for All Screens初体验</div></div></a></div><div><a href="/p/d8d0.html" title="在 Flutter 中使用 WebView"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">在 Flutter 中使用 WebView</div></div></a></div><div><a href="/p/5daa.html" title="快速适配 Flutter 之语言国际化"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gekvgf0e7nj30qo0c8mzc.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">快速适配 Flutter 之语言国际化</div></div></a></div><div><a href="/p/ab06.html" title="Flutter数据存储之shared_preferences"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter数据存储之shared_preferences</div></div></a></div><div><a href="/p/7c99.html" title="Flutter 表单组件"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter 表单组件</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="toc-number">1.</span> <span class="toc-text">添加依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#provider"><span class="toc-number">1.1.</span> <span class="toc-text">provider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flustars"><span class="toc-number">1.2.</span> <span class="toc-text">flustars</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%BB%E9%A2%98%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">添加主题样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Provider-%E8%BF%9B%E8%A1%8C%E5%85%A8%E5%B1%80%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">使用 Provider 进行全局状态管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E9%80%89%E6%8B%A9%E7%9A%84%E4%B8%BB%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">持久化选择的主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%8E%A7%E4%BB%B6%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-number">5.</span> <span class="toc-text">切换主题控件的编写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">6.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

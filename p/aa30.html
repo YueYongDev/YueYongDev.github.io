@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flutter实现文件下载 | 斯是陋室</title><meta name="keywords" content="Flutter"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言之前有做一个工具集的微信小程序「开挂 Lite」，但是由于小程序自身限制，没有办法实现下载文件的功能，只能把下载链接解析出来。而且受限于微信平台，小程序的审核是一件很麻烦的事情，因此有了将其 APP 化的想法。 自从去年 Flutter 横空出世后，我便一直关注它的发展，时隔一年后重新拾起，发现它的生态已经初具规模，于是决定采用 Flutter 重做一个「开挂 Lite」。后期我也会不定时更新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter实现文件下载">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/aa30.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="前言之前有做一个工具集的微信小程序「开挂 Lite」，但是由于小程序自身限制，没有办法实现下载文件的功能，只能把下载链接解析出来。而且受限于微信平台，小程序的审核是一件很麻烦的事情，因此有了将其 APP 化的想法。 自从去年 Flutter 横空出世后，我便一直关注它的发展，时隔一年后重新拾起，发现它的生态已经初具规模，于是决定采用 Flutter 重做一个「开挂 Lite」。后期我也会不定时更新">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5666077-43b6b90c7ba71021.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2021-06-10T11:50:25.320Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.320Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5666077-43b6b90c7ba71021.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/aa30"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://upload-images.jianshu.io/upload_images/5666077-43b6b90c7ba71021.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">Flutter实现文件下载</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.320Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.320Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%9E%E6%88%98%E6%95%99%E5%AD%A6/">实战教学</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/aa30.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/aa30.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前有做一个工具集的微信小程序「开挂 Lite」，但是由于小程序自身限制，没有办法实现下载文件的功能，只能把下载链接解析出来。而且受限于微信平台，小程序的审核是一件很麻烦的事情，因此有了将其 APP 化的想法。</p>
+<p>自从去年 Flutter 横空出世后，我便一直关注它的发展，时隔一年后重新拾起，发现它的生态已经初具规模，于是决定采用 Flutter 重做一个「开挂 Lite」。后期我也会不定时更新一些和 Flutter 有关的文章，希望大家可以多多支持。本文记录的便是我利用 Flutter 实现文件下载功能的过程。</p>
+<blockquote>
+<p>完整源码可在公众号：「01 二进制」后台回复：「Flutter 文件下载」获取</p>
+</blockquote>
+<h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>我们先看一下实现的效果：</p>
+<p><strong>iOS</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-18bd38bf54024947.gif?imageMogr2/auto-orient/strip"></p>
+<p><strong>Android</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-aabdea4546e0d26a.gif?imageMogr2/auto-orient/strip"></p>
+<p>本 demo 的实现效果非常简单，就是点击一个按钮，然后下载文件，完成后提示用户是否打开文件。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在本 demo 中使用的 IDE 为 <strong>Android Studio</strong>，同时使用到了以下几个库：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">flutter_downloader: ^<span class="number">1.1</span><span class="number">.7</span></span><br><span class="line">path_provider: <span class="number">1.1</span><span class="number">.2</span></span><br><span class="line">permission_handler: ^<span class="number">3.1</span><span class="number">.0</span></span><br><span class="line">progress_dialog: ^<span class="number">1.1</span><span class="number">.0</span>+<span class="number">1</span></span><br><span class="line">toast: ^<span class="number">0.1</span><span class="number">.4</span></span><br></pre></td></tr></table></figure>
+
+<p>我们先新建一个空项目，然后将上述依赖添加到项目的<code>pubspec.yaml</code>文件，添加位置如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-ef41d7d38b8fe720.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>接下来我们可以在 <strong>Terminal</strong> 中输入<code>flutter packages get</code>或者点击 IDE 左上角的<code>Packages get</code>字样安装依赖。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-0293aec0cca1885f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>然后将初始项目中的多余代码删除，并在中间添加一个按钮。</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">body: Center(</span><br><span class="line">  child: Column(</span><br><span class="line">    mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">    children: &lt;Widget&gt;[</span><br><span class="line">      RaisedButton(</span><br><span class="line">        child: Text(<span class="string">&quot;点我下载文件&quot;</span>),</span><br><span class="line">        onPressed: () &#123;</span><br><span class="line">          <span class="comment">// 执行下载操作</span></span><br><span class="line">          _doDownloadOperation();</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    ],</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>_doDownloadOperation()</code>便是我们执行下载操作的方法，至此，前期准备工作结束。</p>
+<h2 id="逻辑分析"><a href="#逻辑分析" class="headerlink" title="逻辑分析"></a>逻辑分析</h2><p>虽然整个下载演示的过程非常简单，但还是有必要来分析整个下载的流程，如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-7c2c112bb5f2a7b4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>所以我们接下来要做的事情便是：</p>
+<ol>
+<li>获取权限：网络权限、存储权限</li>
+<li>获取下载路径</li>
+<li>设置下载回调（用于监听下载过程）</li>
+</ol>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="获取权限"><a href="#获取权限" class="headerlink" title="获取权限"></a>获取权限</h3><p>这里使用到一个权限获取插件：<code>permission_handler</code>，这个插件提供了跨平台（Android 和 iOS）的权限检查以及获取 API，地址在：<a target="_blank" rel="noopener" href="https://pub.flutter-io.cn/packages/permission_handler%E3%80%82%E5%9C%A8%E8%8E%B7%E5%8F%96%E6%9D%83%E9%99%90%E5%89%8D%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%85%88%E7%94%B3%E6%98%8E%E6%9D%83%E9%99%90%EF%BC%88Android%EF%BC%89%E3%80%82">https://pub.flutter-io.cn/packages/permission_handler。在获取权限前我们需要先申明权限（Android）。</a></p>
+<p>打开项目根目录下的<code>android/app/src/main/AndroidManifest.xml</code>文件，位置如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-1deb409d3863b356.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>然后添加我们需要使用的权限的申明，如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-c55a8c420aa35cfd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>接下来我们就可以写代码来获取所需的权限了。创建一个<code>_checkPermission()</code>函数用于判断权限是否给予。当然由于平台差异，我们需要判断其为 Android 平台，申请代码如下：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 申请权限</span></span><br><span class="line">Future&lt;<span class="built_in">bool</span>&gt; _checkPermission() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">// 先对所在平台进行判断</span></span><br><span class="line">  <span class="keyword">if</span> (Theme.of(context).platform == TargetPlatform.android) &#123;</span><br><span class="line">    PermissionStatus permission = <span class="keyword">await</span> PermissionHandler()</span><br><span class="line">        .checkPermissionStatus(PermissionGroup.storage);</span><br><span class="line">    <span class="keyword">if</span> (permission != PermissionStatus.granted) &#123;</span><br><span class="line">      <span class="built_in">Map</span>&lt;PermissionGroup, PermissionStatus&gt; permissions =</span><br><span class="line">          <span class="keyword">await</span> PermissionHandler()</span><br><span class="line">              .requestPermissions([PermissionGroup.storage]);</span><br><span class="line">      <span class="keyword">if</span> (permissions[PermissionGroup.storage] == PermissionStatus.granted) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取下载路径"><a href="#获取下载路径" class="headerlink" title="获取下载路径"></a>获取下载路径</h3><p>这里是使用的插件是<code>path_provider</code>，它是一个配合 Dart 的 IO 库以便在 Flutter 中实现文件读写的插件，Flutter 中文网对该插件有着详细的介绍(<a target="_blank" rel="noopener" href="https://flutterchina.club/reading-writing-files/)%EF%BC%8C%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E6%98%8E%E7%99%BD%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%8C%E5%B0%B1%E6%98%AFiOS%E6%B2%A1%E6%9C%89%E5%A4%96%E7%BD%AE%E5%AD%98%E5%82%A8%E8%BF%99%E4%B8%80%E6%A6%82%E5%BF%B5%EF%BC%8C%E5%9B%A0%E6%AD%A4%E9%9C%80%E8%A6%81%E5%AF%B9%E5%B9%B3%E5%8F%B0%E8%BF%9B%E8%A1%8C%E5%88%A4%E6%96%AD%EF%BC%8C%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B%EF%BC%9A">https://flutterchina.club/reading-writing-files/)，这里我们需要明白一个问题，就是iOS没有外置存储这一概念，因此需要对平台进行判断，代码如下：</a></p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取存储路径</span></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; _findLocalPath() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">// 因为Apple没有外置存储，所以第一步我们需要先对所在平台进行判断</span></span><br><span class="line">  <span class="comment">// 如果是android，使用getExternalStorageDirectory</span></span><br><span class="line">  <span class="comment">// 如果是iOS，使用getApplicationSupportDirectory</span></span><br><span class="line">  <span class="keyword">final</span> directory = Theme.of(context).platform == TargetPlatform.android</span><br><span class="line">      ? <span class="keyword">await</span> getExternalStorageDirectory()</span><br><span class="line">      : <span class="keyword">await</span> getApplicationSupportDirectory();</span><br><span class="line">  <span class="keyword">return</span> directory.path;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过上述代码我们便可以获取存储路径，但是如果我们不想把文件下载到存储路径呢？比如我就喜欢单独设置一个<code>/Download</code>路径专门用于保存下载文件，其实也很简单：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取存储路径</span></span><br><span class="line"><span class="keyword">var</span> _localPath = (<span class="keyword">await</span> _findLocalPath()) + <span class="string">&#x27;/Download&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> savedDir = Directory(_localPath);</span><br><span class="line"><span class="comment">// 判断下载路径是否存在</span></span><br><span class="line"><span class="built_in">bool</span> hasExisted = <span class="keyword">await</span> savedDir.exists();</span><br><span class="line"><span class="comment">// 不存在就新建路径</span></span><br><span class="line"><span class="keyword">if</span> (!hasExisted) &#123;</span><br><span class="line">  savedDir.create();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h3><p>下载文件这里我找了一些资料，发现貌似只有一个<code>flutter_downloader</code>插件，也不知道是什么情况。该插件的配置过程也是挺复杂的，好在文档(<a target="_blank" rel="noopener" href="https://pub.flutter-io.cn/packages/flutter_downloader)%E5%86%99%E7%9A%84%E8%BF%98%E7%AE%97%E6%98%8E%E7%99%BD%E3%80%82%E8%BF%99%E4%B8%AA%E6%8F%92%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E5%90%8E%E5%8F%B0%E4%B8%8B%E8%BD%BD%EF%BC%8C%E5%88%86%E5%88%AB%E5%9F%BA%E4%BA%8E">https://pub.flutter-io.cn/packages/flutter_downloader)写的还算明白。这个插件可以实现后台下载，分别基于</a> Android 中的 <a target="_blank" rel="noopener" href="https://developer.android.com/topic/libraries/architecture/workmanager"><code>WorkManager</code></a> 和 iOS 中的 <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nsurlsessiondownloadtask?language=objc"><code>NSURLSessionDownloadTask</code></a> 实现的。</p>
+<p>接下来分别说下在 iOS 端和 Android 端的设置。</p>
+<h4 id="插件配置"><a href="#插件配置" class="headerlink" title="插件配置"></a>插件配置</h4><p><strong>iOS 端配置</strong></p>
+<ul>
+<li>启用 <strong>background mode</strong></li>
+</ul>
+<p>想要执行这一步，我们在 Xcode 中打开该项目的 _iOS module_，如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-a490d106d8654cc9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>然后双击左侧<strong>Runner</strong>选项，选择 <strong>Capabilities</strong> 选项，按图中所示启用<em>background mode</em></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-0acdf54405e40eb4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-35f904b896d16c1c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<ul>
+<li>添加 <strong>sqlite</strong> 依赖库</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-5b01d6d6e383adcf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-61b9cf42dc3bcc9b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>文档中还提供了一些<strong>可选配置</strong>：</p>
+<ul>
+<li>设置 HTTP 请求支持</li>
+</ul>
+<p>为了安全起见，苹果官方已经默认不让开发者使用不安全的 http 通信协议了，而是建议开发者使用安全的 https 协议。若我们还是需要使用 http 协议需要做一些配置，文档中给了两种方式配置，一种是允许单个 HTTP 请求的域名，另一种是允许所有 HTTP 请求的域名，这里出于演示目的，选择第二种。</p>
+<p>只需要在<code>Info.plist</code>文件中添加如下代码即可：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>NSAppTransportSecurity<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSAllowsArbitraryLoads<span class="tag">&lt;/<span class="name">key</span>&gt;</span><span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>设置最大同时下载数</li>
+</ul>
+<p>默认支持同时下载最多 3 个文件，如果你需要更改同样需要更改<code>Info.plist</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>FDMaximumConcurrentTasks<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">integer</span>&gt;</span>5<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>设置下载完成通知</li>
+</ul>
+<p>同样的，修改<code>Info.plist</code>：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>FDAllFilesDownloadedMessage<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>All files have been downloaded<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Android 端配置</strong></p>
+<p>说完了 iOS 端的配置，我们再来说下 Android 端的配置。在 <code>AndroidManifest.xml</code> 文件中添加如下代码：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">provider</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">&quot;vn.hunghd.flutterdownloader.DownloadedFileProvider&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:authorities</span>=<span class="string">&quot;$&#123;applicationId&#125;.flutter_downloader.provider&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:exported</span>=<span class="string">&quot;false&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:grantUriPermissions</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">&quot;android.support.FILE_PROVIDER_PATHS&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:resource</span>=<span class="string">&quot;@xml/provider_paths&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">provider</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>位置如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-afa38a74f243f9ee.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>还有其他类似于 iOS 端的可选配置，功能大同小异，这里就不说了，详见官网。</p>
+<h4 id="编写下载代码"><a href="#编写下载代码" class="headerlink" title="编写下载代码"></a>编写下载代码</h4><p>配置结束后，其实下载的代码很简单：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据 downloadUrl 和 savePath 下载文件</span></span><br><span class="line">_downloadFile(downloadUrl, savePath) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> FlutterDownloader.enqueue(</span><br><span class="line">    url: downloadUrl,</span><br><span class="line">    savedDir: savePath,</span><br><span class="line">    showNotification: <span class="keyword">true</span>,</span><br><span class="line">    <span class="comment">// show download progress in status bar (for Android)</span></span><br><span class="line">    openFileFromNotification:</span><br><span class="line">        <span class="keyword">true</span>, <span class="comment">// click on notification to open downloaded file (for Android)</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然我们需要提前引入<code>flutter_downloader</code>库</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter_downloader/flutter_downloader.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>文档中还提供了其他 API，譬如暂停下载、取消下载，这里就不再阐述了，文档已经写的很清楚了。</p>
+<p>到这其实就已经完成了下载的逻辑，然而下载的逻辑是实现了，想要让用户用的明白，我们还需要加一些提示信息，就像开头 demo 展示的有下载进度条和下载完成的提示框，接下来我们就来为下载设置这些提示信息吧。</p>
+<h3 id="设置下载提示信息"><a href="#设置下载提示信息" class="headerlink" title="设置下载提示信息"></a>设置下载提示信息</h3><p>这里以对话框和进度条的形式展现下载过程，我们使用到了<code>progress_dialog</code>这个插件，可以很方便的显示出一个下载对话框，地址是<a target="_blank" rel="noopener" href="https://pub.flutter-io.cn/packages/progress_dialog%E3%80%82">https://pub.flutter-io.cn/packages/progress_dialog。</a></p>
+<p>使用<code>progress_dialog</code>插件非常简单，首先我们引入依赖文件：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:progress_dialog/progress_dialog.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后创建一个对话框：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">ProgressDialog pr;</span><br></pre></td></tr></table></figure>
+
+<p>如果想要创建一个下载提示对话框的话我们只需要在合适的地方初始化这个 Dialog：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">pr = <span class="keyword">new</span> ProgressDialog(context,ProgressDialogType.Download);</span><br></pre></td></tr></table></figure>
+
+<p>然后执行<code>pr.show();</code>即可显示对话框。取消这个对话框也非常的简单，只需执行<code>pr.hide();</code></p>
+<p>如果想要更新对话框中的提示信息，比如下载进度，只需执行下述代码：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">pr.update(progress: percentage,message: <span class="string">&quot;Please wait...&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>同时我们还可以通过<code>isShowing()</code>函数判断对话框是否显示</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="built_in">bool</span> isProgressDialogShowing = pr.isShowing();</span><br></pre></td></tr></table></figure>
+
+<p>是不是非常方便呢？</p>
+<p>有了展示的对话框，下一步自然就是获取下载进度了，好在<code>flutter_downloader</code>已经给我们提供了一个下载回调，我们可以在下面的这个回调函数中更新我们的 UI。</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">FlutterDownloader.registerCallback((id, status, progress) &#123;</span><br><span class="line">  <span class="comment">// code to update your UI</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其中<strong>id</strong>是下载任务的 id，<strong>status</strong>是当前 id 下载任务的状态，有<code>undefined,enqueued,running,complete,failed,canceled,paused</code>这几种状态，<strong>progress</strong>便是当前 id 下载任务的进度。</p>
+<p>这里方便起见我选择在<code>initState()</code>函数中初始化下载回调函数和对话框：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">  <span class="comment">// 初始化进度条</span></span><br><span class="line">  ProgressDialog pr = <span class="keyword">new</span> ProgressDialog(context, ProgressDialogType.Download);</span><br><span class="line">  pr.setMessage(<span class="string">&#x27;下载中…&#x27;</span>);</span><br><span class="line">  <span class="comment">// 设置下载回调</span></span><br><span class="line">  FlutterDownloader.registerCallback((id, status, progress) &#123;</span><br><span class="line">  	<span class="comment">// 打印输出下载信息</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Download task (<span class="subst">$id</span>) is in status (<span class="subst">$status</span>) and process (<span class="subst">$progress</span>)&#x27;</span>);</span><br><span class="line">    ......</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后我们需要根据下载的状态分情况讨论</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">  ......</span><br><span class="line">  <span class="comment">// 设置下载回调</span></span><br><span class="line">  FlutterDownloader.registerCallback((id, status, progress) &#123;</span><br><span class="line">  	<span class="comment">// 打印输出下载信息</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Download task (<span class="subst">$id</span>) is in status (<span class="subst">$status</span>) and process (<span class="subst">$progress</span>)&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!pr.isShowing()) &#123;</span><br><span class="line">      pr.<span class="keyword">show</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (status == DownloadTaskStatus.running) &#123;</span><br><span class="line">      pr.update(progress: progress.toDouble(), message: <span class="string">&quot;下载中，请稍后…&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (status == DownloadTaskStatus.failed) &#123;</span><br><span class="line">      showToast(<span class="string">&quot;下载异常，请稍后重试&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (pr.isShowing()) &#123;</span><br><span class="line">        pr.<span class="keyword">hide</span>();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (status == DownloadTaskStatus.complete) &#123;</span><br><span class="line">      <span class="built_in">print</span>(pr.isShowing());</span><br><span class="line">      <span class="keyword">if</span> (pr.isShowing()) &#123;</span><br><span class="line">        pr.<span class="keyword">hide</span>();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>其实到这里下载文件的操作就算结束了，但是通常在下载完成后 APP 都会提示你是否要打开，于是在这我们干脆 就拓展一下，实现打开我们已经下载好的文件。</p>
+<h3 id="打开下载完成的文件"><a href="#打开下载完成的文件" class="headerlink" title="打开下载完成的文件"></a>打开下载完成的文件</h3><p>那如何打开已经下载好的文件呢？插件已经提供好了打开下载文件的 API，我们只需要像下面这样使用就可以了。</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据taskId打开下载文件</span></span><br><span class="line">Future&lt;<span class="built_in">bool</span>&gt; _openDownloadedFile(taskId) &#123;</span><br><span class="line">  <span class="keyword">return</span> FlutterDownloader.open(taskId: taskId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>想要打开已经下载完成的文件，我们必须要要确保文件已经下载好了。所以我们需要紧接上面的代码中判断下载完成的函数。这里我们以弹出对话框的形式询问用户是否打开文件。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-fa8cb8781b818726.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>代码如下</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">		......</span><br><span class="line">    <span class="keyword">if</span> (status == DownloadTaskStatus.complete) &#123;</span><br><span class="line">      <span class="built_in">print</span>(pr.isShowing());</span><br><span class="line">      <span class="keyword">if</span> (pr.isShowing()) &#123;</span><br><span class="line">        pr.<span class="keyword">hide</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 显示是否打开的对话框</span></span><br><span class="line">      showDialog(</span><br><span class="line">          <span class="comment">// 设置点击 dialog 外部不取消 dialog，默认能够取消</span></span><br><span class="line">          barrierDismissible: <span class="keyword">false</span>,</span><br><span class="line">          context: context,</span><br><span class="line">          builder: (context) =&gt; AlertDialog(</span><br><span class="line">                title: Text(<span class="string">&#x27;提示&#x27;</span>),</span><br><span class="line">                <span class="comment">// 标题文字样式</span></span><br><span class="line">                content: Text(<span class="string">&#x27;文件下载完成，是否打开？&#x27;</span>),</span><br><span class="line">                <span class="comment">// 内容文字样式</span></span><br><span class="line">                backgroundColor: CupertinoColors.white,</span><br><span class="line">                elevation: <span class="number">8.0</span>,</span><br><span class="line">                <span class="comment">// 投影的阴影高度</span></span><br><span class="line">                semanticLabel: <span class="string">&#x27;Label&#x27;</span>,</span><br><span class="line">                <span class="comment">// 这个用于无障碍下弹出 dialog 的提示</span></span><br><span class="line">                shape: Border.all(),</span><br><span class="line">                <span class="comment">// dialog 的操作按钮，actions 的个数尽量控制不要过多，否则会溢出 `Overflow`</span></span><br><span class="line">                actions: &lt;Widget&gt;[</span><br><span class="line">                  <span class="comment">// 点击取消按钮</span></span><br><span class="line">                  FlatButton(</span><br><span class="line">                      onPressed: () =&gt; Navigator.pop(context),</span><br><span class="line">                      child: Text(<span class="string">&#x27;取消&#x27;</span>)),</span><br><span class="line">                  <span class="comment">// 点击打开按钮</span></span><br><span class="line">                  FlatButton(</span><br><span class="line">                      onPressed: () &#123;</span><br><span class="line">                        Navigator.pop(context);</span><br><span class="line">                        <span class="comment">// 打开文件</span></span><br><span class="line">                        _openDownloadedFile(id).then((success) &#123;</span><br><span class="line">                          <span class="keyword">if</span> (!success) &#123;</span><br><span class="line">                            Scaffold.of(context).showSnackBar(SnackBar(</span><br><span class="line">                                content: Text(<span class="string">&#x27;Cannot open this file&#x27;</span>)));</span><br><span class="line">                          &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                      &#125;,</span><br><span class="line">                      child: Text(<span class="string">&#x27;打开&#x27;</span>)),</span><br><span class="line">                ],</span><br><span class="line">              ));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对话框的使用上述代码已经注释的很详细了。</p>
+<p>至此，我们便使用 Flutter 完成了一个完整的下载文件的过程了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总的来说，利用 Flutter 实现文件下载的思路还是很清楚的，<strong>获取权限-&gt;获取路径-&gt;开始下载-&gt;监听下载进程</strong>，一气呵成。同时，借助于 Flutter 社区的快速发展，已经有很多优秀的开发者开发了一些非常好用的插件，凭借着这些插件我们可以快速实现自己想要的功能。在这个 demo 中整个界面编写+逻辑实现总共也才 <strong>223</strong> 行代码，虽然界面有些丑陋，但考虑到 Dart 语言的迷之缩进这个行数也是很短的了。</p>
+<p>最后想要源码可以扫描下面的二维码关注我的公众号「01 二进制」，后台回复「Flutter 文件下载」即可，后期我也会不定时更新一些和 Flutter 有关的文章，希望大家可以多多支持。</p>
+<hr>
+<p><img src="https://upload-images.jianshu.io/upload_images/5666077-336aa719993c3a45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/aa30.html">https://blog.liangyueyong.cn/p/aa30.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Flutter/">Flutter</a></div><div class="post_share"><div class="social-share" data-image="https://upload-images.jianshu.io/upload_images/5666077-43b6b90c7ba71021.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/3f5e.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ISE头条号海报生成器</div></div></a></div><div class="next-post pull-right"><a href="/p/9234.html"><img class="next-cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geism4zarpj30km08qglt.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">快速适配 Flutter 之深色模式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/7c99.html" title="Flutter 表单组件"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter 表单组件</div></div></a></div><div><a href="/p/c346.html" title="一统江湖？——Flutter for All Screens初体验"><img class="cover" src="https://upload-images.jianshu.io/upload_images/5666077-729709c648e99453?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">一统江湖？——Flutter for All Screens初体验</div></div></a></div><div><a href="/p/d8d0.html" title="在 Flutter 中使用 WebView"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">在 Flutter 中使用 WebView</div></div></a></div><div><a href="/p/adf2.html" title="Flutter主题切换——让你的APP也能一键换肤"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter主题切换——让你的APP也能一键换肤</div></div></a></div><div><a href="/p/5daa.html" title="快速适配 Flutter 之语言国际化"><img class="cover" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gekvgf0e7nj30qo0c8mzc.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">快速适配 Flutter 之语言国际化</div></div></a></div><div><a href="/p/ab06.html" title="Flutter数据存储之shared_preferences"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">Flutter数据存储之shared_preferences</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">2.</span> <span class="toc-text">开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90"><span class="toc-number">2.2.</span> <span class="toc-text">逻辑分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%9D%83%E9%99%90"><span class="toc-number">2.3.1.</span> <span class="toc-text">获取权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%B8%8B%E8%BD%BD%E8%B7%AF%E5%BE%84"><span class="toc-number">2.3.2.</span> <span class="toc-text">获取下载路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.3.</span> <span class="toc-text">下载文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.3.1.</span> <span class="toc-text">插件配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E4%B8%8B%E8%BD%BD%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.3.2.</span> <span class="toc-text">编写下载代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%8B%E8%BD%BD%E6%8F%90%E7%A4%BA%E4%BF%A1%E6%81%AF"><span class="toc-number">2.3.4.</span> <span class="toc-text">设置下载提示信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.5.</span> <span class="toc-text">打开下载完成的文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

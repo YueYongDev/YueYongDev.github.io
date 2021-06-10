@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【译】JetPack Compose for Desktop 初体验 | 斯是陋室</title><meta name="keywords" content="掘金翻译计划,Android"><meta name="author" content="YueYong"><meta name="copyright" content="YueYong"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="目前为止，我们只在 Android 开发中看到 Jetpack Compose。今天，我们将进入一个崭新的阶段，因为 JetBrains 宣布了 IntelliJ 的早期访问版本，允许你使用 Jetpack Compose 来构建 Windows 应用程序。 关于如何使用 Jetpack Compose for desktop，我计划在未来写一些文章加以阐述，本文是这个系列的第一篇文章。上个月，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】JetPack Compose for Desktop 初体验">
+<meta property="og:url" content="https://blog.liangyueyong.cn/p/4e00.html">
+<meta property="og:site_name" content="斯是陋室">
+<meta property="og:description" content="目前为止，我们只在 Android 开发中看到 Jetpack Compose。今天，我们将进入一个崭新的阶段，因为 JetBrains 宣布了 IntelliJ 的早期访问版本，允许你使用 Jetpack Compose 来构建 Windows 应用程序。 关于如何使用 Jetpack Compose for desktop，我计划在未来写一些文章加以阐述，本文是这个系列的第一篇文章。上个月，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-10T11:50:25.284Z">
+<meta property="article:modified_time" content="2021-06-10T11:50:25.284Z">
+<meta property="article:author" content="YueYong">
+<meta property="article:tag" content="掘金翻译计划">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.liangyueyong.cn/p/4e00"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-10 19:50:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">斯是陋室</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">【译】JetPack Compose for Desktop 初体验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-10T11:50:25.284Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-10T11:50:25.284Z" title="更新于 2021-06-10 19:50:25">2021-06-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%96%E6%96%87%E7%BF%BB%E8%AF%91/">外文翻译</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/p/4e00.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count comment-count" data-xid="/p/4e00.html" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://cdn.ytools.xyz/uPic/ECk5bT1*3wOqMMXsvUfkDTWXUri_EQ.png" alt="Photo by the author."></p>
+<p>目前为止，我们只在 Android 开发中看到 <a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>。今天，我们将进入一个崭新的阶段，因为 JetBrains 宣布了 IntelliJ 的早期访问版本，允许你使用 Jetpack Compose 来构建 Windows 应用程序。</p>
+<p>关于如何使用 Jetpack Compose for desktop，我计划在未来写一些文章加以阐述，本文是这个系列的第一篇文章。上个月，JetBrains 发布了 Compose for desktop Milestone 2，为开发者们带来了更好的开发体验和可操作性。</p>
+<p>和往常一样，JetBrains 试图通过提供独家项目引导来简化开发者的开发流程。在 Compose for desktop 的早期版本中，他们为 IntelliJ 增加了一个桌面项目引导，可以在几秒内配置好项目。</p>
+<p>在开始开发之前，你需要安装 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/whatsnew/#section=mac">IntelliJ IDEA 2020.3</a>。</p>
+<h2 id="使用项目模版快速开始"><a href="#使用项目模版快速开始" class="headerlink" title="使用项目模版快速开始"></a>使用项目模版快速开始</h2><p>正如我前面所说，项目模板是 IntelliJ 最好用的东西之一。安装完 IDE 后，启动应用程序。你会看到如下的界面：</p>
+<p><img src="https://cdn.ytools.xyz/uPic/qBSy9V1*x-OrVhcmjnr0FKOlNHjNoQ.png"></p>
+<p>然后点击顶部栏的 “New Project “按钮，这一操作将会跳转至选择应用程序类型的界面。如下所示：</p>
+<p><img src="https://cdn.ytools.xyz/uPic/2HDuXt1*M2u_N3K-1DY9Q3WaYBnB0w.png"></p>
+<p>首先，我们需要从左侧菜单中选择 Kotlin，然后修改项目名称和位置。之后，我们需要选择项目模板。这是配置项目的一个重要步骤。我们需要从项目模板列表中挑选桌面模板，向下滚动就能找到。然后你需要选择项目的 JDK，这里我建议使用 JDK 11。</p>
+<p><img src="https://cdn.ytools.xyz/uPic/mGRgv21*XyyhciTuFLCVhk_hF10xCw.png"></p>
+<p>然后点击 “Next “按钮，这将会跳转至确认 Compose 模块的界面。现在点击 “Finish “按钮，IntelliJ 将通过自动下载适当的 gradle 为你配置整个项目。</p>
+<h2 id="运行你的第一个桌面应用"><a href="#运行你的第一个桌面应用" class="headerlink" title="运行你的第一个桌面应用"></a>运行你的第一个桌面应用</h2><p>如果进展顺利，整个桌面项目加载完成后你将会看到以下界面：</p>
+<p><img src="https://cdn.ytools.xyz/uPic/6pOCLD1*iU2it0DXYOt0qxJQB1VgBQ.png"></p>
+<p>此时，你可以运行该应用程序了。由于某些原因，<code>Main.kt</code>在右上角的 “运行 “按钮旁边没有被默认选中，所以它会要求你配置项目。为了解决这个问题，你需要在<code>Main.kt</code>文件内的主函数旁边点击绿色的 “运行 “按钮。</p>
+<p>运行成功后，你会看到下面的输出结果，有一个包含 “Hello, World!”文字的按钮。如果你点击它，按钮里面的文字就会变成 “Hello, Desktop!“实际操作体验一下吧。</p>
+<p><img src="https://cdn.ytools.xyz/uPic/hxQm5r1*AMNYP559WHhfKFvpGrmN4g.gif"></p>
+<h2 id="探究代码"><a href="#探究代码" class="headerlink" title="探究代码"></a>探究代码</h2><p>正如你看到的，这是一个简单的 Hello World 程序——一点也不复杂。大部分的代码与 Android 里面的 Jetpack Compose UI 相似。</p>
+<p><code>Main.kt</code>是包含与输出有关的代码 Kotlin 文件。它有一个主函数作为应用程序运行的入口。代码从<code>Window</code>函数开始，用给定的内容打开一个窗口。它需要几个参数来初步配置窗口的属性，如<code>title</code>、<code>size</code>、<code>location</code>、<code>centered</code>、<code>content</code>等。</p>
+<figure class="highlight kt"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> = Window &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这种情况下，我们只需要把值传给内容参数，其余的参数保留默认值即可。在接下来的代码中，我们声明了一个具有<code>remember</code>功能的<code>text</code>变量，其初始值为<code>Hello, World！</code>。如下所示：</p>
+<figure class="highlight kt"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> = Window &#123;</span><br><span class="line">    <span class="keyword">var</span> text <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="string">&quot;Hello, World!&quot;</span>) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在一个声明式的 UI 系统中，代码本身就描述了 UI。我们需要描述任何时间点上的 UI——不仅仅是初始时间。在诸如按钮、文本字段等 UI 组件中，我们使用<code>remember</code>作为文本的状态，这样当我们在未来更新这个 <code>text</code> 变量时，与该变量相关的视图也会更新显示文本。</p>
+<p>为了更好地理解它，我建议阅读以下文章。</p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/better-programming/jetpack-compose-components-part-2-2b3eb135d294">Jetpack Compose Components (Part 2)</a></p>
+<p>下一段代码是定义一个具有点击功能的按钮，并将整个应用窗口设置为 Material 主题。如下所示：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> = Window &#123;</span><br><span class="line">    <span class="keyword">var</span> text <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="string">&quot;Hello, World!&quot;</span>) &#125;</span><br><span class="line"></span><br><span class="line">    MaterialTheme &#123;</span><br><span class="line">        Button(onClick = &#123;</span><br><span class="line">            text = <span class="string">&quot;Hello, Desktop!&quot;</span></span><br><span class="line">        &#125;) &#123;</span><br><span class="line">            Text(text)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>目前，Jetpack Compose 在桌面和安卓上都处于非常早期的阶段，但它仍然展现出为构建 UI 所作出的巨大进步。像 Jetpack Compose 这样的框架配合上 Kotlin 的强大功能将提高开发者的开发效率，并为他们提供在不同平台上工作的方法。</p>
+<p>像 <a target="_blank" rel="noopener" href="https://twitter.com/_gurupreet">Gurupreet Singh</a> 这样的开发者非常积极地参与 Compose 的发布，并创造了宝贵的资源（如 <a target="_blank" rel="noopener" href="https://github.com/Gurupreet/ComposeCookBook">ComposeCookBook</a>）来帮助其他开发者。他还从 Compose Android 应用中创建了 <a target="_blank" rel="noopener" href="https://github.com/Gurupreet/ComposeSpotifyDesktop">the Spotify desktop clone</a>，这给了我很大的启发。</p>
+<h2 id="捐赠"><a href="#捐赠" class="headerlink" title="捐赠"></a>捐赠</h2><p>如果你刚入门 Jetpack Compose ，可以从这里开始。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/better-programming/jetpack-compose-a-new-and-simple-way-to-create-material-ui-in-android-f49c6fcb448b">“Jetpack Compose — A New and Simple Way to Create Material-UI in Android”</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/android-dev-hacks/jetpack-compose-with-server-driven-ui-396a19f0a661">“JetPack Compose With Server Driven UI”</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/better-programming/jetpack-compose-how-to-build-a-messaging-app-e2cdc828c00f">“Jetpack Compose: How to Build a Messaging App”</a></li>
+</ul>
+<p>以上就是本文的全部内容了，希望本文能对你有所帮助，感谢你的阅读。</p>
+<blockquote>
+<p>如果发现译文存在错误或其他需要改进的地方，欢迎到 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a> 对译文进行修改并 PR，也可获得相应奖励积分。文章开头的 <strong>本文永久链接</strong> 即为本文在 GitHub 上的 MarkDown 链接。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a> 是一个翻译优质互联网技术文章的社区，文章来源为 <a target="_blank" rel="noopener" href="https://juejin.im/">掘金</a> 上的英文分享文章。内容覆盖 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#android">Android</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#ios">iOS</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%89%8D%E7%AB%AF">前端</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%90%8E%E7%AB%AF">后端</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E5%8C%BA%E5%9D%97%E9%93%BE">区块链</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E4%BA%A7%E5%93%81">产品</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E8%AE%BE%E8%AE%A1">设计</a>、<a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner#%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD">人工智能</a>等领域，想要查看更多优质译文请持续关注 <a target="_blank" rel="noopener" href="https://github.com/xitu/gold-miner">掘金翻译计划</a>、<a target="_blank" rel="noopener" href="http://weibo.com/juejinfanyi">官方微博</a>、<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/juejinfanyi">知乎专栏</a>。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YueYong</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.liangyueyong.cn/p/4e00.html">https://blog.liangyueyong.cn/p/4e00.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.liangyueyong.cn" target="_blank">斯是陋室</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8E%98%E9%87%91%E7%BF%BB%E8%AF%91%E8%AE%A1%E5%88%92/">掘金翻译计划</a><a class="post-meta__tags" href="/tags/Android/">Android</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/2c7f.html"><img class="prev-cover" src="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库</div></div></a></div><div class="next-post pull-right"><a href="/p/3422.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/e593.html" title="【译】在Android上实现Google Inbox样式的动画"><img class="cover" src="https://user-gold-cdn.xitu.io/2018/11/16/1671a9358d506438?w=1280&h=448&f=jpeg&s=55428" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】在Android上实现Google Inbox样式的动画</div></div></a></div><div><a href="/p/8245.html" title="【译】为用户提供安全可靠的体验"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】为用户提供安全可靠的体验</div></div></a></div><div><a href="/p/6804.html" title="【译】在 Android 应用中使用矢量资源"><img class="cover" src="https://user-gold-cdn.xitu.io/2019/3/22/169a30ca76e5ad48?w=4000&h=1190&f=png&s=66173" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】在 Android 应用中使用矢量资源</div></div></a></div><div><a href="/p/3422.html" title="【译】Javascript中的call(), apply() 和 bind()"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Javascript中的call(), apply() 和 bind()</div></div></a></div><div><a href="/p/1daa.html" title="【译】Post-training 量化"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】Post-training 量化</div></div></a></div><div><a href="/p/2c7f.html" title="【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库"><img class="cover" src="https://tva1.sinaimg.cn/large/0081Kckwgy1gktsj574a1j31900u0e81.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="title">【译】在几秒钟内为你的开发环境创建一个私有 PostgreSQL 数据库</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://s1.ax1x.com/2020/09/08/wQQcbq.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">YueYong</div><div class="author-info__description">凡是过往，皆为序章</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">162</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YueYongDEV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/YueYongDEV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:yueyong1030@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">微信公众号「01二进制」</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%A1%B9%E7%9B%AE%E6%A8%A1%E7%89%88%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">使用项目模版快速开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">运行你的第一个桌面应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A2%E7%A9%B6%E4%BB%A3%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">探究代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%90%E8%B5%A0"><span class="toc-number">5.</span> <span class="toc-text">捐赠</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk2ny4uugj30xo0he0yu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未雨绸缪，小米前端实习面经"/></a><div class="content"><a class="title" href="/p/ec8b.html" title="未雨绸缪，小米前端实习面经">未雨绸缪，小米前端实习面经</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/e834.html" title="计算机相关专业实习指北"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdquuna43wj30zk0quaf8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机相关专业实习指北"/></a><div class="content"><a class="title" href="/p/e834.html" title="计算机相关专业实习指北">计算机相关专业实习指北</a><time datetime="2021-06-10T11:50:25.448Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdk77kyd9vj30k40budh9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搏一搏，单车变摩托，记录一下我的淘宝实习面试"/></a><div class="content"><a class="title" href="/p/4fa2.html" title="搏一搏，单车变摩托，记录一下我的淘宝实习面试">搏一搏，单车变摩托，记录一下我的淘宝实习面试</a><time datetime="2021-06-10T11:50:25.447Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了"><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdlnjvgiotj30x20kytfw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="刚完一波蚂蚁金服的面试后，他说他累了"/></a><div class="content"><a class="title" href="/p/d04f.html" title="刚完一波蚂蚁金服的面试后，他说他累了">刚完一波蚂蚁金服的面试后，他说他累了</a><time datetime="2021-06-10T11:50:25.446Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/1109.html" title="从三本到985再到微软，他做了这些"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geg4df4jcqj30k00f040r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从三本到985再到微软，他做了这些"/></a><div class="content"><a class="title" href="/p/1109.html" title="从三本到985再到微软，他做了这些">从三本到985再到微软，他做了这些</a><time datetime="2021-06-10T11:50:25.445Z" title="发表于 2021-06-10 19:50:25">2021-06-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2017 - 2021 By YueYong</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'U0W7ATmVTjBxWkHt96LR9Bj0-gzGzoHsz',
+      appKey: 'uko1Os2bkFSID34qVRrgjCcX',
+      placeholder: '记得留下你的昵称和邮箱....可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_親親":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再見":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_發怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_發財":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可愛":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_嘔吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_壞笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尷尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_驚嚇":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
